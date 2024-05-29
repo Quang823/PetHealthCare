@@ -8,6 +8,7 @@ const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const isLoginActive = email !== '' && password !== '';
+    const [IsShowPassword, setIsShowPassword] = useState(false);
     return (
         <div className="login-form">
             <header className="header">
@@ -28,11 +29,12 @@ const LoginForm = () => {
                     </div>
 
                     <div className="input-box">
-                        <input type="password" placeholder="Password"
+                        <input type={IsShowPassword === true ? "text" : "password"} placeholder="Password"
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
                         />
-                        <i className="fa-solid fa-eye-slash"></i>
+                        <i className={IsShowPassword === true ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
+                            onClick={() => setIsShowPassword(!IsShowPassword)}></i>
                     </div>
 
                     <div className="remember-forgot">

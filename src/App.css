@@ -24,4 +24,7 @@ button.active {
 
 button[disabled=disable], button:disabled {
   cursor: not-allowed;
+  background-color: #ffffffc0;
+
+  
 }
