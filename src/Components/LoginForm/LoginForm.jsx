@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import './LoginForm.css';
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import logo from '../Assets/v186_574.png';
 
 
 const LoginForm = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const isLoginActive = email !== '' && password !== '';
     return (
         <div className="login-form">
             <header className="header">
@@ -17,13 +20,19 @@ const LoginForm = () => {
                     <h1>Login</h1>
 
                     <div className="input-box">
-                        <input type="text" placeholder="Username" required></input>
+                        <input type="text" placeholder="Email"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                        ></input>
                         <FaUser className="icon" />
                     </div>
 
                     <div className="input-box">
-                        <input type="password" placeholder="Password" required></input>
-                        <FaLock className="icon" />
+                        <input type="password" placeholder="Password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                        />
+                        <i className="fa-solid fa-eye-slash"></i>
                     </div>
 
                     <div className="remember-forgot">
@@ -31,7 +40,9 @@ const LoginForm = () => {
                         <a href="#">Forgot Password</a>
                     </div>
 
-                    <button type="submit" className="button-login">Login</button>
+                    <button className={isLoginActive ? "active" : ""}
+                        disabled={isLoginActive ? false : true}
+                    >Login</button>
 
                     <div className="register-link">
                         <p>Don't have an account? <a href="#">Register</a></p>
@@ -41,4 +52,5 @@ const LoginForm = () => {
         </div>
     )
 }
+
 export default LoginForm

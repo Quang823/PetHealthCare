@@ -1,3 +1,4 @@
+
 .login-form .header {
     display: flex;
     align-items: center;
@@ -13,7 +14,7 @@
     justify-content: center;
     width: 130px; /* Đặt kích thước chiều rộng cho khung tròn */
     height: 130px; /* Đặt kích thước chiều cao cho khung tròn */
-    background-color: #d7f3d4; /* Màu nền trắng */
+    background-color: #cff8ca9c; /* Màu nền trắng */
     border: 2px solid #000; /* Viền đen */
     border-radius: 50%; /* Tạo khung tròn */
     padding: 10px; /* Khoảng cách giữa ảnh và viền */
@@ -35,17 +36,21 @@
     border-radius: 10px;
     padding: 30px 40px;
 }
+
 .wrapper h1 {
     font-size: 36px;
     text-align: center;
 }
+
 .wrapper .input-box {
     position: relative;
     width: 100%;
     height: 50px;
     text-align: left;
     margin: 30px 0;
+    font-family: fontAwesome;
 }
+
 .input-box input {
     width: 100%;
     height: 100%;
@@ -58,9 +63,16 @@
     color: #fff;
     padding: 20px 45px 20px 20px;
 }
+
 .input-box input::placeholder {
     color: #fff;
 }
+
+.input-box input:focus {
+    border-color: rgb(209, 209, 209);
+    text-indent: 5px;
+}
+
 .input-box .icon {
     position: absolute;
     right: 20px;
@@ -70,36 +82,60 @@
 
 }
 
+.input-box i {
+    position: absolute;
+    top: 18px;
+    right: 21px;
+
+}
+/* .input-box #toggle {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    cursor: pointer;
+    user-select: none;
+    color: #fdfdfd;
+    margin-right: 10px ;
+}
+
+.input-box #toggle::before {
+    content: '\f06e';
+    
+}
+.input-box #toggle.hide::before {
+    content: '\f070';
+} */
+
 .wrapper .remember-forgot {
     display: flex;
     justify-content: space-between;
     font-size: 14.5px;
     margin: -15px 0 15px;
 }
+
 .remember-forgot label input {
     accent-color: #fff;
     margin-right: 4px;
 }
+
+.remember-forgot label input:hover {
+    accent-color: #5f73e7;
+    margin-right: 4px;
+}
+
 .remember-forgot a {
     color: #fff;
     text-decoration: none;
 }
+
 .remember-forgot a:hover {
     text-decoration: underline;
 }
-.wrapper .button-login {
-    width: 100%;
-    height: 45px;
-    background: #fff;
-    border: none;
-    outline: none;
-    border-radius: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-    cursor: pointer;
-    font-size: 16px;
-    color: #333;
-    font-weight: 700;
-}
+
 
 .wrapper .register-link {
     font-size: 14.5px;
@@ -115,4 +151,18 @@
 
 .register-link p:hover {
     text-decoration: underline;
+}
+
+.button-login:hover {
+    width: 100%;
+    height: 45px;
+    background: #dbdbdb;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 700;
 }
