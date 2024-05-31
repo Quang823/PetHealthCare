@@ -1,14 +1,14 @@
 
-.login-form .header {
+.register-form .header {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px;
     background-color: transparent;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
-.login-form .logo-container {
+.register-form .logo-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,17 +20,18 @@
     padding: 10px; /* Khoảng cách giữa ảnh và viền */
 }
 
-.login-form .logo {
+.register-form .logo {
     max-width: 100%; /* Đảm bảo logo không vượt quá khung */
     max-height: 100%; /* Đảm bảo logo không vượt quá khung */
     border-radius: 50%; /* Đảm bảo logo có góc bo tròn nếu cần */
 }
 
+
 .wrapper {
     width: 420px;
     background-color: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     color: #fff;
     border-radius: 10px;
