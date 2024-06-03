@@ -1,0 +1,20 @@
+.logo-Tittle {
+    display: flex;
+    
+}
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; /* Đặt kích thước chiều rộng cho khung tròn */
+    height: 30px; /* Đặt kích thước chiều cao cho khung tròn */
+    background-color: #cff8ca9c; /* Màu nền trắng */
+    border: .5px solid #000; /* Viền đen */
+    border-radius: 50%; /* Tạo khung tròn */
+    padding: 1px; /* Khoảng cách giữa ảnh và viền */
+    .logo {
+        max-width: 100%; /* Đảm bảo logo không vượt quá khung */
+        max-height: 100%; /* Đảm bảo logo không vượt quá khung */
+        border-radius: 50%; /* Đảm bảo logo có góc bo tròn nếu cần */
+    }
+}

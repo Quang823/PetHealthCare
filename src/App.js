@@ -1,21 +1,46 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
-import LoginForm from './Components/LoginRegisterForm/LoginForm';
-import RegisterForm from './Components/LoginRegisterForm/RegisterForm';
-import Home from './Components/Home/HomePage';
+
+import { ToastContainer, toast } from 'react-toastify';
+import { useContext, useEffect, useState } from 'react';
+import './App.scss';
+import Header from './Components/Header';
+import ModalAddNew from './Components/ModalAddNew';
+import Container from 'react-bootstrap/esm/Container';
+import { Routes, Route, Link } from 'react-router-dom'
+import { UserContext } from './Context/UserContext';
+import AppRoute from './Routes/AppRoute';
+
+
 function App() {
+  const { user, loginContext } = useContext(UserContext);
+  console.log("user", user)
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      loginContext(localStorage.getItem("email"), localStorage.getItem("token"))
+    }
+  }, [])
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/" element={<LoginForm />} /> {/* Redirect to login by default */}
-        </Routes>
+    <>
+      <div className='app-container'>
+        <Header></Header>
+        <Container>
+          <AppRoute></AppRoute>
+        </Container>
       </div>
-    </Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
+    </>
   );
 }
 
