@@ -9,11 +9,12 @@ import { loginApi } from '../../Service/UserService';
 import { toast } from "react-toastify";
 import { UserContext } from "../../Context/UserContext";
 
+
 const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [IsShowPassword, setIsShowPassword] = useState(false);
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const { logout } = useContext(UserContext);
     const { loginContext } = useContext(UserContext);
     const registerLink = (event) => {
@@ -21,10 +22,11 @@ const LoginForm = () => {
         navigate('/register');
     }
 
-    const homePageLink = (event) => {
-        event.preventDefault();
-        navigate('/home');
-    }
+    // const homePageLink = (event) => {
+    //     event.preventDefault();
+    //     navigate('/');
+    // }
+    
 
     const handleBack = () => {
         navigate("/")
@@ -32,13 +34,18 @@ const LoginForm = () => {
 
     const handleLogin = async () => {
         if (!email || !password) {
+            
             toast.error("Email/Password is required!");
             return;
         }
+        
         let res = await loginApi(email, password);
-        if (res && res.token) {
+        console.log("test",res)
+       if (res && res.token) {
+      
             loginContext(email, res.token)
-            navigate("/");
+            
+            navigate('/');
 
             toast.success("Login thanh cong")
 
@@ -79,7 +86,7 @@ const LoginForm = () => {
                         </div>
                         <h3>Welcome back</h3>
                         <div className="wrapper">
-                            <form action="" className="form">
+                            
                                 <h1>Login</h1>
                                 <div className="input-box">
                                     <input
@@ -116,7 +123,7 @@ const LoginForm = () => {
                                 }
 
                                     // onClick={() => handleLogin()}
-                                    onClick={homePageLink}
+                                    onClick={() =>handleLogin()}
                                 >
                                     <i className="fas fa-sync fa-spin">
                                     </i>Login</button>
@@ -125,7 +132,7 @@ const LoginForm = () => {
                                 <i className="fa-solid fa-arrow-left"></i>
                                 <span onClick={() => handleBack()}>Go back</span>
                             </div> */}
-                            </form>
+                          
                         </div>
                     </div>
                 </div>

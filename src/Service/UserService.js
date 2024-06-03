@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../Service/axios';
 
 
 const fetchAlluser = (page) => {
@@ -13,6 +13,7 @@ const putUpdateUser = (name, job) => {
     return axios.put("/api/users/2", { name, job })
 }
 const loginApi = (email, password) => {
+    
     return axios.post("/api/login", { email, password })
 }
 export { fetchAlluser, postCreateUser, putUpdateUser, loginApi };
