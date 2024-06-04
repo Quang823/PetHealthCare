@@ -23,10 +23,10 @@ const Header = (props) => {
     const location = useLocation();
     return (
         <>
-            <Navbar expand="lg" className="bg-body-tertiary">
+            <Navbar expand="lg" className="custom-navbar">
                 <Container>
                     <Navbar.Brand href="/">
-                          <div className='logo-Tittle'>
+                        <div className='logo-Tittle'>
                             <div className='logo-container'>
                                 <img src={logo}
                                     width="30"
@@ -35,19 +35,19 @@ const Header = (props) => {
                                     alt='React Bootstrap logo'
                                 />
                             </div>
-                            <span>Pet Health Care</span>
+                            <span className='Title'>Pet Health Care</span>
                         </div>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             {location.pathname !== '/login' && (
-
                                 <>
-                                    <NavLink to="/" className="nav-link">Home</NavLink>
-
-
-                                    <NavLink to="/users" className="nav-link" >Manage User</NavLink>
+                                    <NavLink to="/" className="nav-link">HOME</NavLink>
+                                    {/* <NavLink to="/users" className="nav-link" >Manage User</NavLink> */}
+                                    <NavLink to="/" className="nav-link">ABOUT</NavLink>
+                                    <NavLink to="/" className="nav-link">PET SERVICE</NavLink>
+                                    <NavLink to="/" className="nav-link">CONTACT US</NavLink>
                                 </>
                             )}
                         </Nav>
@@ -59,10 +59,10 @@ const Header = (props) => {
                                 </NavDropdown.Item> : <NavLink to="/login" className="dropdown-item">Login</NavLink>}
                             </NavDropdown>
                         </Nav>
-
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
         </>)
+
 }
 export default Header;

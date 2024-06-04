@@ -71,8 +71,9 @@ body {
   
 }
 
+
 .app-container {
-  background-color: rgb(255, 255, 255);
+  
   .login-container{
     display: flex;
     flex-direction: column;
@@ -110,17 +111,17 @@ body {
         border: 1px solid aquamarine ;
       }
     }
-   button{
-    margin-top: 5px;
-    padding: 10px;
-    border-radius: 3px;
-    outline: none;
-    border: none;
-    &.active{
-      background-color: red;
-      color: white;
-    }
-   }
+  //  button{
+  //   margin-top: 5px;
+  //   padding: 10px;
+  //   border-radius: 3px;
+  //   outline: none;
+  //   border: none;
+  //   &.active{
+  //     background-color: red;
+  //     color: white;
+  //   }
+  //  }
    .back{
     text-align: center;
     margin-top: 20px;

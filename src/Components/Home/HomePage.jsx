@@ -8,6 +8,12 @@ import lighthouseImg from "../../Assets/anh-thu-cung-cute_014114596.jpg";
 import dandelion from "../../Assets/anh-thu-cung-cute-2k_014112419.jpg";
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import image from "../../Assets/Puppy-PNG-Image.png";
+import image1 from "../../Assets/vet-1.jpg";
+import image2 from "../../Assets/th.jpg";
+import { FaHeart } from "react-icons/fa";
+import { UserContext } from '../../Context/UserContext';
+import { useContext, useEffect, useState } from 'react';
 const HomePage = () => {
     const images = [
         lighthouseImg,
@@ -19,13 +25,62 @@ const HomePage = () => {
         lighthouseImg,
         // Add more image URLs here
     ];
+    const { user } = useContext(UserContext);
     return (
         <div className="HomePage">
-            <div className="imageSlider">
+            <div className="headerDiv">
                 {/* <video src={video} autoPlay muted loop></video> */}
-                <ImageSlider images={images} />
+                {/* <ImageSlider images={images} /> */}
+                <div className="headerText">
+                    <h2>Fur-ever friends</h2>
+                    <h2>Fur-ever memories</h2>
+                    <p>Owning a pet has evolved beyond mere companionship to become an integral part of many people's lives.
+                        This has led to an increased demand for professional healthcare services for pets
+                    </p>
+                    <div className="buttonDiv">
+                        <button> More Information  <FaHeart /></button>
+                    </div>
+                </div>
+                <div className="headerImage">
+                    <img src={image} alt="image" className="image"></img>
+
+                </div>
             </div>
-            <Container fluid className="middleDiv">
+            <div className="middleDiv">
+
+                <div class="box">
+                    <div class="box-content">
+                        <div class="image-container">
+                            <img src={image1} alt="Image 1" class="box-image"></img>
+                        </div>
+                        <div class="text-container">
+                            <p>Veterinarian</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-content">
+                        <div class="image-container">
+                            <img src={image2} alt="Image 2" class="box-image"></img>
+                        </div>
+                        <div class="text-container">
+                            <p>Service</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="box-content">
+                        <div class="image-container">
+                            <img src="image3.jpg" alt="Image 3" class="box-image"></img>
+                        </div>
+                        <div class="text-container">
+                            <p>Text for Box 3</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {/* <Container fluid className="middleDiv">
                 <Row>
                     <Col xs={12} md={6} style={{ backgroundColor: '#f8f9fa', height: '40vh' }} className="leftCol" >
                         <div className="leftSide" style={{ padding: '20px' }}>
@@ -46,9 +101,9 @@ const HomePage = () => {
                         </div>
                     </Col>
                 </Row >
-            </Container>
-        </div>          
-    );           
+            </Container> */}
+        </div>
+    );
 }
 
 export default HomePage;

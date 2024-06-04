@@ -3,12 +3,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './RegisterForm.scss';
 import { FaUser } from "react-icons/fa";
+import { FaPhone } from "react-icons/fa6";
+import { FaAddressCard } from "react-icons/fa";
 import logo from '../../Assets/v186_574.png';
 
 const RegisterForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
+    const [phone, setPhone] = useState("");
+    const [address, setAddress] = useState("");
     const isLoginActive = email !== '' && password !== '' && username !== '';
     const [IsShowPassword, setIsShowPassword] = useState(false);
     const navigate = useNavigate();  // Initialize useNavigate
@@ -62,6 +66,24 @@ const RegisterForm = () => {
                                 className={IsShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
                                 onClick={() => setIsShowPassword(!IsShowPassword)}
                             ></i>
+                        </div>
+                        <div className="input-box">
+                            <input
+                                type="text"
+                                placeholder="Phone Number"
+                                value={phone}
+                                onChange={(event) => setPhone(event.target.value)}
+                            />
+                            <FaPhone className="icon" />
+                        </div>
+                        <div className="input-box">
+                            <input
+                                type="text"
+                                placeholder="Address"
+                                value={address}
+                                onChange={(event) => setAddress(event.target.value)}
+                            />
+                            <FaAddressCard className="icon" />
                         </div>
 
                         <div className="remember-forgot">
