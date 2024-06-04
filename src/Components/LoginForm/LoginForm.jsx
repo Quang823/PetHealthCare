@@ -8,6 +8,7 @@ import video from '../../Assets/7515875-hd_1080_1920_30fps.mp4';
 import { loginApi } from '../../Service/UserService';
 import { toast } from "react-toastify";
 import { UserContext } from "../../Context/UserContext";
+// import jwt_decode from "jwt-decode";
 
 
 const LoginForm = () => {
@@ -41,21 +42,85 @@ const LoginForm = () => {
         
         let res = await loginApi(email, password);
         console.log("test",res)
-       if (res && res.token) {
+       if (res && res.data && res.status == "ok") {
       
-            loginContext(email, res.token)
+            loginContext(email, res.data)
             
             navigate('/');
 
             toast.success("Login thanh cong")
 
         } else {
-            if (res && res.status === 400) {
+            if (res && res.status === 401) {
                 toast.error(res.data.error)
+                toast.error("sai mk");
             }
         }
-
     }
+    // }
+    // async function handleLogin(email, password) {
+    //     let res;
+    //     try {
+    //         res = await loginApi(email, password);
+    //         console.log("test", res);
+    //     } catch (error) {
+    //         console.error("Error logging in:", error);
+    //         toast.error("An error occurred during login");
+    //         return;
+    //     }
+    
+    //     if (res && res.data) {
+    //         // Decode JWT to get role
+    //         try {
+    //             const decoded = jwt_decode(res.data);
+    //             const role = decoded.role;
+    
+    //             // Call login context with email and role
+    //             loginContext(email, role);
+    //             navigate('/');
+    //             toast.success("Login successful");
+    
+    //         } catch (decodeError) {
+    //             console.error("Error decoding JWT:", decodeError);
+    //             toast.error("An error occurred while decoding the token");
+    //         }
+    
+    //     } else {
+    //         if (res && res.status === 400) {
+    //             toast.error(res.data.error);
+    //         } else {
+    //             toast.error("Login failed");
+    //         }
+    //     }
+    // }
+    // const handleLogin = async () => {
+    //     try {
+    //         if (!email || !password) {
+    //             toast.error("Email/Password is required!");
+    //             return;
+    //         }
+            
+            
+    //         let res = await loginApi(email, password);
+    //         console.log("test", res);
+
+           
+            
+    //         if (res && res.data ) {
+    //             loginContext(email, res.data);
+    //             navigate('/');
+    //             toast.success("Login thành công");
+    //         } else {
+    //             if (res && res.status == "400") {
+    //                 toast.error(res.data.error);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error("Error:", error);
+    //         toast.error("Đã xảy ra lỗi khi đăng nhập!");
+    //     }
+    // };
+    
 
 
     return (

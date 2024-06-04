@@ -14,6 +14,6 @@ const putUpdateUser = (name, job) => {
 }
 const loginApi = (email, password) => {
     
-    return axios.post("/api/login", { email, password })
+    return axios.post("/auth/login", { email, password })
 }
 export { fetchAlluser, postCreateUser, putUpdateUser, loginApi };
