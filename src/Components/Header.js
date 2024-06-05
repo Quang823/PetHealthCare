@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../Context/UserContext';
 import logo from '../Assets/v186_574.png';
+import { MdPets } from "react-icons/md";
 import './Header.scss';
 const Header = (props) => {
     const { logout, user } = useContext(UserContext);
@@ -19,6 +20,9 @@ const Header = (props) => {
         logout();
         navigate("/");
         toast.success("Sucess")
+    }
+    const handleManageAccount = () => {
+        navigate("/manageAcc");
     }
     const location = useLocation();
     return (
@@ -46,17 +50,29 @@ const Header = (props) => {
                                     <NavLink to="/" className="nav-link">HOME</NavLink>
                                     {/* <NavLink to="/users" className="nav-link" >Manage User</NavLink> */}
                                     <NavLink to="/" className="nav-link">ABOUT</NavLink>
-                                    <NavLink to="/" className="nav-link">PET SERVICE</NavLink>
-                                    <NavLink to="/" className="nav-link">CONTACT US</NavLink>
+                                    <NavLink to="/" className="nav-link">SERVICE</NavLink>
+                                    <NavLink to="/" className="nav-link">MANAGE PET</NavLink>
+                                    <NavLink to="/" className="nav-link">BOOKING</NavLink>
+                                    <NavLink to="/" className="nav-link">CONTACT</NavLink>
+
                                 </>
                             )}
                         </Nav>
-                        <Nav >
-                            {user && user.email && <span className='nav-link'>Welcome {user.email} </span>}
+                        <Nav>
+                            {user && user.email && <span className='nav-link'> <MdPets className='icon' /> WELCOME {user.email} </span>}
                             <NavDropdown title="Setting" id="basic-nav-dropdown">
-                                {user && user.auth === true ? <NavDropdown.Item onClick={() => handleLogout()} >
-                                    Logout
-                                </NavDropdown.Item> : <NavLink to="/login" className="dropdown-item">Login</NavLink>}
+                                {user && user.auth === true ? (
+                                    <>
+                                        <NavDropdown.Item onClick={() => handleLogout()}>
+                                            Logout
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item onClick={() => handleManageAccount()}>
+                                            Manage Account
+                                        </NavDropdown.Item>
+                                    </>
+                                ) : (
+                                    <NavLink to="/login" className="dropdown-item">Login</NavLink>
+                                )}
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

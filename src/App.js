@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/esm/Container';
 import { Routes, Route, Link } from 'react-router-dom'
 import { UserContext } from './Context/UserContext';
 import AppRoute from './Routes/AppRoute';
-
+import './ToastifyCustom.css';
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
@@ -28,7 +28,7 @@ function App() {
       </div>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

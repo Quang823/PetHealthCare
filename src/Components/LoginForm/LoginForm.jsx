@@ -31,111 +31,63 @@ const LoginForm = () => {
         navigate("/")
     }
 
-    // useEffect(() => {
-    //     let token = localStorage.getItem("token");
-    //     if (token) {
-    //         navigate("/");
-    //     }
-    // }, [])
 
     // const handleLogin = async () => {
     //     if (!email || !password) {
-
     //         toast.error("Email/Password is required!");
     //         return;
     //     }
 
-    //     let res = await loginApi(email, password);
-    //     console.log("test", res)
-    //     if (res && res.token) {
-    //         localStorage.setItem("token", res.token);
-    //         navigate('/');
-    //         toast.success("Login sucessfull")
-    //     } else {
-    //         if (res && res.status === 400) {
-    //             toast.error(res.data.error)
+    //     try {
+    //         let res = await instance.post('/api/login', {
+    //             email: email,
+    //             password: password,
+    //         });
+    //         console.log("test", res);
+
+    //         // Check if the API call was successful and returned a valid token
+    //         if (res && res.token) {
+    //             loginContext(email, res.token); // Pass email and token
+    //             navigate('/');
+    //             toast.success("Login successful");
+    //         } else {
+    //             toast.error("Login failed. Please check your email and password.");
     //         }
-    //     }
-    // }
-    // const handleLogin = async () => {
-    //     if (!email || !password) {
-
-    //         toast.error("Email/Password is required!");
-    //         return;
-    //     }
-
-    //     let res = await loginApi(email, password);
-    //     console.log("test", res)
-    //     if (res && res.token) {
-
-    //         loginContext(email, res.email)
-
-    //         navigate('/');
-
-    //         toast.success("Login sucessfull")
-
-    //     } else {
-    //         if (res && res.status === 400) {
-    //             toast.error(res.data.error)
+    //     } catch (error) {
+    //         // Handle failed login with appropriate message
+    //         if (error.status === 400) {
+    //             toast.error(error.data.error);
+    //         } else {
+    //             toast.error(error.message || "An unexpected error occurred. Please try again.");
     //         }
+    //         console.error("Login error:", error);
     //     }
-
-    // }
+    // };
     const handleLogin = async () => {
         if (!email || !password) {
+
             toast.error("Email/Password is required!");
             return;
         }
 
-        try {
-            let res = await instance.post('/api/login', {
-                email: email,
-                password: password,
-            });
-            console.log("test", res);
+        let res = await loginApi(email, password);
+        console.log("test", res)
+        if (res && res.token) {
 
-            // Check if the API call was successful and returned a valid token
-            if (res && res.token) {
-                loginContext(email, res.token); // Pass email and token
-                navigate('/');
-                toast.success("Login successful");
-            } else {
-                toast.error("Login failed. Please check your email and password.");
+            loginContext(email, res.token)
+
+            navigate('/');
+
+            toast.success("Login successfull")
+
+        } else {
+            if (res && res.status === 400) {
+                toast.error(res.token)
+                toast.error("Wrong Email/Password");
             }
-        } catch (error) {
-            // Handle failed login with appropriate message
-            if (error.status === 400) {
-                toast.error(error.data.error);
-            } else {
-                toast.error(error.message || "An unexpected error occurred. Please try again.");
-            }
-            console.error("Login error:", error);
         }
-    };
+    }
 
-    // const handleLogin = async () => {
-    //     if (!email || !password) {
-
-    //         toast.error("Email/Password is required!");
-    //         return;
-    //     }
-
-    //     let res = await loginApi(email, password);
-    //     console.log("test", res)
-    //     if (res && res.token) {
-
-    //         loginContext(email, res.token)
-
-    //         navigate('/');
-
-    //         toast.success("Login success")
-
-    //     } else {
-    //         if (res && res.status === 400) {
-    //             toast.error(res.data.error)
-    //         }
-    //     }
-    // }
 
     return (
         <>

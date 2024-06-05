@@ -4,6 +4,7 @@ import TableUser from '../Components/TableUser';
 import Login from '../Components/LoginForm/LoginForm';
 import Register from '../Components/RegisterForm/RegisterForm';
 import PrivateRoute from './PrivateRoute';
+import ManageAccount from '../Components/ManageAccount/ManageAccount';
 const AppRoute = () => {
     return (
         <>
@@ -17,8 +18,8 @@ const AppRoute = () => {
                             <TableUser>
                             </TableUser>
                         </PrivateRoute>
-                    }
-                />
+                    } />
+                <Route path='/manageAcc' element={<ManageAccount />} />
             </Routes>
         </>
     )
