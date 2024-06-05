@@ -1,31 +1,94 @@
-
 import React from "react";
-import video from "../../Assets/5227413-uhd_3840_2160_24fps.mp4";
+// import video from "../../Assets/5227413-uhd_3840_2160_24fps.mp4";
 import './HomePage.scss';
-import ImageSlider from "./ImageSlider";
-import flowerImg from "../../Assets/v186_557.png";
-import lighthouseImg from "../../Assets/anh-thu-cung-cute_014114596.jpg";
-import dandelion from "../../Assets/anh-thu-cung-cute-2k_014112419.jpg";
+// import ImageSlider from "./ImageSlider";
+// import flowerImg from "../../Assets/v186_557.png";
+// import lighthouseImg from "../../Assets/anh-thu-cung-cute_014114596.jpg";
+// import dandelion from "../../Assets/anh-thu-cung-cute-2k_014112419.jpg";
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import image from "../../Assets/pngimg.com - dog_PNG50322.png";
+import image1 from "../../Assets/th.jpg";
+import image2 from "../../Assets/vet-1.jpg";
+import image3 from "../../Assets/tieng-anh-nganh-y-chuc-danh-bac-si.jpg";
+import { FaHeart } from "react-icons/fa";
+import { FaPhone } from "react-icons/fa6";
+import { UserContext } from '../../Context/UserContext';
+import { useContext, useEffect, useState } from 'react';
 const HomePage = () => {
-    const images = [
-        lighthouseImg,
-        flowerImg,
-        dandelion,
-        lighthouseImg,
-        flowerImg,
-        dandelion,
-        lighthouseImg,
-        // Add more image URLs here
-    ];
+    // const images = [
+    //     lighthouseImg,
+    //     flowerImg,
+    //     dandelion,
+    //     lighthouseImg,
+    //     flowerImg,
+    //     dandelion,
+    //     lighthouseImg,
+    //     // Add more image URLs here
+    // ];
+    const { user } = useContext(UserContext);
     return (
         <div className="HomePage">
-            <div className="imageSlider">
+            <div className="headerDiv">
                 {/* <video src={video} autoPlay muted loop></video> */}
-                <ImageSlider images={images} />
+                {/* <ImageSlider images={images} /> */}
+                <div className="headerText">
+                    <h2>Fur-ever friends</h2>
+                    <h2>Fur-ever memories</h2>
+                    <p>Owning a pet has evolved beyond mere companionship to become an integral part of many people's lives.
+                        This has led to an increased demand for professional healthcare services for pets
+                    </p>
+                    <div className="buttonDiv">
+                        <div className="button1">
+                            <button> ABOUT US <FaHeart className="icon" /></button>
+                        </div>
+                        <div className="button2">
+                            <button> 012-345-678 <FaPhone className="icon" /></button>
+                        </div>
+                    </div>
+                </div>
+                <div className="headerImage">
+                    <img src={image} alt="image" className="image"></img>
+                </div >
             </div>
-            <Container fluid className="middleDiv">
+
+            <div className="middleDiv">
+                <div className="middleText">
+                    <h3>For you</h3>
+                </div>
+                <div className="middleImage">
+                    <div class="box1">
+                        <div class="box-content">
+                            <div class="image-container">
+                                <img src={image1} alt="Image 1" class="box-image"></img>
+                            </div>
+                            <div class="text-container1">
+                                <button> Veterinarian </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box2">
+                        <div class="box-content">
+                            <div class="image-container">
+                                <img src={image2} alt="Image 2" class="box-image"></img>
+                            </div>
+                            <div class="text-container2">
+                                <button>News</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box3">
+                        <div class="box-content">
+                            <div class="image-container">
+                                <img src={image3} alt="Image 3" class="box-image"></img>
+                            </div>
+                            <div class="text-container3">
+                                <button>Medical specialty</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/* <Container fluid className="middleDiv">
                 <Row>
                     <Col xs={12} md={6} style={{ backgroundColor: '#f8f9fa', height: '40vh' }} className="leftCol" >
                         <div className="leftSide" style={{ padding: '20px' }}>
@@ -46,9 +109,10 @@ const HomePage = () => {
                         </div>
                     </Col>
                 </Row >
-            </Container>
-        </div>          
-    );           
+                    </Container> */}
+            </div>
+        </div>
+    );
 }
 
 export default HomePage;

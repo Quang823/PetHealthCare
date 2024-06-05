@@ -14,8 +14,9 @@ function App() {
   const { user, loginContext } = useContext(UserContext);
   console.log("user", user)
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      loginContext(localStorage.getItem("email"), localStorage.getItem("token"))
+    if (localStorage.getItem("data")) {
+      loginContext(  localStorage.getItem("email"),localStorage.getItem("data"))
+      
     }
   }, [])
   return (

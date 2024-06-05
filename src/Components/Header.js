@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../Context/UserContext';
 import logo from '../Assets/v186_574.png';
+import { MdPets } from "react-icons/md";
 import './Header.scss';
 const Header = (props) => {
     const { logout, user } = useContext(UserContext);
@@ -20,13 +21,16 @@ const Header = (props) => {
         navigate("/");
         toast.success("Sucess")
     }
+    const handleManageAccount = () => {
+        navigate("/manageAcc");
+    }
     const location = useLocation();
     return (
         <>
-            <Navbar expand="lg" className="bg-body-tertiary">
+            <Navbar expand="lg" className="custom-navbar">
                 <Container>
                     <Navbar.Brand href="/">
-                          <div className='logo-Tittle'>
+                        <div className='logo-Tittle'>
                             <div className='logo-container'>
                                 <img src={logo}
                                     width="30"
@@ -35,34 +39,46 @@ const Header = (props) => {
                                     alt='React Bootstrap logo'
                                 />
                             </div>
-                            <span>Pet Health Care</span>
+                            <span className='Title'>Pet Health Care</span>
                         </div>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             {location.pathname !== '/login' && (
-
                                 <>
-                                    <NavLink to="/" className="nav-link">Home</NavLink>
+                                    <NavLink to="/" className="nav-link">HOME</NavLink>
+                                    {/* <NavLink to="/users" className="nav-link" >Manage User</NavLink> */}
+                                    <NavLink to="/" className="nav-link">ABOUT</NavLink>
+                                    <NavLink to="/" className="nav-link">SERVICE</NavLink>
+                                    <NavLink to="/" className="nav-link">MANAGE PET</NavLink>
+                                    <NavLink to="/" className="nav-link">BOOKING</NavLink>
+                                    <NavLink to="/" className="nav-link">CONTACT</NavLink>
 
-
-                                    <NavLink to="/users" className="nav-link" >Manage User</NavLink>
                                 </>
                             )}
                         </Nav>
-                        <Nav >
-                            {user && user.email && <span className='nav-link'>Welcome {user.email} </span>}
+                        <Nav>
+                            {user && user.email && <span className='nav-link'> <MdPets className='icon' /> WELCOME {user.email} </span>}
                             <NavDropdown title="Setting" id="basic-nav-dropdown">
-                                {user && user.auth === true ? <NavDropdown.Item onClick={() => handleLogout()} >
-                                    Logout
-                                </NavDropdown.Item> : <NavLink to="/login" className="dropdown-item">Login</NavLink>}
+{user && user.auth === true ? (
+                                    <>
+                                        <NavDropdown.Item onClick={() => handleLogout()}>
+                                            Logout
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item onClick={() => handleManageAccount()}>
+                                            Manage Account
+                                        </NavDropdown.Item>
+                                    </>
+                                ) : (
+                                    <NavLink to="/login" className="dropdown-item">Login</NavLink>
+                                )}
                             </NavDropdown>
                         </Nav>
-
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
         </>)
+
 }
 export default Header;
