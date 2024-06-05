@@ -120,6 +120,11 @@ body {
       background-color: red;
       color: white;
     }
+    .Toastify__close-button{
+      .Toastify__close-button--light{
+        width: 50px;
+      }
+    }
    }
    .back{
     text-align: center;
@@ -147,6 +152,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
 
 
   

@@ -1,6 +1,8 @@
 .logo-Tittle {
     display: flex;
-    
+    .Title {
+        margin-left: 5px;
+    }
 }
 .logo-container {
     display: flex;
@@ -17,4 +19,32 @@
         max-height: 100%; /* Đảm bảo logo không vượt quá khung */
         border-radius: 50%; /* Đảm bảo logo có góc bo tròn nếu cần */
     }
+}
+.custom-navbar {
+    background-color: #007bff !important; 
+}
+
+.custom-navbar .nav-link,
+.custom-navbar .navbar-brand,
+.custom-navbar .navbar-toggler-icon {
+    color: #ffffff !important; 
+}
+.custom-navbar .dropdown-item {
+    color: #000;
+}
+.custom-navbar .nav-link {
+    border-radius: 10px;
+    .icon{
+        margin-bottom: 5px;
+    }
+}
+.custom-navbar .nav-link:hover {
+    background: #f74040;
+    color:#ffffff;
+    border-radius: 10px;
+}
+
+.custom-navbar .dropdown-item:hover {
+    color: #b8b8b8 !important; 
+   
 }
