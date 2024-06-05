@@ -71,6 +71,7 @@
           padding-left: 10px;
           margin-left: 60px;
           width: 86%;
+
           height: auto;
           object-fit: cover; /* Đảm bảo ảnh không bị méo */
           transform: scale(1.1); /* Tùy chọn: làm ảnh to lên */
@@ -218,33 +219,4 @@
   }
       
       }
-  }
-  
-      // .rightCol {
-      //   height: 40vh;
-      //   display: flex;
-      //   align-items: center;
-      //   justify-content: center;
-      //   .rightSide { 
-      //       border-radius: 15px; /* Bo góc */
-      //       background-color: rgba(164, 233, 146, 0.774); /* Màu nền của khung chứa text */
-      //       padding: 10px;
-      //     }
-      //   }     
-      // .leftCol {
-      //   background-color: #ffffff;
-      //   height: 40vh;
-      //   display: flex;
-      //   align-items: center;
-      //   justify-content: center;    
-      //     h3{
-      //       text-align: center; /* Căn giữa tiêu đề */
-      //       color: green; /* Màu xanh lá */
-      //       max-width: 260px;
-      //       font-family: 'Times New Roman', Times, serif;
-      //       font-weight: 700;
-      //     }
-      // }
-   
-  
-  
+    }

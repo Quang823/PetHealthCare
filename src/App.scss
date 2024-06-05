@@ -111,17 +111,24 @@ body {
         border: 1px solid aquamarine ;
       }
     }
-  //  button{
-  //   margin-top: 5px;
-  //   padding: 10px;
-  //   border-radius: 3px;
-  //   outline: none;
-  //   border: none;
-  //   &.active{
-  //     background-color: red;
-  //     color: white;
-  //   }
-  //  }
+
+   button{
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 3px;
+    outline: none;
+    border: none;
+    &.active{
+      background-color: red;
+      color: white;
+    }
+    .Toastify__close-button{
+      .Toastify__close-button--light{
+        width: 50px;
+      }
+    }
+   }
+
    .back{
     text-align: center;
     margin-top: 20px;
@@ -148,5 +155,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
- 
 

@@ -7,7 +7,11 @@ import './HomePage.scss';
 // import dandelion from "../../Assets/anh-thu-cung-cute-2k_014112419.jpg";
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+<<<<<<< HEAD
 import image from "../../Assets/Puppy-PNG-Image.png";
+=======
+import image from "../../Assets/pngimg.com - dog_PNG50322.png";
+>>>>>>> master
 import image1 from "../../Assets/th.jpg";
 import image2 from "../../Assets/vet-1.jpg";
 import image3 from "../../Assets/tieng-anh-nganh-y-chuc-danh-bac-si.jpg";
