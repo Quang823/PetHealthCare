@@ -1,0 +1,14 @@
+/* ToastifyCustom.css */
+.Toastify__close-button {
+    background-color: rgb(247, 247, 247); /* Thay đổi màu nền */
+    border-radius: 10px;
+    color: white; /* Thay đổi màu chữ */
+    border: none; /* Loại bỏ đường viền */
+    padding: 5px; /* Thay đổi khoảng cách bên trong */
+    cursor: pointer; /* Thay đổi con trỏ chuột khi hover */
+    width: 50px;
+}
+
+.Toastify__close-button:hover {
+    background-color: rgb(224, 224, 224); /* Thay đổi màu nền khi hover */
+}

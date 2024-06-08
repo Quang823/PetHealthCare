@@ -1,0 +1,16 @@
+.image-slider {
+    width: 100%;
+    text-align: center;
+
+
+  }
+  .image-slider .slick-dots {
+    bottom: -30px;
+  }
+  .image-slider img {
+    width: 100%;
+ 
+  }
+
+ 
+ 

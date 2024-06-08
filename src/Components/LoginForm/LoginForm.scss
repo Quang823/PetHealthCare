@@ -1,0 +1,250 @@
+.login-page  {
+    height: 130vh;
+    width: 100%;
+    margin: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: whitesmoke;
+    background: url('../../Assets/hinh-thu-cung-cute-dep-nhat_014120300.jpg')
+     no-repeat;
+    background-size: cover;
+    background-position: center;
+   
+    
+
+    .container {
+        height: 100vh;
+        width: 70%;
+        margin: auto;
+        justify-content: space-between;
+        border-radius: 10px;
+        background: hsla(128, 100%, 94%, 0.863);
+        border: 2px solid #00000083;
+       
+        .videoDiv {
+            position: relative;
+            display: flex;
+            flex-basis: 50%;
+            width: 70%;
+            height: 100%;
+            padding: 0 1.5rem;
+            text-align: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: auto;
+            border-radius: 10px;
+            overflow: hidden;
+
+
+            video, .footerDiv {
+                position: absolute;
+            }
+
+            video{
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                top:0;
+                bottom: 0;
+                right: 0;
+                left: 0;
+            }
+            
+            .textDiv {
+                position: relative;
+                
+                .title {
+                    color:whitesmoke;
+                    font-size: 35px;
+                    font-weight: 800;
+                }
+                p {
+                    color: whitesmoke;
+                    padding: 1rem;
+                    font-weight: 400;
+                    
+                }
+            }
+            .footerDiv {
+                bottom: -10px;
+                padding: 0 1rem;
+                height: 60px;
+                left: 0;
+                right: 0;
+                justify-content: space-between;
+                backdrop-filter: blur(1px);
+                border-radius: 10px;
+                margin: 0 auto;
+                p{
+                    font-weight: 500;
+                }
+                a {
+                    font-weight: 500;
+                } 
+               
+
+                .btn {
+                    background: whitesmoke;
+                    color: rgb(0, 0, 0);
+                    margin-left: 20px;
+                    border-radius: 400;
+                    transition: .3s ease;
+                    padding: 5px 10px 5px 10px;
+
+                    &:hover{
+                        background: rgb(163, 163, 163);
+                        color: rgb(22, 22, 22);
+                    }
+                }
+            }
+        }
+
+        .formDiv {
+            flex-basis: 50%;
+            margin: 0 auto;
+            flex-direction: column;
+           
+            transform: translateY(-1rem);
+            h3 {
+                margin-bottom: 16px;
+            }
+            .headerDiv{
+                text-align: center;
+                justify-content: center;
+                background-color: transparent;
+
+                img{
+                    width: 100px;
+                    
+                }
+                .logo-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 120px; /* Đặt kích thước chiều rộng cho khung tròn */
+                    height: 120px; /* Đặt kích thước chiều cao cho khung tròn */
+                    background-color: #cff8ca9c; /* Màu nền trắng */
+                    border: 2px solid #000; /* Viền đen */
+                    border-radius: 50%; /* Tạo khung tròn */
+                    padding: 10px; /* Khoảng cách giữa ảnh và viền */
+                    .logo {
+                        max-width: 100%; /* Đảm bảo logo không vượt quá khung */
+                        max-height: 100%; /* Đảm bảo logo không vượt quá khung */
+                        border-radius: 50%; /* Đảm bảo logo có góc bo tròn nếu cần */
+                    }
+                }
+               
+            }
+            .wrapper {
+                width: 420px;
+                background-color: transparent;
+                border: 1px solid rgba(255, 255, 255, .2);
+                backdrop-filter: blur(7px);
+                box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+                color: #000000;
+                border-radius: 10px;
+                margin-left: 10px;
+    
+                h1 {
+                    font-size: 36px;
+                    text-align: center;
+                }
+                .input-box {
+                    position: relative;
+                    width: 100%;
+                    height: 50px;
+                    text-align: left;
+                    margin: 30px 0;
+                    font-family: fontAwesome;
+
+                    input {
+                        width: 100%;
+                        height: 100%;
+                        background: transparent;
+                        border: none;
+                        outline: none;
+                        border: 2px solid rgba(0, 0, 0, 0.2);
+                        border-radius: 40px;
+                        font-size: 16px;
+                        color: #000000;
+                        padding: 20px 45px 20px 20px;
+                        background-color: rgb(218, 245, 230);
+                        font-family: none;
+                    }
+                    input::placeholder {
+                        color: #000000;
+                        font-family: none;
+                        font-weight: 200;
+                    }
+                    input:focus {
+                        border-color: rgb(0, 0, 0);
+                        text-indent: 5px;
+                    }
+                    .icon {
+                        position: absolute;
+                        right: 20px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        font-size: 16px;
+                    }
+                    i {
+                        position: absolute;
+                        top: 14px;
+                        right: 21px;
+                    
+                    }
+
+                }
+                
+                .remember-forgot {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 14.5px;
+                    margin: -15px 0 15px;
+
+                    label input {
+                        accent-color: #000000;
+                        margin-right: 4px;
+                    }
+
+                    label input:hover {
+                        accent-color: #5f73e7;
+                        margin-right: 4px;
+                    }
+                    a {
+                        color: #000000;
+                        text-decoration: none;
+                    }
+                    a:hover {
+                        text-decoration: underline;
+                    }
+                    .forgot-password-link {
+                        cursor: pointer;
+                        color: #000000;
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                }
+            }
+                }
+            }
+        }
+    
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+    
+
+
+}
+
+
+
+
+
+

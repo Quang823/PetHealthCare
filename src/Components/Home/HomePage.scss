@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.HomePage {
+
+  .headerDiv {
+
+    display: flex;
+    background-color: #007bff; 
+    background: url('../../Assets/hinh-anh-background-xanh-dep_060335609.jpg');
+    height: 390px; 
+    width: 100%;
+    padding: 20px; /* Tùy chọn: để có khoảng cách xung quanh nội dung */
+    box-sizing: border-box;
+    margin-top: 55px;
+     
+      .headerText {
+        flex: 2 1 40%; /* 2 phần 5 theo chiều ngang */
+        justify-content: center;
+        flex-direction: column;
+        
+        color: rgb(255, 255, 255); /* Màu chữ */
+        padding-left: 40px; /* Tùy chọn: để có khoảng cách bên trong */
+        padding-top: 20px;
+        h2 {
+          text-align: center;
+          // font-weight: bold; /* In đậm */
+          font-size: 50px; /* Kích thước to */
+          font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+         }
+        p {
+          font-size: 15px; /* Kích thước nhỏ */
+          font-weight: normal; /* Không in đậm */
+          text-align: justify; /* Canh giữa nội dung */
+        }
+        .buttonDiv {
+          display: flex;
+          justify-content: space-between;
+        
+        .button1 button {
+          background-color: #FE6B7F;
+          color: #ffffff;
+          border-radius: 10px;
+          width: 170px;
+          cursor: pointer;
+          .icon {
+            margin-left: 2px;
+            margin-bottom: 4px;
+          }
+        }
+        .button2 button {
+          background-color: #00C274;
+          color: #ffffff;
+          border-radius: 10px;
+          width: 170px;
+          .icon {
+            position: absolute;
+            margin-left: 4px;
+            margin-top: 4px;
+          }
+        }
+      }
+      }
+      .headerImage {
+        flex: 3 1 60%; /* 3 phần 5 theo chiều ngang */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+         
+        }
+        .image {
+          padding-top: 40px;
+          padding-left: 10px;
+          margin-left: 60px;
+          width: 86%;
+
+          height: auto;
+          object-fit: cover; /* Đảm bảo ảnh không bị méo */
+          transform: scale(1.1); /* Tùy chọn: làm ảnh to lên */
+          perspective: 1000px; /* Tùy chọn: thêm hiệu ứng 3D */
+          transform: rotate(-2.5deg);
+          filter: brightness(1.1);
+          // box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5); /* Thêm bóng cho ảnh */
+          transition: filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt mà */
+            .image:hover {
+            transform: scale(1.1) rotateY(10deg);
+        }
+      }
+    }
+  }
+  .middleDiv {
+    margin-top: 30px;
+    margin-bottom: 30px;
+      .middleText {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        margin-bottom: 15px;
+        h3 {
+          font-weight: 300;
+        }
+      }
+      .middleImage {
+        background-color: #ffffff;
+          display: flex;
+          width: 100%;
+          height: 100%;
+      
+      .box1 {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          box-sizing: border-box;
+          background-color: #007bff;
+      }
+      
+      .box2 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #00C274;
+    }
+      .box3 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #FE6B7F;
+  }
+      .box-content {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          border-radius: 10px;
+          overflow: hidden;
+      }
+     
+      .box:nth-child(1) .image-container,
+      .box:nth-child(3) .image-container {
+          flex: 2;
+      }
+      
+      .box:nth-child(1) .text-container,
+      .box:nth-child(3) .text-container {
+          flex: 3;
+      }
+      
+      .box:nth-child(2) .image-container {
+          flex: 1;
+      }
+      
+      .box:nth-child(2) .text-container {
+          flex: 1;
+      }
+      
+      .box-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+      }
+      
+      .text-container1 {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          box-sizing: border-box;
+          background-color: #007bff;
+          color: #333;
+          font-size: 16px;
+          text-align: center;
+          button {
+            background-color: #ffffff;
+            color: #007bff;
+            border-radius: 10px;
+            width: 100px;
+            cursor: pointer;
+          }
+      }
+      .text-container2 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #00C274;
+        color: #333;
+        font-size: 16px;
+        text-align: center;
+        button {
+          background-color: #ffffff;
+          color: #00C274;
+          border-radius: 10px;
+          width: 100px;
+          cursor: pointer;
+        }
+    }
+    .text-container3 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #FE6B7F;
+      color: #333;
+    
+      text-align: center;
+      button {
+        background-color: #ffffff;
+        color: #FE6B7F;
+        border-radius: 10px;
+        width: 100px;
+        height: 60px;
+        cursor: pointer;
+      }
+  }
+      
+      }
+    }
+
+  .thirDiv {
+    .thirdText{
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      margin-bottom: 15px;
+      h3{
+        font-weight: 300;
+      }
+    }
+  }

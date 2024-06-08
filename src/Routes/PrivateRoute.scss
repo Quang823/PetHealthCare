@@ -1,0 +1,32 @@
+.Login_to_use {
+    max-width: 100%;
+    margin: 50px auto;
+    padding: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    .text {
+        text-align: center;
+    }
+  }
+  
+  .Login_to_use .buttonDiv {
+    text-align: center;
+    margin-top: 20px;
+   
+  }
+  
+  .Login_to_use button {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 12px 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .Login_to_use button:hover {
+    background-color: #318ef1;
+  }
+  
+ 
+  
