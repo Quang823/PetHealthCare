@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './LoginForm.scss';
 import { FaUser } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 import logo from '../../Assets/v186_574.png';
 import video from '../../Assets/7515875-hd_1080_1920_30fps.mp4';
 import { loginApi } from '../../Service/UserService';
@@ -26,7 +27,7 @@ const LoginForm = () => {
     }
 
     const handleForgotPassword = () => {
-        navigate('/request-otp');
+        navigate('/forgot-password');
     };
 
     const handleBack = () => {
@@ -111,7 +112,7 @@ const LoginForm = () => {
                                     value={email}
                                     onChange={(event) => setEmail(event.target.value)}
                                 />
-                                <FaUser className="icon" />
+                                <MdEmail className="icon" />
                             </div>
 
                             <div className="input-box">

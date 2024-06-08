@@ -9,11 +9,39 @@ import { UserContext } from '../../Context/UserContext';
 import logo from '../../Assets/v186_574.png';
 import { MdPets } from "react-icons/md";
 import './Header.scss';
+import { jwtDecode } from "jwt-decode";
 const Header = (props) => {
     const { logout, user } = useContext(UserContext);
-    const [hideHeader, setHideHeader] = useState(false);
+    const [userName, setUserName] = useState("");
 
+    useEffect(() => {
+        // Kiểm tra xem token có tồn tại và là chuỗi hợp lệ không
+        const token = localStorage.getItem('token');
+        if (user && token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                if (decodedToken && decodedToken.User) {
+                    setUserName(decodedToken.User.name); // Cập nhật tên người dùng từ token giải mã
+                }
+            } catch (error) {
+                console.error('Invalid token:', error);
+            }
+        }
+    }, [user]);
+    // useEffect(() => {
+    //     // Kiểm tra xem user có tồn tại và có thông tin token không
+    //     const token = localStorage.getItem('token');
+    //     if (user && token) {
 
+    //         const decodedToken = jwtDecode(token);
+    //         const userName = decodedToken.User.name;
+
+    //         // Lấy tên người dùng từ thông tin giải mã
+    //         if (decodedToken && userName) {
+    //             setUserName(userName);
+    //         }
+    //     }
+    // }, [user]);
 
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -58,8 +86,9 @@ const Header = (props) => {
                                 </>
                             )}
                         </Nav>
+
                         <Nav>
-                            {user && user.email && <span className='nav-link'> <MdPets className='icon' /> WELCOME {user.email} </span>}
+                            {user && user.auth === true && <span className='nav-link'> <MdPets className='icon' /> WELCOME {userName} </span>}
                             <NavDropdown title="Setting" id="basic-nav-dropdown">
 
                                 {user && user.auth === true ? (

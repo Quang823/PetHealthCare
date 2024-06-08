@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
-const updateUser = async ( userData) => {
+const updateUser = async (userData) => {
     const token = localStorage.getItem('token');
     const decodedToken = jwtDecode(token);
     const userID = decodedToken.User.userID;

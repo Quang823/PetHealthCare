@@ -28,37 +28,39 @@
           font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
          }
         p {
-          font-size: 15px; /* Kích thước nhỏ */
-          font-weight: normal; /* Không in đậm */
-          text-align: justify; /* Canh giữa nội dung */
+          font-size: 17px; 
+          font-weight: normal; 
+          text-align: justify;
+          color: #ffffff;
         }
         .buttonDiv {
           display: flex;
           justify-content: space-between;
         
-        .button1 button {
-          background-color: #FE6B7F;
-          color: #ffffff;
-          border-radius: 10px;
-          width: 170px;
-          cursor: pointer;
-          .icon {
-            margin-left: 2px;
-            margin-bottom: 4px;
+          .button1 button {
+           background-color: #FE6B7F;
+           color: #ffffff;
+            border-radius: 10px;
+            width: 175px;
+            cursor: pointer;
+            .icon {
+             margin-left: 2px;
+             margin-bottom: 4px;
+            }
           }
-        }
-        .button2 button {
-          background-color: #00C274;
-          color: #ffffff;
-          border-radius: 10px;
-          width: 170px;
-          .icon {
-            position: absolute;
-            margin-left: 4px;
-            margin-top: 4px;
+          .button2 button {
+            background-color: #00C274;
+            color: #ffffff;
+            border-radius: 10px;
+            width: 175px;
+            .icon {
+             position: absolute;
+              margin-left: 5px;
+              margin-top: 4px;
           }
         }
       }
+
       }
       .headerImage {
         flex: 3 1 60%; /* 3 phần 5 theo chiều ngang */
@@ -67,7 +69,7 @@
         align-items: center;
          
         }
-        .image {
+      .image {
           padding-top: 40px;
           padding-left: 10px;
           margin-left: 60px;
@@ -131,6 +133,7 @@
       box-sizing: border-box;
       background-color: #FE6B7F;
   }
+
       .box-content {
           display: flex;
           width: 100%;
@@ -138,6 +141,103 @@
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           border-radius: 10px;
           overflow: hidden;
+
+        .text-container1 {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #007bff;
+            color: #333;
+            font-size: 10px;
+            
+            button {
+              display: flex;
+              justify-content: center; /* Canh giữa theo chiều ngang */
+              align-items: center; /* Canh giữa theo chiều dọc */
+              width: 100%;
+              padding: 10px;
+              background-color: #fdfdfd;
+              border: none;
+              border-radius: 5px;
+              color:#007bff;
+              cursor: pointer;
+              outline: none;
+              transition: background-color 0.3s ease;
+              font-size: 16px;
+              text-align: center;
+            }
+    
+            button:hover {
+              background-color: #89b5e4;
+            }
+      }
+        .text-container2 {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          box-sizing: border-box;
+          background-color: #00C274;
+          color: #333;
+          font-size: 16px;
+          text-align: center;
+          button {
+            display: flex;
+            justify-content: center; /* Canh giữa theo chiều ngang */
+            align-items: center; /* Canh giữa theo chiều dọc */
+            width: 100%;
+            padding: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #fdfdfd;
+            border: none;
+            border-radius: 5px;
+            color:#00C274;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            text-align: center;
+          }
+  
+          button:hover {
+            background-color: #89b5e4;
+          }
+      }
+        .text-container3 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #FE6B7F;
+        color: #333;
+        text-align: center;
+        button {
+          display: flex;
+          justify-content: center; /* Canh giữa theo chiều ngang */
+          align-items: center; /* Canh giữa theo chiều dọc */
+          width: 100%;
+          padding: 10px;
+          background-color: #fdfdfd;
+          border: none;
+          border-radius: 5px;
+          color:#FE6B7F;
+          cursor: pointer;
+          outline: none;
+          transition: background-color 0.3s ease;
+          font-size: 16px;
+          text-align: center;
+        }
+
+        button:hover {
+          background-color: #89b5e4;
+        }
+
+      }
       }
      
       .box:nth-child(1) .image-container,
@@ -164,61 +264,7 @@
           object-fit: cover;
       }
       
-      .text-container1 {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-          box-sizing: border-box;
-          background-color: #007bff;
-          color: #333;
-          font-size: 16px;
-          text-align: center;
-          button {
-            background-color: #ffffff;
-            color: #007bff;
-            border-radius: 10px;
-            width: 100px;
-            cursor: pointer;
-          }
-      }
-      .text-container2 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        box-sizing: border-box;
-        background-color: #00C274;
-        color: #333;
-        font-size: 16px;
-        text-align: center;
-        button {
-          background-color: #ffffff;
-          color: #00C274;
-          border-radius: 10px;
-          width: 100px;
-          cursor: pointer;
-        }
-    }
-    .text-container3 {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      box-sizing: border-box;
-      background-color: #FE6B7F;
-      color: #333;
-    
-      text-align: center;
-      button {
-        background-color: #ffffff;
-        color: #FE6B7F;
-        border-radius: 10px;
-        width: 100px;
-        height: 60px;
-        cursor: pointer;
-      }
-  }
+   
       
       }
     }
