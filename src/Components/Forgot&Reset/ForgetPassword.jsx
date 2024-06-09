@@ -12,7 +12,7 @@ const ForgotPassword = () => {
         try {
 
             let success = await getOTP(email);
-            if (success) {
+            if (success && success === "Please check your email address to get OTP") {
                 localStorage.setItem("email", email);
                 console.log(success)
                 navigate('/verify-otp');

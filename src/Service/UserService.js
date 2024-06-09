@@ -29,7 +29,7 @@ const UserInforApi = (userID, name, email, password, phone, address) => {
 
 }
 const ResetAccPassword = (email, password) => {
-    return axios.post("account/reset-password", { email, password })
+    return axios.put("account/reset-password", { email, password })
 }
 
 const getOTP = (email) => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ResetAccPassword } from '../../Service/UserService';
 import './ResetPassword.scss'; // Import CSS
@@ -7,6 +7,13 @@ const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+
+    useEffect(() => {
+        // Lấy email từ localStorage
+        const storedEmail = localStorage.getItem('email');
+        setEmail(storedEmail);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,8 +22,8 @@ const ResetPassword = () => {
             return;
         }
         try {
-            let success = await ResetAccPassword(password);
-            if (success) {
+            let success = await ResetAccPassword(email,password);
+            if (success && success === "Reset password successfully") {
                 alert('Password reset successfully. You can now login with your new password.');
                 navigate('/login');
             } else {

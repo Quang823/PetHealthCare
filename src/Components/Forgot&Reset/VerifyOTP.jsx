@@ -18,7 +18,7 @@ const VerifyOTP = () => {
         e.preventDefault();
         try {
             let success = await VerifyOtp(email, otp);
-            if (success) {
+            if (success && success === "Enter your new password") {
                 navigate('/reset-password');
                 alert('Success');
             } else {
