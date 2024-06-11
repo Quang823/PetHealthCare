@@ -11,6 +11,7 @@ import VerifyOTP from '../Components/Forgot&Reset/VerifyOTP';
 import ResetPassword from '../Components/Forgot&Reset/ResetPassword';
 import Contact from '../Components/Contact/Contact';
 import ServicePage from '../Components/ServicePage/ServicePage';
+
 const AppRoute = () => {
     return (
         <>
