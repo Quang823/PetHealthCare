@@ -21,6 +21,9 @@ const LoginForm = () => {
     const { logout } = useContext(UserContext);
     const { loginContext } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
+
+
+
     const registerLink = (event) => {
         event.preventDefault();
         navigate('/register');
@@ -63,7 +66,7 @@ const LoginForm = () => {
 
                 toast.success("Login successful");
             } else {
-                toast.error("Không lấy được thông tin vai trò");
+                toast.error("Unable to retrieve user role");
             }
         } else {
             if (res && res.status === 401) {
@@ -132,6 +135,8 @@ const LoginForm = () => {
                                 <label>
                                     <input type="checkbox" /> Remember me
                                 </label>
+
+
                                 <p className="forgot-password-link" onClick={handleForgotPassword}>
                                     Forgot Password?
                                 </p>
@@ -139,10 +144,10 @@ const LoginForm = () => {
 
                             <button type="submit" className={email && password ? "active" : ""
 
-                            } onClick={() => handleLogin()} disabled={isLoading}>
+                            } onClick={() => handleLogin()}>
                                 {isLoading ? (
                                     <span className="spinner-container">
-                                        <i className="spinner"></i> Logging in...
+                                        <i className="spinner"></i> Log in
                                     </span>
                                 ) : (
                                     'Login'

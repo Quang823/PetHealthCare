@@ -1,0 +1,69 @@
+/* src/components/BookingForm.css */
+
+.booking-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .booking-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .booking-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .booking-container label {
+    margin-bottom: 10px;
+    color: #666;
+    font-weight: bold;
+  }
+  
+  .booking-container select, 
+  .booking-container input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
+  
+  .booking-container button {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .booking-container button:hover {
+    background-color: #218838;
+  }
+  
+  .booking-container p {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .booking-container .react-datepicker-wrapper {
+    width: 100%;
+  }
+  
+  .booking-container .react-datepicker__input-container input {
+    width: 100%;
+  }
+  

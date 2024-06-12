@@ -35,7 +35,7 @@ const ManageAccount = () => {
         };
 
         fetchUserInfo();
-    }, []);
+    }, [isEditing]);
 
 
     if (!user) {

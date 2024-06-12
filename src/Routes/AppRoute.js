@@ -11,6 +11,8 @@ import VerifyOTP from '../Components/Forgot&Reset/VerifyOTP';
 import ResetPassword from '../Components/Forgot&Reset/ResetPassword';
 import Contact from '../Components/Contact/Contact';
 import ServicePage from '../Components/ServicePage/ServicePage';
+import BookingPage from '../Components/Booking/BookingPage';
+import PaymentPage from '../Components/Payment/Payment';
 const AppRoute = () => {
     return (
         <>
@@ -32,6 +34,13 @@ const AppRoute = () => {
                 <Route path='/service' element={<ServicePage />} />
                 <Route path='/forgot-password' element={<ForgotPassword />} />
                 <Route path='/verify-otp' element={<VerifyOTP />} />
+                <Route path="/booking" element={
+                    <PrivateRoute >
+                        <BookingPage>
+                        </BookingPage>
+                    </PrivateRoute>
+                } />
+                <Route path='/payment' element={<PaymentPage />} />
             </Routes>
         </>
     )

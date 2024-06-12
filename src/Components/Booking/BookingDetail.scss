@@ -1,0 +1,30 @@
+/* src/components/BookingDetail.css */
+
+.booking-detail-container {
+    width: 100%;
+    background-color: #f5f5f5;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    border: 2px #333;
+  }
+  
+  .booking-detail-card {
+    border-radius: 5px;
+  }
+  
+  .booking-detail-card h3 {
+    color: #333;
+    font-size: 18px;
+  }
+  
+  .booking-detail-card p {
+    color: #666;
+    width: 100%;
+  }
+  
+  .booking-total-cost {
+    font-size: 20px;
+    color: #333;
+  }
+  

@@ -1,34 +1,41 @@
-
 import { ToastContainer, toast } from 'react-toastify';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import './App.scss';
-import Header from './Components/Header/Header';
-import Footer from './Components/Footer/Footer';
-import ModalAddNew from './Components/ManagePet/ModalAddNew';
 import Container from 'react-bootstrap/esm/Container';
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { UserContext } from './Context/UserContext';
-import AppRoute from './Routes/AppRoute';
+import CustomerLayout from './CustomerLayout';
+import AdminLayout from './AdminLayout';
+import HomePage from './Components/Home/HomePage';
+import AdminPage from './Components/Admin/Admin';
 import './ToastifyCustom.css';
-
+import AppRoute from './Routes/AppRoute';
 function App() {
   const { user, loginContext } = useContext(UserContext);
   console.log("user", user)
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       loginContext(localStorage.getItem("email"), localStorage.getItem("token"))
-
     }
   }, [])
+
   return (
     <>
-      <div className='app-container'>
-        <Header></Header>
-        <Container>
-          <AppRoute></AppRoute>
-        </Container>
-        <Footer></Footer>
-      </div>
+      <Routes>
+        <Route path="/admin" element={
+          <AdminLayout>
+            <AdminPage />
+          </AdminLayout>
+        } />
+        <Route path="/" element={
+          <CustomerLayout>
+            <Container>
+              <AppRoute></AppRoute>
+            </Container>
+          </CustomerLayout>
+        } />
+      </Routes>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -41,8 +48,6 @@ function App() {
         pauseOnHover
         theme="light"
       />
-      {/* Same as */}
-      <ToastContainer />
     </>
   );
 }
