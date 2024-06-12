@@ -10,7 +10,7 @@ import { CSVLink } from "react-csv";
 import { MdInput, MdOutput } from "react-icons/md";
 import { FaPlus, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'; 
 
 import {jwtDecode} from 'jwt-decode';
 // const TablePet = (props) => {
@@ -188,6 +188,7 @@ const TablePet = () => {
     const [showEditForm, setShowEditForm] = useState(false);
     const [error, setError] = useState('');
     const [userID, setUserID] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
     const [newPet, setNewPet] = useState({
         petname: '',
         petage: '',
@@ -204,17 +205,62 @@ const TablePet = () => {
     //     vaccination: ''
     // });
     const [shouldFetchData, setShouldFetchData] = useState(true);
+   
+
+    // useEffect(()=> {
+    //     const fetchUserID = () => {
+    //         const token = localStorage.getItem('token');
+    //         if (token) {
+    //             const decodedToken = jwtDecode(token);
+    //             setUserID(decodedToken.User.userID);
+    //         }
+    //     };
+    //   fetchUserID();
+    // }, []);
+
+    // useEffect(() => {
+    //     try {
+    //         if(userID){
+    //             axios.get(`http://localhost:8080/pet/getAll/${userID}`)
+    //         .then(res => setData(res.data))
+    //         .catch(err => console.log(err));
+    //         setShouldFetchData(true);
+    //         const token = localStorage.getItem('token');
+    //         if (token) {
+    //             const decodedToken = jwtDecode(token);
+    //             setUserID(decodedToken.User.userID);
+    //         }
+    //         }
+    //     } catch (error) {
+    //         console.error('cant not load data', )
+    //     }
+        
+        
+    // }, [newPet]);
     useEffect(() => {
-        axios.get('http://localhost:8080/pet/getAll')
-            .then(res => setData(res.data))
-            .catch(err => console.log(err));
-            setShouldFetchData(true);
-        const token = localStorage.getItem('token');
-        if (token) {
-            const decodedToken = jwtDecode(token);
-            setUserID(decodedToken.User.userID);
-        }
-    }, [newPet]);
+        const fetchUserID = () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const decodedToken = jwtDecode(token);
+                setUserID(decodedToken.User.userID);
+            }
+        };
+        fetchUserID();
+    }, []);
+
+    useEffect(() => {
+        const fetchPets = async () => {
+            try {
+                if (userID) {
+                    const res = await axios.get(`http://localhost:8080/pet/getAll/${userID}`);
+                    setData(res.data);
+                }
+            } catch (err) {
+                console.error('Cannot load data', err);
+            }
+        };
+        fetchPets();
+    },  [newPet]);
 
     const handleChange = (e) => {
         setNewPet({
@@ -238,7 +284,7 @@ const TablePet = () => {
         }
 
         const petData = { ...newPet };
-        axios.post(`http://localhost:8080/pet/create/${userID}`, petData)
+        axios.post(`http://localhost:8080/pet/create/${userID}`, newPet)
             .then(res => {
                 setData([...data, res.data]);
                 setNewPet({
@@ -251,6 +297,8 @@ const TablePet = () => {
                 setShowForm(false);
                 setError('');
                 toast.success("Add new pet success");
+              
+          
             })
             .catch(err => console.log(err));
     };

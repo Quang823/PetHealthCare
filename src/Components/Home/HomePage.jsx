@@ -11,7 +11,7 @@ import { FaPhone } from "react-icons/fa6";
 import { UserContext } from '../../Context/UserContext';
 import { useContext, useEffect, useState } from 'react';
 const HomePage = () => {
-
+    // localStorage.clear;
     const { user } = useContext(UserContext);
     return (
         <div className="HomePage">
@@ -41,32 +41,32 @@ const HomePage = () => {
                     <h3>For you</h3>
                 </div>
                 <div className="middleImage">
-                    <div class="box1">
-                        <div class="box-content">
-                            <div class="image-container">
-                                <img src={image1} alt="Image 1" class="box-image"></img>
+                    <div className="box1">
+                        <div className="box-content">
+                            <div className="image-container">
+                                <img src={image1} alt="Image 1" className="box-image"></img>
                             </div>
-                            <div class="text-container1">
+                            <div className="text-container1">
                                 <button> Veterinarian </button>
                             </div>
                         </div>
                     </div>
-                    <div class="box2">
-                        <div class="box-content">
-                            <div class="image-container">
-                                <img src={image2} alt="Image 2" class="box-image"></img>
+                    <div className="box2">
+                        <div className="box-content">
+                            <div className="image-container">
+                                <img src={image2} alt="Image 2" className="box-image"></img>
                             </div>
-                            <div class="text-container2">
+                            <div className="text-container2">
                                 <button>News</button>
                             </div>
                         </div>
                     </div>
-                    <div class="box3">
-                        <div class="box-content">
-                            <div class="image-container">
-                                <img src={image3} alt="Image 3" class="box-image"></img>
+                    <div className="box3">
+                        <div className="box-content">
+                            <div className="image-container">
+                                <img src={image3} alt="Image 3" className="box-image"></img>
                             </div>
-                            <div class="text-container3">
+                            <div className="text-container3">
                                 <button>Medical specialty</button>
                             </div>
                         </div>

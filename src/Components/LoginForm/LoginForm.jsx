@@ -139,7 +139,7 @@ const LoginForm = () => {
 
                             <button type="submit" className={email && password ? "active" : ""
 
-                            } onClick={() => handleLogin()} disabled={isLoading}>
+                            } onClick={() => handleLogin()}>
                                 {isLoading ? (
                                     <span className="spinner-container">
                                         <i className="spinner"></i> Logging in...
