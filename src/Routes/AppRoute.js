@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Home from '../Components/Home/HomePage';
 import TablePet from '../Components/ManagePet/TablePet';
 import Login from '../Components/LoginForm/LoginForm';
@@ -13,9 +13,11 @@ import Contact from '../Components/Contact/Contact';
 import ServicePage from '../Components/ServicePage/ServicePage';
 import BookingPage from '../Components/Booking/BookingPage';
 import PaymentPage from '../Components/Payment/Payment';
+import Header from '../Components/Header/Header';
+import Footer from '../Components/Footer/Footer';
 const AppRoute = () => {
     return (
-        <>
+        <> <Header></Header>
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/login' element={<Login />} />
@@ -41,7 +43,9 @@ const AppRoute = () => {
                     </PrivateRoute>
                 } />
                 <Route path='/payment' element={<PaymentPage />} />
+
             </Routes>
+            <Footer></Footer>
         </>
     )
 }

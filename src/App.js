@@ -1,41 +1,34 @@
+
 import { ToastContainer, toast } from 'react-toastify';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './App.scss';
 import Container from 'react-bootstrap/esm/Container';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import { UserContext } from './Context/UserContext';
-import CustomerLayout from './CustomerLayout';
-import AdminLayout from './AdminLayout';
-import HomePage from './Components/Home/HomePage';
-import AdminPage from './Components/Admin/Admin';
-import './ToastifyCustom.css';
 import AppRoute from './Routes/AppRoute';
+import './ToastifyCustom.css';
+import AdminLayout from './Routes/AdminLayout';
+
+
 function App() {
   const { user, loginContext } = useContext(UserContext);
   console.log("user", user)
-
   useEffect(() => {
     if (localStorage.getItem("token")) {
       loginContext(localStorage.getItem("email"), localStorage.getItem("token"))
+
     }
   }, [])
-
   return (
     <>
-      <Routes>
-        <Route path="/admin" element={
-          <AdminLayout>
-            <AdminPage />
-          </AdminLayout>
-        } />
-        <Route path="/" element={
-          <CustomerLayout>
-            <Container>
-              <AppRoute></AppRoute>
-            </Container>
-          </CustomerLayout>
-        } />
-      </Routes>
+      <div className='app-container'>
+        <Routes>
+          {/* Routes for customer */}
+          <Route path="/*" element={<AppRoute />} />
+          {/* Routes for admin */}
+          <Route path="/admin/*" element={<AdminLayout />} />
+        </Routes>
+      </div>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -48,6 +41,8 @@ function App() {
         pauseOnHover
         theme="light"
       />
+      {/* Same as */}
+      <ToastContainer />
     </>
   );
 }

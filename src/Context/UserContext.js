@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 // @function  UserContext
 const UserContext = React.createContext({ name: '', auth: false });
@@ -7,7 +8,23 @@ const UserContext = React.createContext({ name: '', auth: false });
 // Create function to provide UserContext
 const UserProvider = ({ children }) => {
   const [user, setUser] = React.useState({ name: '', auth: false });
-
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        if (decodedToken && decodedToken.User) {
+          setUser({
+            name: decodedToken.User.name,
+            email: decodedToken.User.email,
+            auth: true,
+          });
+        }
+      } catch (error) {
+        console.error('Invalid token:', error);
+      }
+    }
+  }, []);
   const loginContext = (email, token) => {
     setUser((user) => ({
       email: email,
@@ -18,10 +35,10 @@ const UserProvider = ({ children }) => {
     //   localStorage.setItem("email", email);
   };
 
-
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
+    localStorage.removeItem("emial");
     localStorage.removeItem("data");
     localStorage.removeItem("user");
     setUser((user) => ({

@@ -51,6 +51,7 @@ const LoginForm = () => {
             const token = res.data; // Giả sử token được trả về trong res.data.token
             const decodedToken = jwtDecode(token);
 
+
             if (decodedToken && decodedToken.User.role) {
                 const role = decodedToken.User.role;
                 console.log("check", role)
@@ -147,7 +148,7 @@ const LoginForm = () => {
                             } onClick={() => handleLogin()}>
                                 {isLoading ? (
                                     <span className="spinner-container">
-                                        <i className="spinner"></i> Log in
+                                        <i className="spinner"></i> Login...
                                     </span>
                                 ) : (
                                     'Login'
