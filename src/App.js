@@ -2,14 +2,13 @@
 import { ToastContainer, toast } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import './App.scss';
-import Header from './Components/Header/Header';
-import Footer from './Components/Footer/Footer';
-import ModalAddNew from './Components/ManagePet/ModalAddNew';
 import Container from 'react-bootstrap/esm/Container';
 import { Routes, Route, Link } from 'react-router-dom'
 import { UserContext } from './Context/UserContext';
 import AppRoute from './Routes/AppRoute';
 import './ToastifyCustom.css';
+import AdminLayout from './Routes/AdminLayout';
+
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
@@ -23,11 +22,12 @@ function App() {
   return (
     <>
       <div className='app-container'>
-        <Header></Header>
-        <Container>
-          <AppRoute></AppRoute>
-        </Container>
-        <Footer></Footer>
+        <Routes>
+          {/* Routes for customer */}
+          <Route path="/*" element={<AppRoute />} />
+          {/* Routes for admin */}
+          <Route path="/admin/*" element={<AdminLayout />} />
+        </Routes>
       </div>
       <ToastContainer
         position="top-right"
