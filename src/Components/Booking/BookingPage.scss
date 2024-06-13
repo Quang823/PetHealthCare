@@ -1,0 +1,30 @@
+/* src/pages/BookingPage.scss */
+
+.booking-page-container {
+    padding: 20px;
+  }
+  
+  .booking-summary-container {
+    margin-top: 40px;
+    text-align: center;
+    flex-wrap: wrap; /* Cho phép các booking detail xuống dòng khi không đủ không gian */
+    #paymentbutton {
+      max-width: 400px;
+    }
+  }
+  
+  
+  .booking-total-cost {
+    margin-top: 20px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  /* Thêm margin giữa các booking detail */
+  .booking-detail-card {
+    
+    margin-right: 20px;
+    margin-bottom: 20px;
+    
+  }
+  

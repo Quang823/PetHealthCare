@@ -1,0 +1,107 @@
+.paymentPage {
+    max-width: 600px;
+    margin: 0 auto;
+    h2 {
+        text-align: center;
+        padding-bottom: 10px;
+        padding-top: 20px;
+        
+    }
+}
+
+/* Payment page styles */
+.payment-page-container {
+    background-color: rgba(249, 249, 249, 0.9); /* Sử dụng một màu sắc mờ */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+   
+    margin: 0 auto;
+    //background: url('../../Assets/istockphoto-1367756024-612x612.jpg') no-repeat center;
+    // background-size: cover;
+    h3, h4 {
+        text-align: center;
+    }
+    .logo-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.logo-container {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px; /* Đặt kích thước chiều rộng cho khung tròn */
+    height: 90px; /* Đặt kích thước chiều cao cho khung tròn */
+    background-color: #cff8ca9c; /* Màu nền trắng */
+    border: 2px solid #000; /* Viền đen */
+    border-radius: 50%; /* Tạo khung tròn */
+    padding: 10px; /* Khoảng cách giữa ảnh và viền */
+    .logo {
+        max-width: 100%; /* Đảm bảo logo không vượt quá khung */
+        max-height: 100%; /* Đảm bảo logo không vượt quá khung */
+        border-radius: 50%; /* Đảm bảo logo có góc bo tròn nếu cần */
+    }
+}
+}
+
+.head-bill {
+    text-align: center;
+}
+
+.head-bill p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.middle-bill {
+    margin-top: 20px;
+    h5 {
+        text-align: center;
+    }
+    p {
+        font-size: 18px;
+    }
+}
+
+.payment-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.payment-info p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 20px;
+}
+
+.total-cost {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.loading-text {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+    margin-top: 50px;
+}
+.back {
+    text-align: left;
+}
+.payment-method {
+    text-align: left;
+}
+.pay {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

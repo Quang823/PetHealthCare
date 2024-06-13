@@ -10,7 +10,7 @@ import { CSVLink } from "react-csv";
 import { MdInput, MdOutput } from "react-icons/md";
 import { FaPlus, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import axios from 'axios';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 
 import {jwtDecode} from 'jwt-decode';
 // const TablePet = (props) => {
@@ -188,7 +188,6 @@ const TablePet = () => {
     const [showEditForm, setShowEditForm] = useState(false);
     const [error, setError] = useState('');
     const [userID, setUserID] = useState('');
-    const [isEditing, setIsEditing] = useState(false);
     const [newPet, setNewPet] = useState({
         petname: '',
         petage: '',
@@ -204,63 +203,39 @@ const TablePet = () => {
     //     pettype: '',
     //     vaccination: ''
     // });
-    const [shouldFetchData, setShouldFetchData] = useState(true);
    
-
-    // useEffect(()=> {
-    //     const fetchUserID = () => {
-    //         const token = localStorage.getItem('token');
-    //         if (token) {
-    //             const decodedToken = jwtDecode(token);
-    //             setUserID(decodedToken.User.userID);
-    //         }
-    //     };
-    //   fetchUserID();
-    // }, []);
-
     // useEffect(() => {
-    //     try {
-    //         if(userID){
-    //             axios.get(`http://localhost:8080/pet/getAll/${userID}`)
+    //     axios.get(`http://localhost:8080/pet/getAll/${userID}`)
     //         .then(res => setData(res.data))
     //         .catch(err => console.log(err));
-    //         setShouldFetchData(true);
-    //         const token = localStorage.getItem('token');
-    //         if (token) {
-    //             const decodedToken = jwtDecode(token);
-    //             setUserID(decodedToken.User.userID);
-    //         }
-    //         }
-    //     } catch (error) {
-    //         console.error('cant not load data', )
+            
+    //     const token = localStorage.getItem('token');
+    //     if (token) {
+    //         const decodedToken = jwtDecode(token);
+    //         setUserID(decodedToken.User.userID);
     //     }
         
-        
-    // }, [newPet]);
+    // }, [newPEt]);
     useEffect(() => {
-        const fetchUserID = () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                const decodedToken = jwtDecode(token);
-                setUserID(decodedToken.User.userID);
-            }
-        };
-        fetchUserID();
-    }, []);
-
-    useEffect(() => {
-        const fetchPets = async () => {
-            try {
-                if (userID) {
-                    const res = await axios.get(`http://localhost:8080/pet/getAll/${userID}`);
-                    setData(res.data);
-                }
-            } catch (err) {
-                console.error('Cannot load data', err);
-            }
-        };
-        fetchPets();
-    },  [newPet]);
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const userIdFromToken = decodedToken.User.userID;
+            setUserID(userIdFromToken);
+            fetchData(userIdFromToken);
+        }
+    
+    }, [newPet]); // Empty dependency array means it runs once after the initial render
+    
+    const fetchData = async (userId) => {
+        try {
+            const res = await axios.get(`http://localhost:8080/pet/getAll/${userId}`);
+            setData(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
 
     const handleChange = (e) => {
         setNewPet({
@@ -284,7 +259,7 @@ const TablePet = () => {
         }
 
         const petData = { ...newPet };
-        axios.post(`http://localhost:8080/pet/create/${userID}`, newPet)
+        axios.post(`http://localhost:8080/pet/create/${userID}`, petData)
             .then(res => {
                 setData([...data, res.data]);
                 setNewPet({
@@ -297,8 +272,6 @@ const TablePet = () => {
                 setShowForm(false);
                 setError('');
                 toast.success("Add new pet success");
-              
-          
             })
             .catch(err => console.log(err));
     };
@@ -349,7 +322,7 @@ const TablePet = () => {
             <table className="styled-table">
                 <thead>
                     <tr>
-                        <th>Pet Id</th>
+                        {/* <th>Pet Id</th> */}
                         <th>Pet Name</th>
                         <th>Pet Age</th>
                         <th>Pet Gender</th>
@@ -361,7 +334,7 @@ const TablePet = () => {
                 <tbody>
                     {data.map((pet, index) => (
                         <tr key={index}>
-                            <td>{pet.petid}</td>
+                            {/* <td>{pet.petid}</td> */}
                             <td>{pet.petname}</td>
                             <td>{pet.petage}</td>
                             <td>{pet.petgender}</td>
@@ -434,13 +407,7 @@ const TablePet = () => {
             {showEditForm && (
                 <div className="form-container">
                     <h3>Edit pet</h3>
-                    <input
-                        type="text"
-                        name="petid"
-                        placeholder="Pet ID"
-                        value={newPet.petid}
-                        readOnly
-                    />
+                   
                     <input
                         type="text"
                         name="petname"

@@ -1,0 +1,24 @@
+.slots-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); // Adjust columns as needed
+    gap: 10px; // Adjust spacing as needed
+    margin-top: 10px;
+}
+
+.slot {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.slot:hover {
+    background-color: #e0e0e0;
+}
+
+.slot.selected {
+    background-color: #007bff;
+    color: white;
+}
