@@ -33,20 +33,20 @@ const ModalAddNew = (props) => {
         <Modal.Body>
           <div className='body-add-new'>
 
-            <div class="mb-3">
+            <div className="mb-3">
               <label className='form-lable'>Name</label>
               <input type="text" className="form-control"
                 value={name} onChange={(event) => setName(event.target.value)}
               />
 
             </div>
-            <div class="mb-3">
+            <div className="mb-3">
               <label className='form-lable'>Type</label>
               <input type="text" className="form-control"
                 value={type} onChange={(event) => setType(event.target.value)}
               />
             </div>
-            <div class="mb-3">
+            <div className="mb-3">
               <label className='form-lable'>Gender</label>
               <input type="text" className="form-control"
                 value={gender} onChange={(event) => setGender(event.target.value)}

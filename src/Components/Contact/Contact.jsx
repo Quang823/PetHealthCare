@@ -35,7 +35,7 @@ const Contact = () => {
                 <div className="contact-info">
                     <div className="info-item">
                         <FaMapMarkerAlt className="icon" />
-                        <p>123 Main Street, City, Country</p>
+                        <p>123 Thu Duc, Ho Chi Minh, Viet Nam</p>
                     </div>
                     <div className="info-item">
                         <FaPhoneAlt className="icon" />
@@ -43,7 +43,7 @@ const Contact = () => {
                     </div>
                     <div className="info-item">
                         <FaEnvelope className="icon" />
-                        <p>info@example.com</p>
+                        <p>PetHealthCare@gmail.com</p>
                     </div>
                 </div>
                 <div className="contact-form">

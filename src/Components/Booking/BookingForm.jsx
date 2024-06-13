@@ -39,6 +39,7 @@ const BookingForm = ({ onBookingComplete }) => {
                     console.log('Pets data:', response.data); // Log dữ liệu thú cưng để kiểm tra
                     if (response.data && Array.isArray(response.data)) {
                         setPets(response.data);
+
                     } else {
                         console.error('Pets data is not an array:', response.data);
                         setPets([]);
@@ -53,6 +54,7 @@ const BookingForm = ({ onBookingComplete }) => {
         const fetchData = async () => {
             const servicesData = await getServices();
             setServices(Array.isArray(servicesData.data) ? servicesData.data : []);
+
             const doctorsData = await getDoctors();
             setDoctors(Array.isArray(doctorsData.data) ? doctorsData.data : []);
         };
@@ -120,8 +122,9 @@ const BookingForm = ({ onBookingComplete }) => {
                     <select value={selectedPet} onChange={(e) => setSelectedPet(e.target.value)}>
                         <option value="">Select Pet</option>
                         {pets.map((pet) => (
-                            <option key={pet.id} value={pet.id}>
-                                {pet.name}
+
+                            <option key={pet.petId} value={pet.petId}>
+                                {pet.petname}
                             </option>
                         ))}
                     </select>
@@ -165,5 +168,6 @@ const BookingForm = ({ onBookingComplete }) => {
         </div>
     );
 };
+
 
 export default BookingForm;

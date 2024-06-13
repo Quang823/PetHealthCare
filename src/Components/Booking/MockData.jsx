@@ -48,4 +48,6 @@ export const getSlots = async (doctorId) => {
 export const bookAppointment = async (bookingData) => {
     await delay(100); // Giả lập độ trễ
     return { data: { success: true } };
+
 };
+

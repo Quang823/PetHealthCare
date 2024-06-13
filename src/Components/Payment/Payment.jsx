@@ -108,4 +108,6 @@ const calculateTotalCost = (bookings) => {
     return bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0).toFixed(2);
 };
 
+
 export default PaymentPage;
+
