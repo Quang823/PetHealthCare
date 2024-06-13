@@ -34,7 +34,7 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 50px;
-    padding-bottom: 210px;
+   
 }
 
 .styled-table {
@@ -76,31 +76,43 @@
     cursor: pointer;
 }
 .form-container {
-    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.form-container h3 {
+    margin-bottom: 20px;
 }
 
 .form-container input {
-    display: block;
-    width: 100%;
+    width: 50%; /* hoặc bạn có thể điều chỉnh kích thước theo ý muốn */
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .form-container button {
-    display: block;
-    width: 100%;
+    width: 100%; /* hoặc bạn có thể điều chỉnh kích thước theo ý muốn */
     padding: 10px;
-    background-color: #009879;
-    color: #fff;
+    margin: 10px 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.form-container button:hover {
-    background-color: #007f6d;
+.form-container .btn-success {
+    background-color: #318d34;
+    color: white;
+}
+
+.form-container .btn-danger {
+    background-color: #f44336;
+    color: white;
 }
 
   
