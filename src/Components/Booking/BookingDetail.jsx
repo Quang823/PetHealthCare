@@ -19,3 +19,4 @@ const BookingDetail = ({ bookings }) => {
 };
 
 export default BookingDetail;
+

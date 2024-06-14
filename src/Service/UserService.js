@@ -39,4 +39,25 @@ const VerifyOtp = (email, otp) => {
     return axios.put("account/verify-otp", { email, otp })
 }
 
-export { fetchAllpet, postCreatePet, putUpdatePet, loginApi, UserInforApi, putUpdateUser, ResetAccPassword, getOTP, VerifyOtp };
+const getPets = (email) => {
+    return axios.put("account/forgot-password", { email })
+}
+const getServices = (email) => {
+    return axios.put("account/forgot-password", { email })
+}
+const getDoctors = (email) => {
+    return axios.put("account/forgot-password", { email })
+}
+const getSlots = (email) => {
+    return axios.put("account/forgot-password", { email })
+}
+const bookAppointment = (email) => {
+    return axios.put("account/forgot-password", { email })
+}
+const getPet = (userID) => {
+    return axios.get(`http://localhost:8080/pet/getAll/${userID}`)
+}
+export {
+    fetchAllpet, postCreatePet, putUpdatePet, loginApi, UserInforApi, putUpdateUser, ResetAccPassword, getOTP, VerifyOtp, getPets
+    , getServices, getDoctors, getSlots, bookAppointment, getPet
+};

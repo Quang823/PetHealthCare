@@ -21,6 +21,9 @@ const LoginForm = () => {
     const { logout } = useContext(UserContext);
     const { loginContext } = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
+
+
+
     const registerLink = (event) => {
         event.preventDefault();
         navigate('/register');
@@ -48,6 +51,7 @@ const LoginForm = () => {
             const token = res.data; // Giả sử token được trả về trong res.data.token
             const decodedToken = jwtDecode(token);
 
+
             if (decodedToken && decodedToken.User.role) {
                 const role = decodedToken.User.role;
                 console.log("check", role)
@@ -57,13 +61,15 @@ const LoginForm = () => {
                     navigate('/admin'); // Đường dẫn tới trang admin
                 } else if (role === "Customer") {
                     navigate('/'); // Đường dẫn tới trang customer
-                } else {
+                } else if(role === "staff"){
+                     navigate('/staff')
+                }else {
                     navigate('/'); // Điều hướng mặc định
                 }
 
                 toast.success("Login successful");
             } else {
-                toast.error("Không lấy được thông tin vai trò");
+                toast.error("Unable to retrieve user role");
             }
         } else {
             if (res && res.status === 401) {
@@ -132,6 +138,8 @@ const LoginForm = () => {
                                 <label>
                                     <input type="checkbox" /> Remember me
                                 </label>
+
+
                                 <p className="forgot-password-link" onClick={handleForgotPassword}>
                                     Forgot Password?
                                 </p>
@@ -142,7 +150,7 @@ const LoginForm = () => {
                             } onClick={() => handleLogin()}>
                                 {isLoading ? (
                                     <span className="spinner-container">
-                                        <i className="spinner"></i> Logging in...
+                                        <i className="spinner"></i> Login...
                                     </span>
                                 ) : (
                                     'Login'

@@ -1,11 +1,6 @@
 // src/services/bookingService.js
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const mockPets = [
-    { id: '1', name: 'Dog Thinh' },
-    { id: '2', name: 'Dog An' },
-    { id: '3', name: 'Cat Đạt' },
-];
 
 const mockServices = [
     { id: '1', name: 'Service 1', price: 100 },
@@ -25,10 +20,7 @@ const mockSlots = [
     { id: '3', time: '11:00 AM' },
 ];
 
-export const getPets = async () => {
-    await delay(100); // Giả lập độ trễ
-    return { data: mockPets };
-};
+
 
 export const getServices = async () => {
     await delay(100); // Giả lập độ trễ
@@ -48,4 +40,6 @@ export const getSlots = async (doctorId) => {
 export const bookAppointment = async (bookingData) => {
     await delay(100); // Giả lập độ trễ
     return { data: { success: true } };
+
 };
+

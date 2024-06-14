@@ -12,9 +12,14 @@ const BookingPage = () => {
     const Payment = () => {
         navigate('/payment');
     }
+    // 
     const handleBookingComplete = (newBooking) => {
-        setBookings([...bookings, newBooking]);
+        const updatedBookings = [...bookings, newBooking];
+        setBookings(updatedBookings);
+        localStorage.setItem('bookedInfo', JSON.stringify(updatedBookings)); // Lưu thông tin booking vào localStorage
+        localStorage.setItem('selectedDate', newBooking.date); // Lưu ngày đã chọn vào localStorage
     };
+
 
 
     const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
@@ -37,3 +42,4 @@ const BookingPage = () => {
 };
 
 export default BookingPage;
+

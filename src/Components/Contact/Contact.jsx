@@ -14,12 +14,15 @@ const Contact = () => {
 
     const handleSendMessage = (e) => {
         e.preventDefault();
-
-        // Xử lý logic gửi tin nhắn ở đây
-
-        // Hiển thị toast khi tin nhắn đã được gửi thành công
-        toast.success('Message sent successfully!', {
-        });
+        if (!email || !name) {
+            // Xử lý logic gửi tin nhắn ở đây
+            toast.error('Email/Name is missing')
+        }
+        else {
+            // Hiển thị toast khi tin nhắn đã được gửi thành công
+            toast.success('Message sent successfully!', {
+            });
+        }
     };
 
     return (

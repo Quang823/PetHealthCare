@@ -7,6 +7,7 @@
     display: flex;
     background-color: #007bff; 
     background: url('../../Assets/hinh-anh-background-xanh-dep_060335609.jpg');
+   
     height: 390px; 
     width: 100%;
     padding: 20px; /* Tùy chọn: để có khoảng cách xung quanh nội dung */
@@ -70,10 +71,10 @@
          
         }
       .image {
-          margin-top: 42px;
+        margin-top: 45px;
           padding-left: 10px;
           margin-left: 60px;
-          width: 70%;
+          width: 63%;
 
           height: auto;
           object-fit: cover; /* Đảm bảo ảnh không bị méo */
@@ -97,6 +98,7 @@
         margin-bottom: 15px;
         h3 {
           font-weight: 300;
+          padding-left: 20px;
         }
       }
       .middleImage {
@@ -275,6 +277,7 @@
       margin-bottom: 15px;
       h3{
         font-weight: 300;
+        padding-left: 20px;
       }
     }
   }

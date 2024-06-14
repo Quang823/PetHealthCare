@@ -16,6 +16,7 @@ import BookingPage from '../Components/Booking/BookingPage';
 import PaymentPage from '../Components/Payment/Payment';
 import Header from '../Components/Header/Header';
 import Footer from '../Components/Footer/Footer';
+
 const AppRoute = () => {
     return (
         <> <Header></Header>
