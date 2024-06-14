@@ -12,12 +12,7 @@ import { FaPlus, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-
-import { jwtDecode } from 'jwt-decode';
-
-
-
-
+import {jwtDecode} from 'jwt-decode';
 
 
 const TablePet = () => {
@@ -33,27 +28,7 @@ const TablePet = () => {
         pettype: '',
         vaccination: ''
     });
-    // const [currentPet, setCurrentPet] = useState({
-    //     petid: '',
-    //     petname: '',
-    //     petage: '',
-    //     petgender: '',
-    //     pettype: '',
-    //     vaccination: ''
-    // });
-   
-    // useEffect(() => {
-    //     axios.get(`http://localhost:8080/pet/getAll/${userID}`)
-    //         .then(res => setData(res.data))
-    //         .catch(err => console.log(err));
-            
-    //     const token = localStorage.getItem('token');
-    //     if (token) {
-    //         const decodedToken = jwtDecode(token);
-    //         setUserID(decodedToken.User.userID);
-    //     }
-        
-    // }, [newPEt]);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -98,7 +73,6 @@ const TablePet = () => {
 
         const petData = { ...newPet };
         axios.post(`http://localhost:8080/pet/create/${userID}`, petData)
-
             .then(res => {
                 setData([...data, res.data]);
                 setNewPet({
@@ -111,7 +85,6 @@ const TablePet = () => {
                 setShowForm(false);
                 setError('');
                 toast.success("Add new pet success");
-
             })
             .catch(err => console.log(err));
     };
@@ -141,6 +114,7 @@ const TablePet = () => {
                 setData(data.map(pet => (pet.petid === petid ? res.data : pet)));
                 setShowEditForm(false);
                 setNewPet({
+                    
                     petname: '',
                     petage: '',
                     petgender: '',
@@ -162,7 +136,6 @@ const TablePet = () => {
             <table className="styled-table">
                 <thead>
                     <tr>
-
                         {/* <th>Pet Id</th> */}
                         <th>Pet Name</th>
                         <th>Pet Age</th>
@@ -175,81 +148,79 @@ const TablePet = () => {
                 <tbody>
                     {data.map((pet, index) => (
                         <tr key={index}>
-
-                            {/* <td>{pet.petid}</td> */}
-
-                            <td>{pet.petname}</td>
-                            <td>{pet.petage}</td>
-                            <td>{pet.petgender}</td>
-                            <td>{pet.pettype}</td>
-                            <td>{pet.vaccination}</td>
-                            <td>
-                                <button className='btn btn-warning' onClick={() => {
-                                    handleEditPet(pet);
-                                    setShowEditForm(true);
-                                    setShowForm(false);
-                                }} >Edit</button>
-                                <button className='btn btn-danger' onClick={() => handleDeletePet(pet.petid)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <button className='btn btn-success' onClick={() => {
-                setShowForm(true);
-                setShowEditForm(false); 
-            }}>
-                <FaPlus /> Add your new pet
-            </button>
-            {showForm && (
-                <div className="form-container">
-                    <h3>Add a new pet</h3>
-                    <input
-                        type="text"
-                        name="petname"
-                        placeholder="Pet Name"
-                        value={newPet.petname}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="text"
-                        name="petage"
-                        placeholder="Pet Age"
-                        value={newPet.petage}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="text"
-                        name="petgender"
-                        placeholder="Pet Gender"
-                        value={newPet.petgender}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="text"
-                        name="pettype"
-                        placeholder="Pet Type"
-                        value={newPet.pettype}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="text"
-                        name="vaccination"
-                        placeholder="Vaccination"
-                        value={newPet.vaccination}
-                        onChange={handleChange}
-                    />
-                    <button className='btn btn-success' onClick={handleAddPet}>
-                        Save
-                    </button>
-                    <button className='btn btn-danger' onClick={() => setShowForm(false)}>
-                        Cancel
-                    </button>
-                </div>
-            )}
-            {showEditForm && (
-                <div className="form-container">
+                        {/* <td>{pet.petid}</td> */}
+                        <td>{pet.petname}</td>
+                        <td>{pet.petage}</td>
+                        <td>{pet.petgender}</td>
+                        <td>{pet.pettype}</td>
+                        <td>{pet.vaccination}</td>
+                        <td>
+                            <button className='btn btn-warning' onClick={() => {
+                                handleEditPet(pet);
+                                setShowEditForm(true);
+                                setShowForm(false);
+                            }} >Edit</button>
+                            <button className='btn btn-danger' onClick={() => handleDeletePet(pet.petid)}>Delete</button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+        <button className='btn btn-success' onClick={() => {
+            setShowForm(true);
+            setShowEditForm(false); 
+        }}>
+            <FaPlus /> Add your new pet
+        </button>
+        {showForm && (
+            <div className="form-container">
+                <h3>Add a new pet</h3>
+                <input
+                    type="text"
+                    name="petname"
+                    placeholder="Pet Name"
+                    value={newPet.petname}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="petage"
+                    placeholder="Pet Age"
+                    value={newPet.petage}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="petgender"
+                    placeholder="Pet Gender"
+                    value={newPet.petgender}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="pettype"
+                    placeholder="Pet Type"
+                    value={newPet.pettype}
+                    onChange={handleChange}
+                />
+                <input
+                    type="text"
+                    name="vaccination"
+                    placeholder="Vaccination"
+                    value={newPet.vaccination}
+                    onChange={handleChange}
+                />
+                <button className='btn btn-success' onClick={handleAddPet}>
+                    Save
+                </button>
+                <button className='btn btn-danger' onClick={() => setShowForm(false)}>
+                    Cancel
+                </button>
+            </div>
+        )}
+        {showEditForm && (<div className="form-container">
                     <h3>Edit pet</h3>
+                   
                     <input
                         type="text"
                         name="petname"
