@@ -54,10 +54,11 @@ const BookingForm = ({ onBookingComplete }) => {
         };
 
         const fetchData = async () => {
-            const servicesData = await getServices();
+            const servicesData = await axios.get(`http://localhost:8080/Service/getAll`);
             setServices(Array.isArray(servicesData.data) ? servicesData.data : []);
 
-            const doctorsData = await getDoctors();
+
+            const doctorsData = await axios.get(`http://localhost:8080/account/getVeterinarian`);
             setDoctors(Array.isArray(doctorsData.data) ? doctorsData.data : []);
         };
 
@@ -79,8 +80,8 @@ const BookingForm = ({ onBookingComplete }) => {
     }, [selectedDoctor, selectedDate]);
 
     useEffect(() => {
-        const service = services.find(s => s.id === selectedService);
-        setTotalCost(service ? service.price : 0);
+        const service2 = services.find(s => s.serviceID === selectedService);
+        // setTotalCost(service2 ? service2.price : 0);
     }, [selectedService, services]);
 
     const handleBooking = async () => {
@@ -90,13 +91,18 @@ const BookingForm = ({ onBookingComplete }) => {
         }
         const bookingData = {
             petId: selectedPet,
-            serviceId: selectedService,
+            serviceID: selectedService,
             doctorId: selectedDoctor,
             slotId: selectedSlot,
             date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
         };
         await bookAppointment(bookingData);
-        const selectedServiceDetail = services.find(service => service.name === selectedService);
+
+
+        // const selectedServiceDetail = services.find(service => service.name === selectedService);
+        const selectedServiceDetail = services.find(service => service.serviceID === selectedService);
+        console.log('service', selectedServiceDetail)
+
         onBookingComplete({
             petName: pets.find(pet => pet.petname === selectedPet)?.petname,
             serviceName: selectedServiceDetail?.name,
