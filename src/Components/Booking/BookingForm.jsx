@@ -52,7 +52,7 @@ const BookingForm = ({ onBookingComplete }) => {
         };
 
         const fetchData = async () => {
-            const servicesData = await getServices();
+            const servicesData = await axios.get(`http://localhost:8080/Service/getAll`);
             setServices(Array.isArray(servicesData.data) ? servicesData.data : []);
 
             const doctorsData = await getDoctors();
