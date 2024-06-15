@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './BookingForm.scss';
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 
 const BookingForm = ({ onBookingComplete }) => {
     const [userID, setUserID] = useState('');
@@ -17,6 +18,7 @@ const BookingForm = ({ onBookingComplete }) => {
     const [selectedDoctor, setSelectedDoctor] = useState('');
     const [selectedSlot, setSelectedSlot] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [minDate, setMinDate] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
 
     useEffect(() => {
@@ -82,20 +84,26 @@ const BookingForm = ({ onBookingComplete }) => {
     }, [selectedService, services]);
 
     const handleBooking = async () => {
+        if (!selectedPet || !selectedService || !selectedDoctor || !selectedSlot || !selectedDate) {
+            toast.error('Please fill in all fields before booking.');
+            return;
+        }
         const bookingData = {
             petId: selectedPet,
             serviceId: selectedService,
             doctorId: selectedDoctor,
-            slotId: selectedSlot
+            slotId: selectedSlot,
+            date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
         };
         await bookAppointment(bookingData);
         const selectedServiceDetail = services.find(service => service.id === selectedService);
         onBookingComplete({
-            petName: pets.find(pet => pet.id === selectedPet)?.name,
+            petName: pets.find(pet => pet.petname === selectedPet)?.petname,
             serviceName: selectedServiceDetail?.name,
             doctorName: doctors.find(doctor => doctor.id === selectedDoctor)?.name,
             slotTime: slots.find(slot => slot.id === selectedSlot)?.time,
-            totalCost: selectedServiceDetail?.price
+            totalCost: selectedServiceDetail?.price,
+            date: selectedDate.toISOString().split('T')[0] // Truyền ngày đã chọn
         });
         // Reset form
         setSelectedPet('');
@@ -103,6 +111,16 @@ const BookingForm = ({ onBookingComplete }) => {
         setSelectedDoctor('');
         setSelectedSlot('');
         setTotalCost(0);
+
+    };
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+    };
+
+    const validateDate = (date) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Đặt giờ và phút về 0 để so sánh ngày một cách chính xác
+        return date >= today;
     };
 
     return (
@@ -113,7 +131,9 @@ const BookingForm = ({ onBookingComplete }) => {
                     Select Date:
                     <DatePicker
                         selected={selectedDate}
-                        onChange={date => setSelectedDate(date)}
+                        onChange={handleDateChange}
+                        minDate={new Date()}
+                        filterDate={validateDate} // Hạn chế chọn ngày trong quá khứ
                         dateFormat="yyyy-MM-dd"
                     />
                 </label>
