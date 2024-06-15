@@ -9,7 +9,7 @@ const AdminLayout = () => {
         <>
             <Routes>
                 <Route path='/' element={<AdminDashboard />} />
-                <Route path="/customers" element={<CustomerList/>} />
+                <Route path='/customers' element={<CustomerList />} />
                 <Route path='/servicePet' element={<ServicePet />} />
             </Routes>
         </>

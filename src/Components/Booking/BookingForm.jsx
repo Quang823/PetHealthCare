@@ -96,7 +96,7 @@ const BookingForm = ({ onBookingComplete }) => {
             date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
         };
         await bookAppointment(bookingData);
-        const selectedServiceDetail = services.find(service => service.id === selectedService);
+        const selectedServiceDetail = services.find(service => service.name === selectedService);
         onBookingComplete({
             petName: pets.find(pet => pet.petname === selectedPet)?.petname,
             serviceName: selectedServiceDetail?.name,
@@ -124,67 +124,81 @@ const BookingForm = ({ onBookingComplete }) => {
     };
 
     return (
-        <div className="booking-container">
-            <h2>Book an Appointment</h2>
-            <form>
-                <label>
-                    Select Date:
-                    <DatePicker
-                        selected={selectedDate}
-                        onChange={handleDateChange}
-                        minDate={new Date()}
-                        filterDate={validateDate} // Hạn chế chọn ngày trong quá khứ
-                        dateFormat="yyyy-MM-dd"
-                    />
-                </label>
-                <label>
-                    Select Pet:
-                    <select value={selectedPet} onChange={(e) => setSelectedPet(e.target.value)}>
-                        <option value="">Select Pet</option>
-                        {pets.map((pet) => (
+        <div>
+            <div className="booking-container">
+                <h2>Book an Appointment</h2>
+                <form>
+                    <label>
+                        Select Date:
+                        <DatePicker
+                            selected={selectedDate}
+                            onChange={handleDateChange}
+                            minDate={new Date()}
+                            filterDate={validateDate} // Hạn chế chọn ngày trong quá khứ
+                            dateFormat="yyyy-MM-dd"
+                        />
+                    </label>
+                    <label>
+                        Select Pet:
+                        <select value={selectedPet} onChange={(e) => setSelectedPet(e.target.value)}>
+                            <option value="">Select Pet</option>
+                            {pets.map((pet) => (
 
-                            <option key={pet.petId} value={pet.petId}>
-                                {pet.petname}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <label>
-                    Select Service:
-                    <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
-                        <option value="">Select Service</option>
-                        {services.map((service) => (
-                            <option key={service.id} value={service.id}>
-                                {service.name} - ${service.price}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <label>
-                    Select Doctor:
-                    <select value={selectedDoctor} onChange={(e) => setSelectedDoctor(e.target.value)}>
-                        <option value="">Select Doctor</option>
-                        {doctors.map((doctor) => (
-                            <option key={doctor.id} value={doctor.id}>
-                                {doctor.name}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <label>
-                    Select Slot:
-                    <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
-                        <option value="">Select Slot</option>
-                        {slots.map((slot) => (
-                            <option key={slot.id} value={slot.id}>
-                                {slot.time}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <p>Cost: ${totalCost}</p>
-                <button type="button" onClick={handleBooking}>Book</button>
-            </form>
+                                <option key={pet.petId} value={pet.petId}>
+                                    {pet.petname}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <label>
+                        Select Service:
+                        <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
+                            <option value="">Select Service</option>
+                            {services.map((service) => (
+                                <option key={service.id} value={service.id}>
+                                    {service.name} - ${service.price}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <label>
+                        Select Doctor:
+                        <select value={selectedDoctor} onChange={(e) => setSelectedDoctor(e.target.value)}>
+                            <option value="">Select Doctor</option>
+                            {doctors.map((doctor) => (
+                                <option key={doctor.id} value={doctor.id}>
+                                    {doctor.name}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <label>
+                        Select Slot:
+                        <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
+                            <option value="">Select Slot</option>
+                            {slots.map((slot) => (
+                                <option key={slot.id} value={slot.id}>
+                                    {slot.time}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <p>Cost: ${totalCost}</p>
+                    <button type="button" onClick={handleBooking}>Confirm</button>
+                </form>
+            </div>
+            <div className="booking-middle">
+                <p>Please fill in all information to save time during examination procedures</p>
+            </div>
+            <div className="booking-footer">
+                <h7>NOTE</h7>
+                <p>
+                    The information you provide will be used as medical records. When filling in the information, please:</p>
+                <ul>
+                    <li>Clearly state your full name, capitalizing the first letters, for example: Tran Van Phu</li>
+                    <li>Fill in completely and correctly and please check the information before pressing "Confirm"</li>
+                </ul>
+            </div>
         </div>
     );
 };

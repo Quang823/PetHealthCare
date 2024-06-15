@@ -69,7 +69,7 @@ const Header = (props) => {
                                     alt='React Bootstrap logo'
                                 />
                             </div>
-                            <span className='Title'>Pet Health Care</span>
+                            <span className='Title'>PET HEALTH CARE</span>
                         </div>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -90,7 +90,7 @@ const Header = (props) => {
                         </Nav>
 
                         <Nav>
-                            {user && user.auth === true && <span className='nav-link'> <MdPets className='icon' /> WELCOME {user.name} </span>}
+                            {user && user.auth === true && <span className='nav-link'> <MdPets className='icon' /> WELCOME {userName} </span>}
                             <NavDropdown title="Setting" id="basic-nav-dropdown">
 
                                 {user && user.auth === true ? (

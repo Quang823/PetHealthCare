@@ -85,20 +85,21 @@ const PaymentPage = () => {
                     <p>Notes: </p>
                     <h5>Booking details</h5>
                     <BookingDetail bookings={bookings} />
+                    <div className="payment-method">
+                        <h6>Payment Method:</h6>
+                        <select id="payment-method">
+                            <option value="credit-card">Credit Card</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="bank-transfer">Bank Transfer</option>
+                        </select>
+                    </div>
                     <div className="total-cost">Total Cost: ${calculateTotalCost(bookings)}</div>
                 </div>
             </div>
             <div className='back'>
                 <a href='/booking'><RiArrowGoBackLine />Go back</a>
             </div>
-            <div className="payment-method">
-                <label>Payment Method:</label>
-                <select id="payment-method">
-                    <option value="credit-card">Credit Card</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="bank-transfer">Bank Transfer</option>
-                </select>
-            </div>
+
             <div className='pay'>
                 <button>
                     Make Payment

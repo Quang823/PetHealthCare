@@ -53,8 +53,8 @@
   }
   
   .booking-container p {
-    font-size: 16px;
-    color: #333;
+    font-size: 20px;
+    color: #000000;
     text-align: center;
     margin-top: 10px;
   }
@@ -66,4 +66,23 @@
   .booking-container .react-datepicker__input-container input {
     width: 100%;
   }
-  
+  .booking-middle {
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 10px;
+    text-align: center;
+   
+    p {
+      font-size: 15px;
+    }
+  }
+  .booking-footer {
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #D4EFFC;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }

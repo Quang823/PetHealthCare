@@ -31,9 +31,10 @@ function App() {
           <Route path="/*" element={<AppRoute />} />
           {/* Routes for admin */}
           <Route path="/admin/*" element={<AdminLayout />} />
-          <Route path="/customers/*" element={<CustomerList />} />
+          <Route path="/customers" element={<CustomerList />} />
           <Route path='/servicePet' element={<ServicePet />} />
-          <Route path='/staff' element={<StaffLayout />} />
+          {/* Routes for staff */}
+          <Route path="/staff/*" element={<StaffLayout />} />
         </Routes>
       </div>
       <ToastContainer
