@@ -42,8 +42,8 @@ const VerifyOtp = (email, otp) => {
 const getPets = (email) => {
     return axios.put("account/forgot-password", { email })
 }
-const getServices = (email) => {
-    return axios.put("account/forgot-password", { email })
+const getServices = () => {
+    return axios.get("Service/getAll")
 }
 const getDoctors = (email) => {
     return axios.put("account/forgot-password", { email })
