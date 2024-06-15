@@ -1,24 +1,18 @@
-import './Admin.scss'
-import { Outlet } from 'react-router-dom';
-
-import React ,{ useState } from 'react';
+import './Staff.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import Nav from './Nav'
-
-import {FaCartArrowDown, FaUserAlt, FaSafari, FaTasks, FaCar} from 'react-icons/fa';
+import React ,{ useState } from 'react';
+import Sidebar from './Sidebar';
 import Home from './Home';
-import { Router, Route, Routes } from 'react-router-dom';
-import Sidebar from './SideBar';
-
-const AdminDashboard = () => {
+const StaffLayout = () =>{
     const [toggle, setToggle] = useState(true);
 
     const Toggle = () => {
       setToggle(!toggle);
     };
-    return (
-        <div className='container-fluid bg-secondary min-vh-100'>
+    return(
+        <>
+     <div className='container-fluid bg-secondary min-vh-100'>
           <div className='row'>
             {toggle && (
               <div className='col-4 col-md-2 bg-white vh-100 position-fixed'>
@@ -31,7 +25,8 @@ const AdminDashboard = () => {
              </div>
           </div>
         </div>
-    );
+        
+        </>
+    )
 }
-
-export default AdminDashboard;
+export default StaffLayout
