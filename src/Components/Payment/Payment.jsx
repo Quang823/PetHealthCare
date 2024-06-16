@@ -77,7 +77,7 @@ const PaymentPage = () => {
                         <p>Bill code: 01sda-adsd-vfdg</p>
                         <p>Date: {selectedDate}</p> {/* Hiển thị ngày đã chọn */}
                     </div>
-                    <p>Staff: Quang Dep Zai</p>
+                    <h5>Customer information</h5>
                     <p>Name: {user?.name}</p>
                     <p>Email: {user?.email}</p>
                     <p>Phone: {user?.phone}</p>

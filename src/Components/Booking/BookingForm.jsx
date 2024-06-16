@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getServices, getDoctors, getSlots, bookAppointment } from './MockData';
+import { getSlots, bookAppointment } from './MockData';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './BookingForm.scss';
@@ -80,15 +80,22 @@ const BookingForm = ({ onBookingComplete }) => {
     }, [selectedDoctor, selectedDate]);
 
     useEffect(() => {
-        const service2 = services.find(s => s.serviceID === selectedService);
-        // setTotalCost(service2 ? service2.price : 0);
+        const service = services.find(s => s.name === selectedService);
+        setTotalCost(service ? service.price : 0);
     }, [selectedService, services]);
+
 
     const handleBooking = async () => {
         if (!selectedPet || !selectedService || !selectedDoctor || !selectedSlot || !selectedDate) {
             toast.error('Please fill in all fields before booking.');
             return;
         }
+
+        console.log('Selected Service ID:', selectedService);
+        console.log('Selected Doctor ID:', selectedDoctor);
+        console.log('Services:', services);
+        console.log('Doctors:', doctors);
+
         const bookingData = {
             petId: selectedPet,
             serviceID: selectedService,
@@ -98,27 +105,30 @@ const BookingForm = ({ onBookingComplete }) => {
         };
         await bookAppointment(bookingData);
 
+        const selectedServiceDetail = services.find(service => service.name === selectedService);
+        const selectedDoctorDetail = doctors.find(doctor => doctor.name === selectedDoctor);
+        const selectedPetDetail = pets.find(pet => pet.petname === selectedPet);
 
-        // const selectedServiceDetail = services.find(service => service.name === selectedService);
-        const selectedServiceDetail = services.find(service => service.serviceID === selectedService);
-        console.log('service', selectedServiceDetail)
+        console.log('Selected Service Detail:', selectedServiceDetail);
+        console.log('Selected Doctor Detail:', selectedDoctorDetail);
 
         onBookingComplete({
-            petName: pets.find(pet => pet.petname === selectedPet)?.petname,
+            petName: selectedPetDetail?.petname,
             serviceName: selectedServiceDetail?.name,
-            doctorName: doctors.find(doctor => doctor.id === selectedDoctor)?.name,
+            doctorName: selectedDoctorDetail?.name,
             slotTime: slots.find(slot => slot.id === selectedSlot)?.time,
             totalCost: selectedServiceDetail?.price,
-            date: selectedDate.toISOString().split('T')[0] // Truyền ngày đã chọn
+            date: selectedDate.toISOString().split('T')[0]
         });
+
         // Reset form
         setSelectedPet('');
         setSelectedService('');
         setSelectedDoctor('');
         setSelectedSlot('');
         setTotalCost(0);
-
     };
+
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
@@ -161,7 +171,7 @@ const BookingForm = ({ onBookingComplete }) => {
                         <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
                             <option value="">Select Service</option>
                             {services.map((service) => (
-                                <option key={service.id} value={service.id}>
+                                <option key={service.name} value={service.name}>
                                     {service.name} - ${service.price}
                                 </option>
                             ))}
@@ -172,7 +182,7 @@ const BookingForm = ({ onBookingComplete }) => {
                         <select value={selectedDoctor} onChange={(e) => setSelectedDoctor(e.target.value)}>
                             <option value="">Select Doctor</option>
                             {doctors.map((doctor) => (
-                                <option key={doctor.id} value={doctor.id}>
+                                <option key={doctor.name} value={doctor.name}>
                                     {doctor.name}
                                 </option>
                             ))}

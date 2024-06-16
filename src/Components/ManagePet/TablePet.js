@@ -11,11 +11,12 @@ import { MdInput, MdOutput } from "react-icons/md";
 import { FaPlus, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 
 const TablePet = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
@@ -128,6 +129,12 @@ const TablePet = () => {
                 toast.error("Failed to update pet");
             });
     };
+    const handleViewVaccine = (petid, petname) => {
+        navigate(`/vaccine/${petid}`, { state: { petname } });
+    };
+    const handleViewMedicalHistory = (petid, petname) => {
+        navigate(`/medical-history/${petid}`);
+    };
 
 
     return (
@@ -161,7 +168,8 @@ const TablePet = () => {
                                     setShowForm(false);
                                 }} >Edit</button>
                                 <button className='btn btn-danger' onClick={() => handleDeletePet(pet.petid)}>Delete</button>
-                                <button className='btn btn-view'>View Medical History</button>
+                                <button className='btn btn-view' onClick={() => handleViewVaccine(pet.petid, pet.petname)}> Vaccine</button>
+                                <button className='btn btn-med' onClick={() => handleViewMedicalHistory(pet.petid, pet.petname)}> MedHistory</button>
                             </td>
                         </tr>
                     ))}

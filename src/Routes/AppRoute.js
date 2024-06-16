@@ -14,6 +14,8 @@ import Contact from '../Components/Contact/Contact';
 import ServicePage from '../Components/ServicePage/ServicePage';
 import BookingPage from '../Components/Booking/BookingPage';
 import PaymentPage from '../Components/Payment/Payment';
+import Vaccine from '../Components/Vaccine/Vaccine';
+import MedicalHistory from '../Components/Medical History/MedicalHistory';
 import Header from '../Components/Header/Header';
 import Footer from '../Components/Footer/Footer';
 
@@ -38,13 +40,15 @@ const AppRoute = () => {
                 <Route path='/service' element={<ServicePage />} />
                 <Route path='/forgot-password' element={<ForgotPassword />} />
                 <Route path='/verify-otp' element={<VerifyOTP />} />
-                <Route path="/booking" element={
+                <Route path='/booking' element={
                     <PrivateRoute >
                         <BookingPage>
                         </BookingPage>
                     </PrivateRoute>
                 } />
                 <Route path='/payment' element={<PaymentPage />} />
+                <Route path='/vaccine/:petId' element={<Vaccine />} />
+                <Route path='/medical-history/:petId' element={<MedicalHistory />} />
 
             </Routes>
             <Footer></Footer>
