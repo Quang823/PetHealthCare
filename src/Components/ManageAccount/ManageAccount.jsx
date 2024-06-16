@@ -3,16 +3,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 import updateUser from './EditUser';
-import  UpdateUser from './UpdateUser';
+import UpdateUser from './UpdateUser';
 import './ManageAccount.scss'
-import  EditUserForm from './EditUser';
+import EditUserForm from './EditUser';
 import { toast } from 'react-toastify';
 import { Navigate, useNavigate } from 'react-router-dom';
 const ManageAccount = () => {
     const [user, setUser] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('token');
@@ -44,10 +44,10 @@ const ManageAccount = () => {
         return <div>Loading user information...</div>;
     }
     const handleSave = async (updatedUser) => {
-        console.log('Saving updated user:', updatedUser); 
+        console.log('Saving updated user:', updatedUser);
         // try {
         //     const updatedData = await updateUser(updatedUser);
-            
+
         //     setUser(updatedData);
         //     setIsEditing(false);
         //     alert('User information updated successfully!');
@@ -59,29 +59,29 @@ const ManageAccount = () => {
             const token = localStorage.getItem('token');
             const decodedToken = jwtDecode(token);
             const userID = decodedToken.User.userID;
-        const response = await axios.put(
-            `http://localhost:8080/account/update/${userID}`,
-            updatedUser,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-            
-          );
-          console.log('Update response:', response.data);
-          //navigate('/')
-          toast.success("Update success")
-          navigate('/manageAcc')
-         setIsEditing(false)
-         
-          // You can update the state here if needed
-          // (but it might be redundant based on your API response)
-        }catch (error) {
-          console.error('Error updating user:', error);
-          throw error;
+            const response = await axios.put(
+                `http://localhost:8080/account/update/${userID}`,
+                updatedUser,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+
+            );
+            console.log('Update response:', response.data);
+            //navigate('/')
+            toast.success("Update success")
+            navigate('/manageAcc')
+            setIsEditing(false)
+
+            // You can update the state here if needed
+            // (but it might be redundant based on your API response)
+        } catch (error) {
+            console.error('Error updating user:', error);
+            throw error;
         }
-       
+
     };
 
     return (
@@ -91,13 +91,13 @@ const ManageAccount = () => {
                 <EditUserForm user={user} onSave={handleSave} />
             ) : (
                 <div>
-                    
+
                     <p>Name: {user?.name}</p>
                     <p>Email: {user.email}</p>
-                    
+
                     <p>Phone: {user.phone}</p>
                     <p>Address: {user.address}</p>
-                   
+
                     <p></p>
                     <button onClick={() => setIsEditing(true)}>Edit</button>
                 </div>

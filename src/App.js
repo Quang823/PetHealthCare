@@ -1,4 +1,5 @@
 
+
 import { ToastContainer, toast } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import './App.scss';
@@ -11,6 +12,7 @@ import AdminLayout from './Routes/AdminLayout';
 import CustomerList from './Components/Admin/User/UserList';
 import ServicePet from './Components/Admin/Service/ServicePet';
 import StaffLayout from './Components/Staff/StaffLayout';
+
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
@@ -29,9 +31,10 @@ function App() {
           <Route path="/*" element={<AppRoute />} />
           {/* Routes for admin */}
           <Route path="/admin/*" element={<AdminLayout />} />
-          <Route path="/customers/*" element={<CustomerList />} />
+          <Route path="/customers" element={<CustomerList />} />
           <Route path='/servicePet' element={<ServicePet />} />
-          <Route path='/staff' element={<StaffLayout />} />
+          {/* Routes for staff */}
+          <Route path="/staff/*" element={<StaffLayout />} />
         </Routes>
       </div>
       <ToastContainer

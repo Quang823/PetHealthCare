@@ -3,19 +3,19 @@ import './ManageAccount.scss'
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 const EditUserForm = ({ user, onSave }) => {
-   
+
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [phone, setPhone] = useState(user.phone);
     const [address, setAddress] = useState(user.address);
-    const [password,setPassWord] = useState(user.password);
-    
+    const [password, setPassWord] = useState(user.password);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         // Gọi hàm onSave để cập nhật thông tin người dùng
-        onSave({ name, email, phone, address,password  });
+        onSave({ name, email, phone, address, password });
     };
 
     return (

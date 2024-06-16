@@ -61,9 +61,11 @@ const LoginForm = () => {
                     navigate('/admin'); // Đường dẫn tới trang admin
                 } else if (role === "Customer") {
                     navigate('/'); // Đường dẫn tới trang customer
-                } else if(role === "Staff"){
-                     navigate('/staff')
-                }else {
+
+                } else if (role === "Staff") {
+                    navigate('/staff')
+                } else {
+
                     navigate('/'); // Điều hướng mặc định
                 }
 
