@@ -28,7 +28,7 @@ const PaymentPage = () => {
 
             try {
                 const decodedToken = jwtDecode(token);
-                const userID = decodedToken.User.userID;
+                const userID = decodedToken.User.map.userID;
                 const response = await axios.get(`http://localhost:8080/account/getaccount/${userID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -70,7 +70,7 @@ const PaymentPage = () => {
     if (loading) {
         return <p className="loading-text">Loading...</p>;
     }
-
+    const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
     return (
         <div className='paymentPage'>
             <h2>PAYMENT</h2>
@@ -112,13 +112,13 @@ const PaymentPage = () => {
                         </select>
                     </div>
                     <div className="total-cost">
-                        <p>Total cost: $000</p>
+                        <p>Total Cost: ${totalCost.toFixed(2)}</p>
                     </div>
                 </div>
                 <div className="qr-signature">
                     <div className="signature">
-                        <p>Date: ____________</p>
-                        <p>Signature: ____________</p>
+                        <p>Date:</p>
+                        <p>Signature:</p>
                         <div className="signature-line">Signed by</div>
                     </div>
                     <div className="qr-code">

@@ -26,7 +26,7 @@ const BookingForm = ({ onBookingComplete }) => {
             const token = localStorage.getItem('token');
             if (token) {
                 const decodedToken = jwtDecode(token);
-                setUserID(decodedToken.User.userID);
+                setUserID(decodedToken.User.map.userID);
             }
         };
 
@@ -67,12 +67,16 @@ const BookingForm = ({ onBookingComplete }) => {
         }
         fetchData();
     }, [userID]);
-
+    const selectedDoctorDetail = doctors.find(doctor => doctor.name === selectedDoctor);
     useEffect(() => {
         const fetchSlots = async () => {
             if (selectedDoctor && selectedDate) {
                 const formattedDate = selectedDate.toISOString().split('T')[0];
-                const slotsData = await getSlots(selectedDoctor, formattedDate);
+                //const slotsData = await getSlots(selectedDoctor, formattedDate);
+                const slotsData = await axios.post(`http://localhost:8080/sev-slot/slot-available`, {
+                    userId: selectedDoctorDetail.userId,
+                    date: selectedDate.toISOString().split('T')[0]
+                });
                 setSlots(Array.isArray(slotsData.data) ? slotsData.data : []);
             }
         };
@@ -93,8 +97,10 @@ const BookingForm = ({ onBookingComplete }) => {
 
         console.log('Selected Service ID:', selectedService);
         console.log('Selected Doctor ID:', selectedDoctor);
+        console.log('date', selectedDate);
         console.log('Services:', services);
         console.log('Doctors:', doctors);
+        console.log('Slot', selectedSlot);
 
         const bookingData = {
             petId: selectedPet,
@@ -104,19 +110,19 @@ const BookingForm = ({ onBookingComplete }) => {
             date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
         };
         await bookAppointment(bookingData);
-
         const selectedServiceDetail = services.find(service => service.name === selectedService);
-        const selectedDoctorDetail = doctors.find(doctor => doctor.name === selectedDoctor);
-        const selectedPetDetail = pets.find(pet => pet.petname === selectedPet);
+        const selectedSlotDetail = slots.find(slot => slot.slot.slotId === selectedSlot);
+        const selectedPetDetail = pets.find(pet => pet.petName === selectedPet);
 
         console.log('Selected Service Detail:', selectedServiceDetail);
         console.log('Selected Doctor Detail:', selectedDoctorDetail);
+        console.log('Selected Slot Detail:', selectedSlotDetail);
 
         onBookingComplete({
-            petName: selectedPetDetail?.petname,
+            petName: selectedPetDetail?.petName,
             serviceName: selectedServiceDetail?.name,
             doctorName: selectedDoctorDetail?.name,
-            slotTime: slots.find(slot => slot.id === selectedSlot)?.time,
+            slotTime: selectedSlotDetail?.slot.slotId,
             totalCost: selectedServiceDetail?.price,
             date: selectedDate.toISOString().split('T')[0]
         });
@@ -160,8 +166,8 @@ const BookingForm = ({ onBookingComplete }) => {
                             <option value="">Select Pet</option>
                             {pets.map((pet) => (
 
-                                <option key={pet.petId} value={pet.petId}>
-                                    {pet.petname}
+                                <option key={pet.petName} value={pet.petName}>
+                                    {pet.petName}
                                 </option>
                             ))}
                         </select>
@@ -193,8 +199,8 @@ const BookingForm = ({ onBookingComplete }) => {
                         <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
                             <option value="">Select Slot</option>
                             {slots.map((slot) => (
-                                <option key={slot.id} value={slot.id}>
-                                    {slot.time}
+                                <option key={slot.slot.slotId} value={slot.slot.slotId}>
+                                    Slot {slot.slot.slotId}: {slot.slot.startTime}
                                 </option>
                             ))}
                         </select>

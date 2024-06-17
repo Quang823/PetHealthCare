@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './BookingHistory.scss'; // Import the updated SCSS file
+import './BookingHistory.scss';
 
 const BookingHistory = () => {
     const [bookingHistory, setBookingHistory] = useState([]);

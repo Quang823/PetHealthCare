@@ -22,7 +22,7 @@ const Header = (props) => {
             try {
                 const decodedToken = jwtDecode(token);
                 if (decodedToken && decodedToken.User) {
-                    setUserName(decodedToken.User.name); // Cập nhật tên người dùng từ token giải mã
+                    setUserName(decodedToken.User.map.name); // Cập nhật tên người dùng từ token giải mã
                 }
             } catch (error) {
                 console.error('Invalid token:', error);

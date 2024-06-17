@@ -52,8 +52,8 @@ const LoginForm = () => {
             const decodedToken = jwtDecode(token);  // giải mã token
 
 
-            if (decodedToken && decodedToken.User.role) {
-                const role = decodedToken.User.role;
+            if (decodedToken && decodedToken.User.map.role) {
+                const role = decodedToken.User.map.role;
                 console.log("check", role)
                 loginContext(email, token, role); //  loginContext là hàm để lưu trữ thông tin đăng nhập
 

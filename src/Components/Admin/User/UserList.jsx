@@ -10,29 +10,29 @@ function CustomerList() {
       .then(data => setUsers(data))
       .catch(error => console.error('Error fetching users:', error));
   }, []);
-  
+
   const handleBack = () => {
     navigate('/admin')
-    
-};
-const handleAddNew = () => {
-  
-};
 
-const handleEdit = () => {
- 
-};
+  };
+  const handleAddNew = () => {
 
-const handleDelete = () => {
-  
-};
+  };
+
+  const handleEdit = () => {
+
+  };
+
+  const handleDelete = () => {
+
+  };
 
   return (
     <div className="container">
-       <div className='hehe'>
-              <h2 className="my-4">Customer List</h2>
-              <button className="back-button" onClick={handleBack}>Back</button>
-        </div>
+      <div className='hehe'>
+        <h2 className="my-4">Customer List</h2>
+        <button className="back-button" onClick={handleBack}>Back</button>
+      </div>
       <table className="table table-striped">
         <thead>
           <tr>
@@ -46,15 +46,15 @@ const handleDelete = () => {
         <tbody>
           {users.map((user, index) => (
             <tr key={index}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.phone}</td>
-              <td>{user.address}</td>
-              <td>{user.role}</td>
+              <td>{user.Name}</td>
+              <td>{user.Email}</td>
+              <td>{user.Phone}</td>
+              <td>{user.Address}</td>
+              <td>{user.Role}</td>
               <td>
                 <button className="edit-button" onClick={() => handleEdit()}>Edit</button>
-                  <button className="delete-button" onClick={() => handleDelete()}>Delete</button>
-                </td>
+                <button className="delete-button" onClick={() => handleDelete()}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
