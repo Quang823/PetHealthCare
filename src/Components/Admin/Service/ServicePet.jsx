@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import './ServicePet.scss';
 import { toast } from 'react-toastify';
-
+import ReactPaginate from 'react-paginate';
 const ServicePet = () => {
     const [showForm, setShowForm] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
@@ -15,11 +15,22 @@ const ServicePet = () => {
         description: ''
     });
     const formRef = useRef(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postPerPage,setpostPerPage] =useState(5);
+    
+
+    
+    
 
     useEffect(() => {
         fetchService();
-    }, []);
-
+    }, [newService]);
+    
+    const indexOfLastPost = currentPage * postPerPage;
+    const indexOfFirstPost = indexOfLastPost - postPerPage;
+    const currentPosts = service.slice(indexOfFirstPost, indexOfLastPost);
+  
+    
     useEffect(() => {
         if (showForm || showEditForm) {
             formRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -100,7 +111,7 @@ const ServicePet = () => {
                 toast.error("Failed to delete pet");
             });
     };
-
+    
     return (
         <>
             <div className="container">
@@ -124,7 +135,7 @@ const ServicePet = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {service.map((service, index) => (
+                        {currentPosts.map((service, index) => (
                             <tr key={index}>
                                 <td>{service.serviceID}</td>
                                 <td>{service.name}</td>
@@ -142,6 +153,14 @@ const ServicePet = () => {
                         ))}
                     </tbody>
                 </table>
+                <ReactPaginate
+                previousLabel={'Previous'}
+                nextLabel={'Next'}
+               pageCount={Math.ceil(service.length / postPerPage)}
+              onPageChange={({ selected }) => setCurrentPage(selected + 1)}
+              containerClassName={'pagination'}
+               activeClassName={'active'}
+/>
 
                 {showForm && (
                     <div className="form-container" ref={formRef}>

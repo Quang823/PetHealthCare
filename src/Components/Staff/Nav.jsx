@@ -41,6 +41,11 @@ function Nav({ Toggle }) {
                 Logout
               </a>
             </div> */}
+            <div className="notification-container">
+        <a href="#" className="notification">
+          <span>Notification</span>
+        </a>
+      </div>  
           </li>
         </ul>
       </div>

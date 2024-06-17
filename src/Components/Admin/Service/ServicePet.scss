@@ -135,3 +135,39 @@
 .btn {
     margin-right: 10px;
 }
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .pagination li {
+    margin: 0 5px;
+  }
+  
+  .pagination a {
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f2f2f2;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination a:hover {
+    background-color: #e6e6e6;
+  }
+  
+  .pagination .active a {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .pagination .disabled a {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }

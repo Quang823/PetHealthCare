@@ -1,4 +1,3 @@
-import './Admin.scss'
 import React ,{ useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -8,14 +7,15 @@ import {FaCartArrowDown, FaUserAlt, FaSafari, FaTasks, FaCar} from 'react-icons/
 import Home from './Home';
 import { Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './SideBar';
-
-const AdminDashboard = () => {
+const Doctor = () =>{
     const [toggle, setToggle] = useState(true);
 
     const Toggle = () => {
       setToggle(!toggle);
     };
-    return (
+    return(
+        <>
+          
         <div className='container-fluid bg-secondary min-vh-100'>
           <div className='row'>
             {toggle && (
@@ -24,12 +24,12 @@ const AdminDashboard = () => {
               </div>
             )}
             {toggle && <div className='col-4 col-md-2'></div>}
-            <div className='col'>
+            <div className='col  bg-white'>
             <Home Toggle={Toggle} />
              </div>
           </div>
         </div>
-    );
+        </>
+    )
 }
-
-export default AdminDashboard;
+export default Doctor
