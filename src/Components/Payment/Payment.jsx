@@ -1,8 +1,11 @@
+// PaymentPage.js
+
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 import logo from '../../Assets/v186_574.png';
+import qrCode from '../../Assets/QR-Code-PNG-HD-Image.png';
 import axios from 'axios';
 import { RiArrowGoBackLine } from "react-icons/ri";
 import './Payment.scss';
@@ -13,8 +16,8 @@ const PaymentPage = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState('');
+    const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
-    // Lấy thông tin user từ token
     useEffect(() => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('token');
@@ -41,7 +44,6 @@ const PaymentPage = () => {
         fetchUserInfo();
     }, []);
 
-    // Lấy thông tin booking từ localStorage
     useEffect(() => {
         const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
         if (bookedInfo) {
@@ -53,8 +55,20 @@ const PaymentPage = () => {
         }
     }, []);
 
+    const handlePayClick = async () => {
+        try {
+            // Implement your payment processing logic here
+            // Example: await processPayment();
+
+            // After successful payment, redirect to booking history
+            navigate('/booking-history');
+        } catch (error) {
+            console.error('Payment failed:', error);
+        }
+    };
+
     if (loading) {
-        return <p>Loading...</p>;
+        return <p className="loading-text">Loading...</p>;
     }
 
     return (
@@ -75,16 +89,20 @@ const PaymentPage = () => {
                 <div className="middle-bill">
                     <div className='payment-info'>
                         <p>Bill code: 01sda-adsd-vfdg</p>
-                        <p>Date: {selectedDate}</p> {/* Hiển thị ngày đã chọn */}
+                        <p>Date: {selectedDate}</p>
                     </div>
-                    <h5>Customer information</h5>
-                    <p>Name: {user?.name}</p>
-                    <p>Email: {user?.email}</p>
-                    <p>Phone: {user?.phone}</p>
-                    <p>Address: {user?.address}</p>
-                    <p>Notes: </p>
-                    <h5>Booking details</h5>
-                    <BookingDetail bookings={bookings} />
+                    <div className="customer-info">
+                        <h5>Customer information</h5>
+                        <p>Name: {user?.name}</p>
+                        <p>Email: {user?.email}</p>
+                        <p>Phone: {user?.phone}</p>
+                        <p>Address: {user?.address}</p>
+                        <p>Notes: </p>
+                    </div>
+                    <div className="booking-details">
+                        <h5>Booking details</h5>
+                        <BookingDetail bookings={bookings} />
+                    </div>
                     <div className="payment-method">
                         <h6>Payment Method:</h6>
                         <select id="payment-method">
@@ -93,24 +111,29 @@ const PaymentPage = () => {
                             <option value="bank-transfer">Bank Transfer</option>
                         </select>
                     </div>
-                    <div className="total-cost">Total Cost: ${calculateTotalCost(bookings)}</div>
+                    <div className="total-cost">
+                        <p>Total cost: $000</p>
+                    </div>
                 </div>
-            </div>
-            <div className='back'>
-                <a href='/booking'><RiArrowGoBackLine />Go back</a>
-            </div>
-
-            <div className='pay'>
-                <button>
-                    Make Payment
-                </button>
+                <div className="qr-signature">
+                    <div className="signature">
+                        <p>Date: ____________</p>
+                        <p>Signature: ____________</p>
+                        <div className="signature-line">Signed by</div>
+                    </div>
+                    <div className="qr-code">
+                        <img src={qrCode} alt="QR Code" />
+                    </div>
+                </div>
+                <div className="pay">
+                    <button onClick={handlePayClick}>Pay</button>
+                </div>
+                <div className="back">
+                    <a href="/"><RiArrowGoBackLine /> Go back</a>
+                </div>
             </div>
         </div>
     );
-};
-
-const calculateTotalCost = (bookings) => {
-    return bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0).toFixed(2);
 };
 
 export default PaymentPage;
