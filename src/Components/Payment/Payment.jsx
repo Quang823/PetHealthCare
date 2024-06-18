@@ -1,5 +1,3 @@
-// PaymentPage.js
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
@@ -8,6 +6,7 @@ import logo from '../../Assets/v186_574.png';
 import qrCode from '../../Assets/QR-Code-PNG-HD-Image.png';
 import axios from 'axios';
 import { RiArrowGoBackLine } from "react-icons/ri";
+
 import './Payment.scss';
 
 const PaymentPage = () => {
@@ -16,7 +15,7 @@ const PaymentPage = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState('');
-    const navigate = useNavigate(); // Use useNavigate instead of useHistory
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -34,6 +33,7 @@ const PaymentPage = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+                console.log("res", response);
                 setUser(response.data);
             } catch (error) {
                 console.error('Error fetching user info:', error);
@@ -46,6 +46,7 @@ const PaymentPage = () => {
 
     useEffect(() => {
         const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
+        console.log("bkinfo", bookedInfo)
         if (bookedInfo) {
             setBookings(bookedInfo);
         }
@@ -56,13 +57,42 @@ const PaymentPage = () => {
     }, []);
 
     const handlePayClick = async () => {
-        try {
-            // Implement your payment processing logic here
-            // Example: await processPayment();
+        if (!user) {
+            console.error('User information is missing.');
+            return;
+        }
 
-            // After successful payment, redirect to booking history
-            navigate('/booking-history');
+        const bookingData = {
+            customerId: user.userId,
+            date: selectedDate,
+            status: "Confirmed",
+            totalPrice: bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0),
+            bookingDetails: bookings.map(booking => ({
+                petId: booking.petId,
+                veterinarianId: booking.doctorId,
+                serviceId: booking.serviceId,
+                needCage: false,
+                date: booking.date,
+                slot: booking.slotTime
+            }))
+        };
+        console.log("BkData", bookingData);
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post('http://localhost:8080/booking/add', bookingData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            // After successful payment, clear localStorage and redirect to booking history
+            localStorage.removeItem('bookedInfo');
+            localStorage.removeItem('selectedDate');
+            alert("Paymet Successfully");
+            navigate('/');
         } catch (error) {
+            alert(error);
             console.error('Payment failed:', error);
         }
     };
@@ -70,7 +100,9 @@ const PaymentPage = () => {
     if (loading) {
         return <p className="loading-text">Loading...</p>;
     }
+
     const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
+
     return (
         <div className='paymentPage'>
             <h2>PAYMENT</h2>

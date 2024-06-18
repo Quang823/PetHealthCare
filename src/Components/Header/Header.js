@@ -69,7 +69,7 @@ const Header = (props) => {
                                     alt='React Bootstrap logo'
                                 />
                             </div>
-                            <span className='Title'>PET HEALTH CARE</span>
+                            <span className='Title'>Pet Health Care</span>
                         </div>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -77,21 +77,21 @@ const Header = (props) => {
                         <Nav className="me-auto">
                             {location.pathname !== '/login' && (
                                 <>
-                                    <NavLink to="/" className="nav-link">HOME</NavLink>
+                                    <NavLink to="/" className="nav-link">Home</NavLink>
                                     {/* <NavLink to="/users" className="nav-link" >Manage Pet</NavLink> */}
-                                    <NavLink to="/about" className="nav-link">ABOUT</NavLink>
-                                    <NavLink to="/service" className="nav-link">SERVICE</NavLink>
-                                    <NavLink to="/pets" className="nav-link">MANAGE PET</NavLink>
-                                    <NavLink to="/booking" className="nav-link">BOOKING</NavLink>
-                                    <NavLink to="/contact" className="nav-link">CONTACT</NavLink>
+                                    <NavLink to="/about" className="nav-link">About</NavLink>
+                                    <NavLink to="/service" className="nav-link">Service</NavLink>
+                                    <NavLink to="/pets" className="nav-link">Manage Pet</NavLink>
+                                    <NavLink to="/booking" className="nav-link">Booking</NavLink>
+                                    <NavLink to="/contact" className="nav-link">Contact</NavLink>
 
                                 </>
                             )}
                         </Nav>
 
                         <Nav>
-                            {user && user.auth === true && <span className='nav-link'> <MdPets className='icon' /> WELCOME {userName} </span>}
-                            <NavDropdown title="Setting" id="basic-nav-dropdown">
+                            {user && user.auth === true && <span className='nav-link'> <MdPets className='icon' /> Welcome {userName} </span>}
+                            <NavDropdown title="Option" id="basic-nav-dropdown">
 
                                 {user && user.auth === true ? (
 

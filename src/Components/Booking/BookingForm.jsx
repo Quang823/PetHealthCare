@@ -95,28 +95,18 @@ const BookingForm = ({ onBookingComplete }) => {
             return;
         }
 
-        console.log('Selected Service ID:', selectedService);
-        console.log('Selected Doctor ID:', selectedDoctor);
-        console.log('date', selectedDate);
-        console.log('Services:', services);
-        console.log('Doctors:', doctors);
-        console.log('Slot', selectedSlot);
-
-        const bookingData = {
-            petId: selectedPet,
-            serviceID: selectedService,
-            doctorId: selectedDoctor,
-            slotId: selectedSlot,
-            date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
-        };
-        await bookAppointment(bookingData);
+        // const bookingData = {
+        //     petId: selectedPet,
+        //     serviceID: selectedService,
+        //     doctorId: selectedDoctor,
+        //     slotId: selectedSlot,
+        //     date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
+        // };
+        // await bookAppointment(bookingData);
         const selectedServiceDetail = services.find(service => service.name === selectedService);
-        const selectedSlotDetail = slots.find(slot => slot.slot.slotId === selectedSlot);
+        const selectedSlotDetail = slots.find(slot => slot.slot.slotId === parseInt(selectedSlot, 10));
         const selectedPetDetail = pets.find(pet => pet.petName === selectedPet);
 
-        console.log('Selected Service Detail:', selectedServiceDetail);
-        console.log('Selected Doctor Detail:', selectedDoctorDetail);
-        console.log('Selected Slot Detail:', selectedSlotDetail);
 
         onBookingComplete({
             petName: selectedPetDetail?.petName,
