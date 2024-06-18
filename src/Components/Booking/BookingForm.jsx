@@ -109,14 +109,16 @@ const BookingForm = ({ onBookingComplete }) => {
 
 
         onBookingComplete({
+            petId: selectedPetDetail?.petId,
             petName: selectedPetDetail?.petName,
+            serviceId: selectedServiceDetail?.serviceId,
             serviceName: selectedServiceDetail?.name,
+            doctorId: selectedDoctorDetail?.userId,
             doctorName: selectedDoctorDetail?.name,
             slotTime: selectedSlotDetail?.slot.slotId,
             totalCost: selectedServiceDetail?.price,
             date: selectedDate.toISOString().split('T')[0]
         });
-
         // Reset form
         setSelectedPet('');
         setSelectedService('');
@@ -155,7 +157,6 @@ const BookingForm = ({ onBookingComplete }) => {
                         <select value={selectedPet} onChange={(e) => setSelectedPet(e.target.value)}>
                             <option value="">Select Pet</option>
                             {pets.map((pet) => (
-
                                 <option key={pet.petName} value={pet.petName}>
                                     {pet.petName}
                                 </option>
