@@ -26,7 +26,7 @@ const BookingForm = ({ onBookingComplete }) => {
             const token = localStorage.getItem('token');
             if (token) {
                 const decodedToken = jwtDecode(token);
-                setUserID(decodedToken.User.userID);
+                setUserID(decodedToken.User.map.userID);
             }
         };
 
@@ -67,12 +67,16 @@ const BookingForm = ({ onBookingComplete }) => {
         }
         fetchData();
     }, [userID]);
-
+    const selectedDoctorDetail = doctors.find(doctor => doctor.name === selectedDoctor);
     useEffect(() => {
         const fetchSlots = async () => {
             if (selectedDoctor && selectedDate) {
                 const formattedDate = selectedDate.toISOString().split('T')[0];
-                const slotsData = await getSlots(selectedDoctor, formattedDate);
+                //const slotsData = await getSlots(selectedDoctor, formattedDate);
+                const slotsData = await axios.post(`http://localhost:8080/sev-slot/slot-available`, {
+                    userId: selectedDoctorDetail.userId,
+                    date: selectedDate.toISOString().split('T')[0]
+                });
                 setSlots(Array.isArray(slotsData.data) ? slotsData.data : []);
             }
         };
@@ -91,36 +95,30 @@ const BookingForm = ({ onBookingComplete }) => {
             return;
         }
 
-        console.log('Selected Service ID:', selectedService);
-        console.log('Selected Doctor ID:', selectedDoctor);
-        console.log('Services:', services);
-        console.log('Doctors:', doctors);
-
-        const bookingData = {
-            petId: selectedPet,
-            serviceID: selectedService,
-            doctorId: selectedDoctor,
-            slotId: selectedSlot,
-            date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
-        };
-        await bookAppointment(bookingData);
-
+        // const bookingData = {
+        //     petId: selectedPet,
+        //     serviceID: selectedService,
+        //     doctorId: selectedDoctor,
+        //     slotId: selectedSlot,
+        //     date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
+        // };
+        // await bookAppointment(bookingData);
         const selectedServiceDetail = services.find(service => service.name === selectedService);
-        const selectedDoctorDetail = doctors.find(doctor => doctor.name === selectedDoctor);
-        const selectedPetDetail = pets.find(pet => pet.petname === selectedPet);
+        const selectedSlotDetail = slots.find(slot => slot.slot.slotId === parseInt(selectedSlot, 10));
+        const selectedPetDetail = pets.find(pet => pet.petName === selectedPet);
 
-        console.log('Selected Service Detail:', selectedServiceDetail);
-        console.log('Selected Doctor Detail:', selectedDoctorDetail);
 
         onBookingComplete({
-            petName: selectedPetDetail?.petname,
+            petId: selectedPetDetail?.petId,
+            petName: selectedPetDetail?.petName,
+            serviceId: selectedServiceDetail?.serviceId,
             serviceName: selectedServiceDetail?.name,
+            doctorId: selectedDoctorDetail?.userId,
             doctorName: selectedDoctorDetail?.name,
-            slotTime: slots.find(slot => slot.id === selectedSlot)?.time,
+            slotTime: selectedSlotDetail?.slot.slotId,
             totalCost: selectedServiceDetail?.price,
             date: selectedDate.toISOString().split('T')[0]
         });
-
         // Reset form
         setSelectedPet('');
         setSelectedService('');
@@ -159,9 +157,8 @@ const BookingForm = ({ onBookingComplete }) => {
                         <select value={selectedPet} onChange={(e) => setSelectedPet(e.target.value)}>
                             <option value="">Select Pet</option>
                             {pets.map((pet) => (
-
-                                <option key={pet.petId} value={pet.petId}>
-                                    {pet.petname}
+                                <option key={pet.petName} value={pet.petName}>
+                                    {pet.petName}
                                 </option>
                             ))}
                         </select>
@@ -190,14 +187,18 @@ const BookingForm = ({ onBookingComplete }) => {
                     </label>
                     <label>
                         Select Slot:
-                        <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
-                            <option value="">Select Slot</option>
+                        <div className="slot-buttons">
                             {slots.map((slot) => (
-                                <option key={slot.id} value={slot.id}>
-                                    {slot.time}
-                                </option>
+                                <button
+                                    key={slot.slot.slotId}
+                                    type="button"
+                                    className={`slot-button ${selectedSlot === slot.slot.slotId.toString() ? 'selected' : ''}`}
+                                    onClick={() => setSelectedSlot(slot.slot.slotId.toString())}
+                                >
+                                    Slot {slot.slot.slotId}: {slot.slot.startTime}
+                                </button>
                             ))}
-                        </select>
+                        </div>
                     </label>
                     <p>Cost: ${totalCost}</p>
                     <button type="button" onClick={handleBooking}>Confirm</button>
@@ -221,3 +222,218 @@ const BookingForm = ({ onBookingComplete }) => {
 
 
 export default BookingForm;
+
+
+
+// const BookingForm = ({ onBookingComplete }) => {
+//     const [userID, setUserID] = useState('');
+//     const [pets, setPets] = useState([]);
+//     const [services, setServices] = useState([]);
+//     const [doctors, setDoctors] = useState([]);
+//     const [slots, setSlots] = useState([]);
+//     const [bookedSlots, setBookedSlots] = useState([]); // Thêm trạng thái để theo dõi các slot đã được đặt
+//     const [selectedPet, setSelectedPet] = useState('');
+//     const [selectedService, setSelectedService] = useState('');
+//     const [selectedDoctor, setSelectedDoctor] = useState('');
+//     const [selectedSlot, setSelectedSlot] = useState('');
+//     const [selectedDate, setSelectedDate] = useState(new Date());
+//     const [totalCost, setTotalCost] = useState(0);
+
+//     useEffect(() => {
+//         const fetchUserID = () => {
+//             const token = localStorage.getItem('token');
+//             if (token) {
+//                 const decodedToken = jwtDecode(token);
+//                 setUserID(decodedToken.User.map.userID);
+//             }
+//         };
+
+//         fetchUserID();
+//     }, []);
+
+//     useEffect(() => {
+//         const fetchPets = async () => {
+//             try {
+//                 if (userID) {
+//                     const response = await axios.get(`http://localhost:8080/pet/getAll/${userID}`);
+//                     console.log('Pets data:', response.data);
+//                     if (response.data && Array.isArray(response.data)) {
+//                         setPets(response.data);
+//                     } else {
+//                         console.error('Pets data is not an array:', response.data);
+//                         setPets([]);
+//                     }
+//                 }
+//             } catch (error) {
+//                 console.error('Error fetching pets:', error);
+//                 setPets([]); // Trả về mảng rỗng nếu có lỗi
+//             }
+//         };
+
+//         const fetchData = async () => {
+//             const servicesData = await axios.get(`http://localhost:8080/Service/getAll`);
+//             setServices(Array.isArray(servicesData.data) ? servicesData.data : []);
+
+//             const doctorsData = await axios.get(`http://localhost:8080/account/getVeterinarian`);
+//             setDoctors(Array.isArray(doctorsData.data) ? doctorsData.data : []);
+//         };
+
+//         if (userID) {
+//             fetchPets();
+//         }
+//         fetchData();
+//     }, [userID]);
+
+//     useEffect(() => {
+//         const fetchSlots = async () => {
+//             if (selectedDoctor && selectedDate) {
+//                 const formattedDate = selectedDate.toISOString().split('T')[0];
+//                 const slotsData = await axios.post(`http://localhost:8080/sev-slot/slot-available`, {
+//                     userId: selectedDoctorDetail.userId,
+//                     date: formattedDate
+//                 });
+//                 setSlots(Array.isArray(slotsData.data) ? slotsData.data : []);
+
+//                 // Giả sử server trả về danh sách các slot đã được đặt
+//                 const bookedSlotsData = await axios.post(`http://localhost:8080/sev-slot/booked-slots`, {
+//                     userId: selectedDoctorDetail.userId,
+//                     date: formattedDate
+//                 });
+//                 setBookedSlots(Array.isArray(bookedSlotsData.data) ? bookedSlotsData.data : []);
+//             }
+//         };
+//         fetchSlots();
+//     }, [selectedDoctor, selectedDate]);
+
+//     useEffect(() => {
+//         const service = services.find(s => s.name === selectedService);
+//         setTotalCost(service ? service.price : 0);
+//     }, [selectedService, services]);
+
+//     const handleBooking = async () => {
+//         if (!selectedPet || !selectedService || !selectedDoctor || !selectedSlot || !selectedDate) {
+//             toast.error('Please fill in all fields before booking.');
+//             return;
+//         }
+
+//         const selectedServiceDetail = services.find(service => service.name === selectedService);
+//         const selectedSlotDetail = slots.find(slot => slot.slot.slotId === parseInt(selectedSlot, 10));
+//         const selectedPetDetail = pets.find(pet => pet.petName === selectedPet);
+
+//         onBookingComplete({
+//             petId: selectedPetDetail?.petId,
+//             petName: selectedPetDetail?.petName,
+//             serviceId: selectedServiceDetail?.serviceId,
+//             serviceName: selectedServiceDetail?.name,
+//             doctorId: selectedDoctorDetail?.userId,
+//             doctorName: selectedDoctorDetail?.name,
+//             slotTime: selectedSlotDetail?.slot.slotId,
+//             totalCost: selectedServiceDetail?.price,
+//             date: selectedDate.toISOString().split('T')[0]
+//         });
+
+//         // Cập nhật bookedSlots với slot mới
+//         setBookedSlots(prevBookedSlots => [...prevBookedSlots, parseInt(selectedSlot, 10)]);
+
+//         // Reset form
+//         setSelectedPet('');
+//         setSelectedService('');
+//         setSelectedDoctor('');
+//         setSelectedSlot('');
+//         setTotalCost(0);
+//     };
+
+//     const handleDateChange = (date) => {
+//         setSelectedDate(date);
+//     };
+
+//     const validateDate = (date) => {
+//         const today = new Date();
+//         today.setHours(0, 0, 0, 0);
+//         return date >= today;
+//     };
+
+//     return (
+//         <div>
+//             <div className="booking-container">
+//                 <h2>Book an Appointment</h2>
+//                 <form>
+//                     <label>
+//                         Select Date:
+//                         <DatePicker
+//                             selected={selectedDate}
+//                             onChange={handleDateChange}
+//                             minDate={new Date()}
+//                             filterDate={validateDate}
+//                             dateFormat="yyyy-MM-dd"
+//                         />
+//                     </label>
+//                     <label>
+//                         Select Pet:
+//                         <select value={selectedPet} onChange={(e) => setSelectedPet(e.target.value)}>
+//                             <option value="">Select Pet</option>
+//                             {pets.map((pet) => (
+//                                 <option key={pet.petName} value={pet.petName}>
+//                                     {pet.petName}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </label>
+//                     <label>
+//                         Select Service:
+//                         <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
+//                             <option value="">Select Service</option>
+//                             {services.map((service) => (
+//                                 <option key={service.name} value={service.name}>
+//                                     {service.name} - ${service.price}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </label>
+//                     <label>
+//                         Select Doctor:
+//                         <select value={selectedDoctor} onChange={(e) => setSelectedDoctor(e.target.value)}>
+//                             <option value="">Select Doctor</option>
+//                             {doctors.map((doctor) => (
+//                                 <option key={doctor.name} value={doctor.name}>
+//                                     {doctor.name}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </label>
+//                     <label>
+//                         Select Slot:
+//                         <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
+//                             <option value="">Select Slot</option>
+//                             {slots.map((slot) => (
+//                                 <option
+//                                     key={slot.slot.slotId}
+//                                     value={slot.slot.slotId}
+//                                     style={{ color: bookedSlots.includes(slot.slot.slotId) ? 'red' : 'black' }}
+//                                 >
+//                                     Slot {slot.slot.slotId}: {slot.slot.startTime} {bookedSlots.includes(slot.slot.slotId) ? '(Booked)' : ''}
+//                                 </option>
+//                             ))}
+//                         </select>
+//                     </label>
+//                     <p>Cost: ${totalCost}</p>
+//                     <button type="button" onClick={handleBooking}>Confirm</button>
+//                 </form>
+//             </div>
+//             <div className="booking-middle">
+//                 <p>Please fill in all information to save time during examination procedures</p>
+//             </div>
+//             <div className="booking-footer">
+//                 <h7>NOTE</h7>
+//                 <p>
+//                     The information you provide will be used as medical records. When filling in the information, please:</p>
+//                 <ul>
+//                     <li>Clearly state your full name, capitalizing the first letters, for example: Tran Van Phu</li>
+//                     <li>Fill in completely and correctly and please check the information before pressing "Confirm"</li>
+//                 </ul>
+//             </div>
+//         </div>
+//     );
+// };
+
+

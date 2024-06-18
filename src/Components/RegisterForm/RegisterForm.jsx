@@ -34,7 +34,7 @@ const RegisterForm = () => {
                 password: password,
             });
 
-            alert("Employee Registation Successfully");
+            alert("Registation Successfully");
             navigate('/login')
         } catch (err) {
             alert(err);

@@ -23,7 +23,7 @@ import './Vaccine.scss';
 //     const fetchPetName = async () => {
 //         try {
 //             const response = await axios.get(`http://localhost:8080/pet/${petId}`);
-//             setPetName(response.data.petname);
+//             setPetName(response.data.petName);
 //         } catch (error) {
 //             console.error('Error fetching pet name:', error);
 //         }
@@ -144,7 +144,7 @@ import './Vaccine.scss';
 const Vaccine = () => {
     const { petId } = useParams();
     const location = useLocation();
-    const [petName, setPetName] = useState(location.state?.petname || '');
+    const [petName, setPetName] = useState(location.state?.petName || '');
     const [medicalHistory, setMedicalHistory] = useState([]);
     const [editingVaccine, setEditingVaccine] = useState(null);
     const [newVaccineData, setNewVaccineData] = useState({
@@ -220,7 +220,7 @@ const Vaccine = () => {
 
     return (
         <div className="medical-history-container">
-            <h2>Medical History for {petName}</h2>
+            <h2>Vaccine for {petName}</h2>
             <table className="styled-table">
                 <thead>
                     <tr>

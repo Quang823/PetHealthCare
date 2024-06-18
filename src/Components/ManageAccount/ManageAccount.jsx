@@ -17,7 +17,7 @@ const ManageAccount = () => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('token');
             const decodedToken = jwtDecode(token);
-            const userID = decodedToken.User.userID;
+            const userID = decodedToken.User.map.userID;
             if (!token || !userID) {
                 console.error('No token or user ID found in localStorage.');
                 return;
@@ -58,7 +58,7 @@ const ManageAccount = () => {
         try {
             const token = localStorage.getItem('token');
             const decodedToken = jwtDecode(token);
-            const userID = decodedToken.User.userID;
+            const userID = decodedToken.User.map.userID;
             const response = await axios.put(
                 `http://localhost:8080/account/update/${userID}`,
                 updatedUser,

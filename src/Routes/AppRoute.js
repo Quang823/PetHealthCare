@@ -16,6 +16,8 @@ import BookingPage from '../Components/Booking/BookingPage';
 import PaymentPage from '../Components/Payment/Payment';
 import Vaccine from '../Components/Vaccine/Vaccine';
 import MedicalHistory from '../Components/Medical History/MedicalHistory';
+import BookingHistory from '../Components/BookingHistory/BookingHistory';
+import BookingDetail from '../Components/Booking/BookingDetail';
 import Header from '../Components/Header/Header';
 import Footer from '../Components/Footer/Footer';
 
@@ -49,6 +51,8 @@ const AppRoute = () => {
                 <Route path='/payment' element={<PaymentPage />} />
                 <Route path='/vaccine/:petId' element={<Vaccine />} />
                 <Route path='/medical-history/:petId' element={<MedicalHistory />} />
+                <Route path='/booking-history' element={<BookingHistory />} />
+                <Route path='/booking-detail/:id' element={<BookingDetail />} />
 
             </Routes>
             <Footer></Footer>

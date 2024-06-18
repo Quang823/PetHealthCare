@@ -15,8 +15,8 @@ const UserProvider = ({ children }) => {
         const decodedToken = jwtDecode(token);
         if (decodedToken && decodedToken.User) {
           setUser({
-            name: decodedToken.User.name,
-            email: decodedToken.User.email,
+            name: decodedToken.User.map.name,
+            email: decodedToken.User.map.email,
             auth: true,
           });
         }
@@ -38,7 +38,6 @@ const UserProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
-    localStorage.removeItem("emial");
     localStorage.removeItem("data");
     localStorage.removeItem("user");
     setUser((user) => ({

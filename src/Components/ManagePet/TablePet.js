@@ -23,10 +23,10 @@ const TablePet = () => {
     const [error, setError] = useState('');
     const [userID, setUserID] = useState('');
     const [newPet, setNewPet] = useState({
-        petname: '',
-        petage: '',
-        petgender: '',
-        pettype: '',
+        petName: '',
+        petAge: '',
+        petGender: '',
+        petType: '',
         vaccination: ''
     });
 
@@ -34,7 +34,7 @@ const TablePet = () => {
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = jwtDecode(token);
-            const userIdFromToken = decodedToken.User.userID;
+            const userIdFromToken = decodedToken.User.map.userID;
             setUserID(userIdFromToken);
             fetchData(userIdFromToken);
         }
@@ -66,7 +66,7 @@ const TablePet = () => {
     };
 
     const handleAddPet = () => {
-        if (!newPet.petname || !newPet.petage || !newPet.petgender || !newPet.pettype || !newPet.vaccination) {
+        if (!newPet.petName || !newPet.petAge || !newPet.petGender || !newPet.petType || !newPet.vaccination) {
             setError('Please fill in all fields.');
             toast.error("Please fill in all fields");
             return;
@@ -77,10 +77,10 @@ const TablePet = () => {
             .then(res => {
                 setData([...data, res.data]);
                 setNewPet({
-                    petname: '',
-                    petage: '',
-                    petgender: '',
-                    pettype: '',
+                    petName: '',
+                    petAge: '',
+                    petGender: '',
+                    petType: '',
                     vaccination: ''
                 });
                 setShowForm(false);
@@ -90,10 +90,10 @@ const TablePet = () => {
             .catch(err => console.log(err));
     };
 
-    const handleDeletePet = (petid) => {
-        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petid}`)
+    const handleDeletePet = (petId) => {
+        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
             .then(() => {
-                setData(data.filter(pet => pet.petid !== petid));
+                setData(data.filter(pet => pet.petId !== petId));
                 toast.success("Delete pet success");
             })
             .catch(err => {
@@ -108,18 +108,18 @@ const TablePet = () => {
     };
 
     const handleUpdatePet = () => {
-        const { petid, ...petData } = newPet;
+        const { petId, ...petData } = newPet;
 
-        axios.put(`http://localhost:8080/pet/update/${userID}/${petid}`, petData)
+        axios.put(`http://localhost:8080/pet/update/${userID}/${petId}`, petData)
             .then(res => {
-                setData(data.map(pet => (pet.petid === petid ? res.data : pet)));
+                setData(data.map(pet => (pet.petId === petId ? res.data : pet)));
                 setShowEditForm(false);
                 setNewPet({
 
-                    petname: '',
-                    petage: '',
-                    petgender: '',
-                    pettype: '',
+                    petName: '',
+                    petAge: '',
+                    petGender: '',
+                    petType: '',
                     vaccination: ''
                 });
                 toast.success("Update pet success");
@@ -129,11 +129,11 @@ const TablePet = () => {
                 toast.error("Failed to update pet");
             });
     };
-    const handleViewVaccine = (petid, petname) => {
-        navigate(`/vaccine/${petid}`, { state: { petname } });
+    const handleViewVaccine = (petId, petName) => {
+        navigate(`/vaccine/${petId}`, { state: { petName } });
     };
-    const handleViewMedicalHistory = (petid, petname) => {
-        navigate(`/medical-history/${petid}`);
+    const handleViewMedicalHistory = (petId, petName) => {
+        navigate(`/medical-history/${petId}`);
     };
 
 
@@ -155,11 +155,11 @@ const TablePet = () => {
                 <tbody>
                     {data.map((pet, index) => (
                         <tr key={index}>
-                            {/* <td>{pet.petid}</td> */}
-                            <td>{pet.petname}</td>
-                            <td>{pet.petage}</td>
-                            <td>{pet.petgender}</td>
-                            <td>{pet.pettype}</td>
+                            {/* <td>{pet.petId}</td> */}
+                            <td>{pet.petName}</td>
+                            <td>{pet.petAge}</td>
+                            <td>{pet.petGender}</td>
+                            <td>{pet.petType}</td>
                             <td>{pet.vaccination}</td>
                             <td>
                                 <button className='btn btn-warning' onClick={() => {
@@ -167,9 +167,9 @@ const TablePet = () => {
                                     setShowEditForm(true);
                                     setShowForm(false);
                                 }} >Edit</button>
-                                <button className='btn btn-danger' onClick={() => handleDeletePet(pet.petid)}>Delete</button>
-                                <button className='btn btn-view' onClick={() => handleViewVaccine(pet.petid, pet.petname)}> Vaccine</button>
-                                <button className='btn btn-med' onClick={() => handleViewMedicalHistory(pet.petid, pet.petname)}> MedHistory</button>
+                                <button className='btn btn-danger' onClick={() => handleDeletePet(pet.petId)}>Delete</button>
+                                <button className='btn btn-view' onClick={() => handleViewVaccine(pet.petId, pet.petName)}> Vaccine</button>
+                                <button className='btn btn-med' onClick={() => handleViewMedicalHistory(pet.petId, pet.petName)}> MedHistory</button>
                             </td>
                         </tr>
                     ))}
@@ -186,30 +186,30 @@ const TablePet = () => {
                     <h3>Add a new pet</h3>
                     <input
                         type="text"
-                        name="petname"
+                        name="petName"
                         placeholder="Pet Name"
-                        value={newPet.petname}
+                        value={newPet.petName}
                         onChange={handleChange}
                     />
                     <input
                         type="text"
-                        name="petage"
+                        name="petAge"
                         placeholder="Pet Age"
-                        value={newPet.petage}
+                        value={newPet.petAge}
                         onChange={handleChange}
                     />
                     <input
                         type="text"
-                        name="petgender"
+                        name="petGender"
                         placeholder="Pet Gender"
-                        value={newPet.petgender}
+                        value={newPet.petGender}
                         onChange={handleChange}
                     />
                     <input
                         type="text"
-                        name="pettype"
+                        name="petType"
                         placeholder="Pet Type"
-                        value={newPet.pettype}
+                        value={newPet.petType}
                         onChange={handleChange}
                     />
                     <input
@@ -232,30 +232,30 @@ const TablePet = () => {
 
                 <input
                     type="text"
-                    name="petname"
+                    name="petName"
                     placeholder="Pet Name"
-                    value={newPet.petname}
+                    value={newPet.petName}
                     onChange={handleEditChange}
                 />
                 <input
                     type="text"
-                    name="petage"
+                    name="petAge"
                     placeholder="Pet Age"
-                    value={newPet.petage}
+                    value={newPet.petAge}
                     onChange={handleEditChange}
                 />
                 <input
                     type="text"
-                    name="petgender"
+                    name="petGender"
                     placeholder="Pet Gender"
-                    value={newPet.petgender}
+                    value={newPet.petGender}
                     onChange={handleEditChange}
                 />
                 <input
                     type="text"
-                    name="pettype"
+                    name="petType"
                     placeholder="Pet Type"
-                    value={newPet.pettype}
+                    value={newPet.petType}
                     onChange={handleEditChange}
                 />
                 <input
