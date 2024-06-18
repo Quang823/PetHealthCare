@@ -14,7 +14,7 @@ function Sidebar() {
   return (
     <div className='bg-white sidebar p-2'>
       <div className='m-2'>
-        <i className='bi bi-android2 me-3 fs-4'></i>
+        <i className='bi bi-bootstrap-fill me-3 fs-4'></i>
         <span className='brand-name fs-4'>WELCOME</span>
       </div>
       <hr className='text-dark' />
@@ -23,18 +23,9 @@ function Sidebar() {
           <i className='bi bi-house fs-5 me-3'></i>
           <span>Home</span>
         </a>
-        <a className='list-group-item py-2' href="/cagestaff">
-          <i className='bi bi-archive-fill me-3'></i> 
-          <span>Cage</span>
-        </a>
-        <a className='list-group-item py-2' href="/bookingstaff">
-          <i className='bi bi-bag-fill fs-5 me-3'></i>
-          <span>Booking</span>
-        </a>
-        <a className='list-group-item py-2' href="">
-        <i class="bi bi-android fs-5 me-3 "></i>
-          <span>Manage Pet</span>
-        </a>
+        
+        
+        
         <a className='list-group-item py-2' href="">
           <i className='bi bi-power fs-5 me-3'></i>
           <span onClick={() => handleLogout()}>Logout</span>

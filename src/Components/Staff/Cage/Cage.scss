@@ -1,0 +1,28 @@
+/* src/components/Cinema.css */
+.cinema {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10%;
+  }
+  
+  .row {
+    display: flex;
+    margin: 5px 0;
+  }
+  
+  .seat {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .seat.selected {
+    background-color: #6c3;
+  }
+  

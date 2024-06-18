@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import './UserList.scss';
+import './BookingStaff.scss';
 import ReactPaginate from 'react-paginate';
-import axios from 'axios';
-function CustomerList() {
+function BookingStaff() {
   const [users, setUsers] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-    const [showEditForm, setShowEditForm] = useState(false);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage,setpostPerPage] =useState(5);
   const indexOfLastPost = currentPage * postPerPage;
     const indexOfFirstPost = indexOfLastPost - postPerPage;
     const currentPosts = users.slice(indexOfFirstPost, indexOfLastPost);
-    const [newUser, setNewUser] = useState({
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      role: ''
-  });
   useEffect(() => {
     fetch('http://localhost:8080/account/getAll')
       .then(response => response.json())
@@ -36,19 +26,7 @@ const handleAddNew = () => {
 };
 
 const handleEdit = () => {
-  const { userID, ...serviceData } = setNewUser;
- axios.put(`http://localhost:8080/Service/update/${userID}`, serviceData)
- .then( res => {
-  setNewUser(users.map(s => (s.serviceID === userID ? res.data : s)));
-  setShowEditForm(false);
-  setNewUser({
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      role: ''
-  });
- })
+ 
 };
 
 const handleDelete = () => {
@@ -58,17 +36,19 @@ const handleDelete = () => {
   return (
     <div className="container">
        <div className='hehe'>
-              <h2 className="my-4">Customer List</h2>
+              <h2 className="my-4">Booking List</h2>
               <button className="back-button" onClick={handleBack}>Back</button>
         </div>
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Role</th>
+            <th>Date</th>
+            <th>Pet</th>
+            <th>Service</th>
+            <th>Doctor</th>
+            <th>Slot</th>
+            <th>Cost</th>
+            <th>Payment Method</th>
           </tr>
         </thead>
         <tbody>
@@ -99,4 +79,4 @@ const handleDelete = () => {
   );
 }
 
-export default CustomerList;
+export default BookingStaff;

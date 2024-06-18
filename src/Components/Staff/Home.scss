@@ -1,0 +1,28 @@
+.container-fluid{
+    background-color: #f9f9f9; /* Light gray color */
+   
+    
+}
+.col {
+    flex: 1 0;
+    background-color: wheat;
+}
+.notification {
+    background-color: blueviolet;
+    color: white;
+    text-decoration: none;
+    padding: 15px 26px;
+    position: relative;
+    display: inline-block;
+    border-radius: 2px;
+   
+  }
+  
+  .notification:hover {
+    background: red;
+  }
+  .com-sche{
+    text-align: center;
+  }
+  
+  
