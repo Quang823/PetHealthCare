@@ -44,9 +44,8 @@ function Home({ Toggle }) {
             </div>
           </div>
         </div>
-      </div>
-      <table className="table caption-top bg-white rounded mt-2">
-        <caption className='text-white fs-4'>Các dịch vụ nổi bật</caption>
+        <table className="table caption-top bg-white rounded mt-2">
+        <caption className=''>Các dịch vụ nổi bật</caption>
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -95,6 +94,9 @@ function Home({ Toggle }) {
           </tr>
         </tbody>
       </table>
+      </div>
+      
+     
     </div>
         </>
     )

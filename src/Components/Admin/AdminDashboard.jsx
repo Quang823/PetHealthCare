@@ -1,12 +1,10 @@
 
 import './Admin.scss'
+import React ,{ useState } from 'react';
 import { Outlet } from 'react-router-dom';
-
-import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import Nav from './Nav'
-
+import Nav from './Nav';
 import { FaCartArrowDown, FaUserAlt, FaSafari, FaTasks, FaCar } from 'react-icons/fa';
 import Home from './Home';
 import { Router, Route, Routes } from 'react-router-dom';

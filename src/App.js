@@ -12,6 +12,12 @@ import AdminLayout from './Routes/AdminLayout';
 import CustomerList from './Components/Admin/User/UserList';
 import ServicePet from './Components/Admin/Service/ServicePet';
 import StaffLayout from './Components/Staff/StaffLayout';
+import Doctor from './Components/Doctors/Doctor';
+import Schedule from './Components/Doctors/Schedule/Schedule';
+import BookingStaff from './Components/Staff/Booking/BookingStaff';
+import Cage from './Components/Staff/Cage/Cage';
+
+
 
 
 function App() {
@@ -34,7 +40,12 @@ function App() {
           <Route path="/customers" element={<CustomerList />} />
           <Route path='/servicePet' element={<ServicePet />} />
           {/* Routes for staff */}
-          <Route path="/staff/*" element={<StaffLayout />} />
+          <Route path='/staff' element={<StaffLayout />} />
+          <Route path='/doctor' element={<Doctor />} />
+          <Route path='/scheduleDoctor' element={<Schedule />} />
+          <Route path='/bookingstaff' element={<BookingStaff/>} />
+          <Route path='/cagestaff' element={<Cage/>} />
+
         </Routes>
       </div>
       <ToastContainer
