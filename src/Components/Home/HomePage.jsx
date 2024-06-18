@@ -74,10 +74,120 @@ const HomePage = () => {
                 </div>
             </div>
 
-            <div className="thirDiv">
-                <div className="thirdText">
-                    <h3>Service</h3>
-                </div>
+            <div className="section services">
+                <Container>
+                    <h3 className="section-title">Our Services</h3>
+                    <Row>
+                        <Col md={4}>
+                            <div className="serviceBox">
+                                <img src={image3} alt="Veterinarian Consultation" className="serviceImage" />
+                                <h4>Veterinarian Consultation</h4>
+                                <p>Schedule appointments with our expert veterinarians.</p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="serviceBox">
+                                <img src={image2} alt="Pet Shop" className="serviceImage" />
+                                <h4>Pet Shop</h4>
+                                <p>Find the best products and accessories for your pets.</p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="serviceBox">
+                                <img src={image1} alt="Pet Food" className="serviceImage" />
+                                <h4>Pet Food</h4>
+                                <p>High-quality pet food to keep your pets healthy and happy.</p>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+
+            <div className="section veterinarians">
+                <Container>
+                    <h3 className="section-title">Meet Our Veterinarians</h3>
+                    <Row>
+                        <Col md={4}>
+                            <div className="vetBox">
+                                <img src={image2} alt="Veterinarian 1" className="vetImage" />
+                                <h4>Dr. John Doe</h4>
+                                <p>Specializes in small animals and surgeries.</p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="vetBox">
+                                <img src={image3} alt="Veterinarian 2" className="vetImage" />
+                                <h4>Dr. Jane Smith</h4>
+                                <p>Expertise in exotic pets and dermatology.</p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="vetBox">
+                                <img src={image1} alt="Veterinarian 3" className="vetImage" />
+                                <h4>Dr. Michael Brown</h4>
+                                <p>Passionate about preventive care and nutrition.</p>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+
+            <div className="section news">
+                <Container>
+                    <h3 className="section-title">Latest Pet News</h3>
+                    <Row>
+                        <Col md={4}>
+                            <div className="newsBox">
+                                <img src={image2} alt="Pet Health Tips" className="newsImage" />
+                                <h4>Pet Health Tips</h4>
+                                <p>Learn how to keep your pets healthy and active.</p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="newsBox">
+                                <img src={image3} alt="New Arrivals in Pet Shop" className="newsImage" />
+                                <h4>New Arrivals in Pet Shop</h4>
+                                <p>Check out the latest products in our pet shop.</p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="newsBox">
+                                <img src={image1} alt="Upcoming Pet Events" className="newsImage" />
+                                <h4>Upcoming Pet Events</h4>
+                                <p>Join us for fun and informative pet events.</p>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+
+            <div className="section shop">
+                <Container>
+                    <h3 className="section-title">Visit Our Pet Shop</h3>
+                    <Row>
+                        <Col md={4}>
+                            <div className="shopBox">
+                                <img src={image2} alt="Pet Shop 1" className="shopImage" />
+                                <h4>Quality Pet Accessories</h4>
+                                <p>Explore our range of pet toys and accessories.</p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="shopBox">
+                                <img src={image3} alt="Pet Shop 2" className="shopImage" />
+                                <h4>Premium Pet Food</h4>
+                                <p>Choose from a variety of nutritious pet food brands.</p>
+                            </div>
+                        </Col>
+                        <Col md={4}>
+                            <div className="shopBox">
+                                <img src={image1} alt="Pet Shop 3" className="shopImage" />
+                                <h4>Healthcare Products</h4>
+                                <p>Find essential healthcare products for your pets.</p>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         </div>
     );

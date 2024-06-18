@@ -1,4 +1,5 @@
 
+
 import { ToastContainer, toast } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import './App.scss';
@@ -15,6 +16,7 @@ import Doctor from './Components/Doctors/Doctor';
 import Schedule from './Components/Doctors/Schedule/Schedule';
 import BookingStaff from './Components/Staff/Booking/BookingStaff';
 import Cage from './Components/Staff/Cage/Cage';
+
 
 
 
@@ -35,13 +37,15 @@ function App() {
           <Route path="/*" element={<AppRoute />} />
           {/* Routes for admin */}
           <Route path="/admin/*" element={<AdminLayout />} />
-          <Route path="/customers/*" element={<CustomerList />} />
+          <Route path="/customers" element={<CustomerList />} />
           <Route path='/servicePet' element={<ServicePet />} />
+          {/* Routes for staff */}
           <Route path='/staff' element={<StaffLayout />} />
           <Route path='/doctor' element={<Doctor />} />
           <Route path='/scheduleDoctor' element={<Schedule />} />
           <Route path='/bookingstaff' element={<BookingStaff/>} />
           <Route path='/cagestaff' element={<Cage/>} />
+
         </Routes>
       </div>
       <ToastContainer

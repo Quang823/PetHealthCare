@@ -1,30 +1,38 @@
-/* src/pages/BookingPage.scss */
 
+  /* BookingPage.scss */
 .booking-page-container {
-    padding: 20px;
-  }
-  
-  .booking-summary-container {
-    margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background: url("../../Assets/hand-painted-watercolor-pastel-sky-background_23-2148902771.avif")no-repeat;
+  background-size: cover;
+
+}
+
+.booking-page-content {
+  display: flex;
+  flex-direction: row; /* Hiển thị các thành phần theo hàng ngang */
+  width: 100%;
+  max-width: 1200px;
+  justify-content: space-between;
+}
+
+.booking-form-container, .booking-detail-container {
+  flex: 1;
+  padding: 20px;
+}
+
+.booking-form-container {
+  border-right: 1px solid #ddd;
+}
+
+.booking-detail-container {
+  padding-left: 20px;
+  h2{
     text-align: center;
-    flex-wrap: wrap; /* Cho phép các booking detail xuống dòng khi không đủ không gian */
-    #paymentbutton {
-      max-width: 400px;
-    }
   }
-  
-  
-  .booking-total-cost {
-    margin-top: 20px;
-    font-size: 24px;
-    color: #333;
+  #paymentbutton{
+    color: #ffffff;
+    background-color: #28a745;
   }
-  
-  /* Thêm margin giữa các booking detail */
-  .booking-detail-card {
-    
-    margin-right: 20px;
-    margin-bottom: 20px;
-    
-  }
-  
+}

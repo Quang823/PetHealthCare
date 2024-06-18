@@ -6,11 +6,13 @@ import logo from '../../Assets/v186_574.png';
 import axios from 'axios';
 import { RiArrowGoBackLine } from "react-icons/ri";
 import './Payment.scss';
+
 const PaymentPage = () => {
     const { date } = useParams();
     const [bookings, setBookings] = useState([]);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedDate, setSelectedDate] = useState('');
 
     // Lấy thông tin user từ token
     useEffect(() => {
@@ -45,6 +47,10 @@ const PaymentPage = () => {
         if (bookedInfo) {
             setBookings(bookedInfo);
         }
+        const selectedDate = localStorage.getItem('selectedDate');
+        if (selectedDate) {
+            setSelectedDate(selectedDate);
+        }
     }, []);
 
     if (loading) {
@@ -69,37 +75,36 @@ const PaymentPage = () => {
                 <div className="middle-bill">
                     <div className='payment-info'>
                         <p>Bill code: 01sda-adsd-vfdg</p>
-                        <p>Date: {date}</p>
+                        <p>Date: {selectedDate}</p> {/* Hiển thị ngày đã chọn */}
                     </div>
-                    <p>Staff: Quang Dep Zai</p>
+                    <h5>Customer information</h5>
                     <p>Name: {user?.name}</p>
-                    <p>Email: {user.email}</p>
-                    <p>Phone: {user.phone}</p>
-                    <p>Address: {user.address}</p>
+                    <p>Email: {user?.email}</p>
+                    <p>Phone: {user?.phone}</p>
+                    <p>Address: {user?.address}</p>
                     <p>Notes: </p>
                     <h5>Booking details</h5>
                     <BookingDetail bookings={bookings} />
+                    <div className="payment-method">
+                        <h6>Payment Method:</h6>
+                        <select id="payment-method">
+                            <option value="credit-card">Credit Card</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="bank-transfer">Bank Transfer</option>
+                        </select>
+                    </div>
                     <div className="total-cost">Total Cost: ${calculateTotalCost(bookings)}</div>
                 </div>
-
             </div>
             <div className='back'>
                 <a href='/booking'><RiArrowGoBackLine />Go back</a>
             </div>
-            <div className="payment-method">
-                <label>Payment Method:</label>
-                <select id="payment-method">
-                    <option value="credit-card">Credit Card</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="bank-transfer">Bank Transfer</option>
-                </select>
-            </div>
+
             <div className='pay'>
                 <button>
                     Make Payment
                 </button>
             </div>
-
         </div>
     );
 };
@@ -108,6 +113,4 @@ const calculateTotalCost = (bookings) => {
     return bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0).toFixed(2);
 };
 
-
 export default PaymentPage;
-

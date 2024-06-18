@@ -48,22 +48,24 @@ const LoginForm = () => {
         console.log("test", res.data);
 
         if (res && res.data && res.status === "ok") {
-            const token = res.data; // Giả sử token được trả về trong res.data.token
-            const decodedToken = jwtDecode(token);
+            const token = res.data; // token được trả về trong res.data.token
+            const decodedToken = jwtDecode(token);  // giải mã token
 
 
             if (decodedToken && decodedToken.User.role) {
                 const role = decodedToken.User.role;
                 console.log("check", role)
-                loginContext(email, token, role); // Giả sử loginContext là hàm để lưu trữ thông tin đăng nhập
+                loginContext(email, token, role); //  loginContext là hàm để lưu trữ thông tin đăng nhập
 
                 if (role === "Admin") {
                     navigate('/admin'); // Đường dẫn tới trang admin
                 } else if (role === "Customer") {
                     navigate('/'); // Đường dẫn tới trang customer
-                } else if(role === "staff"){
-                     navigate('/staff')
-                }else {
+
+                } else if (role === "Staff") {
+                    navigate('/staff')
+                } else {
+
                     navigate('/'); // Điều hướng mặc định
                 }
 

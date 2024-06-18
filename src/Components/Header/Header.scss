@@ -1,3 +1,4 @@
+
 .logo-Tittle {
     display: flex;
     .Title {
@@ -22,6 +23,7 @@
 }
 .custom-navbar {
     background-color: #007bff !important; 
+    max-height:65px !important;
 }
 
 .custom-navbar .nav-link,
@@ -34,6 +36,7 @@
 }
 .custom-navbar .nav-link {
     border-radius: 10px;
+    font-size: large;
     .icon{
         margin-bottom: 5px;
     }
