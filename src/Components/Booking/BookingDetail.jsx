@@ -11,9 +11,7 @@ const BookingDetail = ({ bookings }) => {
                     <p>Pet: {booking.petName} ; Service: {booking.serviceName} ; Doctor: {booking.doctorName} ;
                         Slot: {booking.slotTime} ; Cost: ${booking.totalCost}
                     </p>
-                    {/* <p>Pet: {[booking.petId] || booking.petName} ; Service: {[booking.serviceId] || booking.serviceName} ; Doctor: {[booking.doctorId] || booking.doctorName} ;
-                        Slot: {booking.slotTime} ; Cost: ${booking.totalCost}
-                    </p> */}
+
                     {index < bookings.length - 1 && <hr />}
                 </div>
             ))}

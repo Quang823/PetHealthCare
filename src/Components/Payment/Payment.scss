@@ -76,6 +76,39 @@
         font-size: 18px;
         color: #333;
     }
+    .payment-method {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+        select {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+    .payment-details {
+        margin-top: 20px;
+        text-align: center;
+
+        img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+    }
 }
 
 .payment-info {
@@ -95,6 +128,11 @@
 
 .customer-info, .booking-details {
     margin-bottom: 20px;
+}
+.customer-info{
+    b {
+        font-size: 15px;
+    }
 }
 
 .total-cost {

@@ -51,8 +51,8 @@ const AppRoute = () => {
                 <Route path='/payment' element={<PaymentPage />} />
                 <Route path='/vaccine/:petId' element={<Vaccine />} />
                 <Route path='/medical-history/:petId' element={<MedicalHistory />} />
-                <Route path='/booking-history' element={BookingHistory} />
-                <Route path='/booking-detail/:id' element={BookingDetail} />
+                <Route path='/booking-history' element={<BookingHistory />} />
+                <Route path='/booking-detail/:id' element={<BookingDetail />} />
 
             </Routes>
             <Footer></Footer>
