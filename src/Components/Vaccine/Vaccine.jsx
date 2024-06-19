@@ -241,8 +241,8 @@ const Vaccine = () => {
                                 )}
                             </td>
                             <td>
-                                <button className='btn btn-warning' onClick={() => handleEditVaccine(vaccine)}>Edit</button>
-                                <button className='btn btn-danger' onClick={() => handleDeleteVaccine(vaccine.id)}>Delete</button>
+                                <button className='bt btn-warning' onClick={() => handleEditVaccine(vaccine)}>Edit</button>
+                                <button className='bt btn-danger' onClick={() => handleDeleteVaccine(vaccine.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
@@ -270,11 +270,11 @@ const Vaccine = () => {
                     name="image"
                     onChange={handleImageChange}
                 />
-                <button className='btn btn-success' onClick={handleSaveVaccine}>
+                <button className='bt btn-success' onClick={handleSaveVaccine}>
                     {editingVaccine ? 'Save' : 'Add Vaccine'}
                 </button>
                 {editingVaccine && (
-                    <button className='btn btn-danger' onClick={() => setEditingVaccine(null)}>Cancel</button>
+                    <button className='bt btn-danger' onClick={() => setEditingVaccine(null)}>Cancel</button>
                 )}
             </div>
         </div>

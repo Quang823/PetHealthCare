@@ -52,11 +52,20 @@
             
             .textDiv {
                 position: relative;
-                
+                h3{
+                    font-size: 24px;
+                    font-weight: bold;
+                    margin: 0;
+                    padding: 10px 0;
+                    display: inline-block ;
+                    text-decoration: none !important;
+                    
+                    }
                 .title {
                     color:whitesmoke;
                     font-size: 35px;
                     font-weight: 800;
+                     
                 }
                 p {
                     color: whitesmoke;
@@ -84,13 +93,18 @@
                 } 
                
 
-                .btn {
+                .butn {
                     background: whitesmoke;
                     color: rgb(0, 0, 0);
-                    margin-left: 20px;
-                    border-radius: 400;
+                    margin-left: 10px;
+                    border-radius: 10px;
                     transition: .3s ease;
                     padding: 5px 10px 5px 10px;
+                    text-decoration: none;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    border-radius: 8px;
 
                     &:hover{
                         background: rgb(163, 163, 163);
@@ -99,6 +113,7 @@
                 }
             }
         }
+        
 
         .formDiv {
             flex-basis: 50%;

@@ -7,7 +7,7 @@ import './BookingForm.scss';
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 
-const BookingForm = ({ onBookingComplete }) => {
+const BookingForm = ({ onBookingComplete, bookedSlots }) => {
     const [userID, setUserID] = useState('');
     const [pets, setPets] = useState([]);
     const [services, setServices] = useState([]);
@@ -18,7 +18,6 @@ const BookingForm = ({ onBookingComplete }) => {
     const [selectedDoctor, setSelectedDoctor] = useState('');
     const [selectedSlot, setSelectedSlot] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [minDate, setMinDate] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
 
     useEffect(() => {
@@ -38,7 +37,7 @@ const BookingForm = ({ onBookingComplete }) => {
             try {
                 if (userID) {
                     const response = await axios.get(`http://localhost:8080/pet/getAll/${userID}`);
-                    console.log('Pets data:', response.data); // Log dữ liệu thú cưng để kiểm tra
+                    console.log('Pets data:', response.data);
                     if (response.data && Array.isArray(response.data)) {
                         setPets(response.data);
 
@@ -49,14 +48,13 @@ const BookingForm = ({ onBookingComplete }) => {
                 }
             } catch (error) {
                 console.error('Error fetching pets:', error);
-                setPets([]);  // Trả về mảng rỗng nếu có lỗi
+                setPets([]);
             }
         };
 
         const fetchData = async () => {
             const servicesData = await axios.get(`http://localhost:8080/Service/getAll`);
             setServices(Array.isArray(servicesData.data) ? servicesData.data : []);
-
 
             const doctorsData = await axios.get(`http://localhost:8080/account/getVeterinarian`);
             setDoctors(Array.isArray(doctorsData.data) ? doctorsData.data : []);
@@ -67,17 +65,20 @@ const BookingForm = ({ onBookingComplete }) => {
         }
         fetchData();
     }, [userID]);
+
     const selectedDoctorDetail = doctors.find(doctor => doctor.name === selectedDoctor);
+
     useEffect(() => {
         const fetchSlots = async () => {
             if (selectedDoctor && selectedDate) {
                 const formattedDate = selectedDate.toISOString().split('T')[0];
-                //const slotsData = await getSlots(selectedDoctor, formattedDate);
                 const slotsData = await axios.post(`http://localhost:8080/sev-slot/slot-available`, {
                     userId: selectedDoctorDetail.userId,
                     date: selectedDate.toISOString().split('T')[0]
                 });
                 setSlots(Array.isArray(slotsData.data) ? slotsData.data : []);
+            } else {
+                setSlots([]); // Clear slots if no doctor is selected
             }
         };
         fetchSlots();
@@ -88,25 +89,15 @@ const BookingForm = ({ onBookingComplete }) => {
         setTotalCost(service ? service.price : 0);
     }, [selectedService, services]);
 
-
     const handleBooking = async () => {
         if (!selectedPet || !selectedService || !selectedDoctor || !selectedSlot || !selectedDate) {
             toast.error('Please fill in all fields before booking.');
             return;
         }
 
-        // const bookingData = {
-        //     petId: selectedPet,
-        //     serviceID: selectedService,
-        //     doctorId: selectedDoctor,
-        //     slotId: selectedSlot,
-        //     date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
-        // };
-        // await bookAppointment(bookingData);
         const selectedServiceDetail = services.find(service => service.name === selectedService);
         const selectedSlotDetail = slots.find(slot => slot.slot.slotId === parseInt(selectedSlot, 10));
         const selectedPetDetail = pets.find(pet => pet.petName === selectedPet);
-
 
         onBookingComplete({
             petId: selectedPetDetail?.petId,
@@ -119,6 +110,7 @@ const BookingForm = ({ onBookingComplete }) => {
             totalCost: selectedServiceDetail?.price,
             date: selectedDate.toISOString().split('T')[0]
         });
+
         // Reset form
         setSelectedPet('');
         setSelectedService('');
@@ -133,14 +125,14 @@ const BookingForm = ({ onBookingComplete }) => {
 
     const validateDate = (date) => {
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Đặt giờ và phút về 0 để so sánh ngày một cách chính xác
+        today.setHours(0, 0, 0, 0);
         return date >= today;
     };
 
     return (
         <div>
             <div className="booking-container">
-                <h2>Book an Appointment</h2>
+                <h3>Book an Appointment</h3>
                 <form>
                     <label>
                         Select Date:
@@ -148,7 +140,7 @@ const BookingForm = ({ onBookingComplete }) => {
                             selected={selectedDate}
                             onChange={handleDateChange}
                             minDate={new Date()}
-                            filterDate={validateDate} // Hạn chế chọn ngày trong quá khứ
+                            filterDate={validateDate}
                             dateFormat="yyyy-MM-dd"
                         />
                     </label>
@@ -185,21 +177,24 @@ const BookingForm = ({ onBookingComplete }) => {
                             ))}
                         </select>
                     </label>
-                    <label>
-                        Select Slot:
-                        <div className="slot-buttons">
-                            {slots.map((slot) => (
-                                <button
-                                    key={slot.slot.slotId}
-                                    type="button"
-                                    className={`slot-button ${selectedSlot === slot.slot.slotId.toString() ? 'selected' : ''}`}
-                                    onClick={() => setSelectedSlot(slot.slot.slotId.toString())}
-                                >
-                                    Slot {slot.slot.slotId}: {slot.slot.startTime}
-                                </button>
-                            ))}
-                        </div>
-                    </label>
+                    {selectedDoctor && (
+                        <label>
+                            Select Slot:
+                            <div className="slot-buttons">
+                                {slots.map((slot) => (
+                                    <button
+                                        key={slot.slot.slotId}
+                                        type="button"
+                                        className={`slot-button ${selectedSlot === slot.slot.slotId.toString() ? 'selected' : ''} ${bookedSlots.includes(slot.slot.slotId.toString()) ? 'booked' : ''}`}
+                                        onClick={() => setSelectedSlot(slot.slot.slotId.toString())}
+                                        disabled={bookedSlots.includes(slot.slot.slotId.toString())}
+                                    >
+                                        Slot {slot.slot.slotId}: {slot.slot.startTime}
+                                    </button>
+                                ))}
+                            </div>
+                        </label>
+                    )}
                     <p>Cost: ${totalCost}</p>
                     <button type="button" onClick={handleBooking}>Confirm</button>
                 </form>
@@ -220,10 +215,7 @@ const BookingForm = ({ onBookingComplete }) => {
     );
 };
 
-
 export default BookingForm;
-
-
 
 // const BookingForm = ({ onBookingComplete }) => {
 //     const [userID, setUserID] = useState('');
@@ -231,12 +223,12 @@ export default BookingForm;
 //     const [services, setServices] = useState([]);
 //     const [doctors, setDoctors] = useState([]);
 //     const [slots, setSlots] = useState([]);
-//     const [bookedSlots, setBookedSlots] = useState([]); // Thêm trạng thái để theo dõi các slot đã được đặt
 //     const [selectedPet, setSelectedPet] = useState('');
 //     const [selectedService, setSelectedService] = useState('');
 //     const [selectedDoctor, setSelectedDoctor] = useState('');
 //     const [selectedSlot, setSelectedSlot] = useState('');
 //     const [selectedDate, setSelectedDate] = useState(new Date());
+//     const [minDate, setMinDate] = useState(null);
 //     const [totalCost, setTotalCost] = useState(0);
 
 //     useEffect(() => {
@@ -256,9 +248,10 @@ export default BookingForm;
 //             try {
 //                 if (userID) {
 //                     const response = await axios.get(`http://localhost:8080/pet/getAll/${userID}`);
-//                     console.log('Pets data:', response.data);
+//                     console.log('Pets data:', response.data); // Log dữ liệu thú cưng để kiểm tra
 //                     if (response.data && Array.isArray(response.data)) {
 //                         setPets(response.data);
+
 //                     } else {
 //                         console.error('Pets data is not an array:', response.data);
 //                         setPets([]);
@@ -266,13 +259,14 @@ export default BookingForm;
 //                 }
 //             } catch (error) {
 //                 console.error('Error fetching pets:', error);
-//                 setPets([]); // Trả về mảng rỗng nếu có lỗi
+//                 setPets([]);  // Trả về mảng rỗng nếu có lỗi
 //             }
 //         };
 
 //         const fetchData = async () => {
 //             const servicesData = await axios.get(`http://localhost:8080/Service/getAll`);
 //             setServices(Array.isArray(servicesData.data) ? servicesData.data : []);
+
 
 //             const doctorsData = await axios.get(`http://localhost:8080/account/getVeterinarian`);
 //             setDoctors(Array.isArray(doctorsData.data) ? doctorsData.data : []);
@@ -283,23 +277,17 @@ export default BookingForm;
 //         }
 //         fetchData();
 //     }, [userID]);
-
+//     const selectedDoctorDetail = doctors.find(doctor => doctor.name === selectedDoctor);
 //     useEffect(() => {
 //         const fetchSlots = async () => {
 //             if (selectedDoctor && selectedDate) {
 //                 const formattedDate = selectedDate.toISOString().split('T')[0];
+//                 //const slotsData = await getSlots(selectedDoctor, formattedDate);
 //                 const slotsData = await axios.post(`http://localhost:8080/sev-slot/slot-available`, {
 //                     userId: selectedDoctorDetail.userId,
-//                     date: formattedDate
+//                     date: selectedDate.toISOString().split('T')[0]
 //                 });
 //                 setSlots(Array.isArray(slotsData.data) ? slotsData.data : []);
-
-//                 // Giả sử server trả về danh sách các slot đã được đặt
-//                 const bookedSlotsData = await axios.post(`http://localhost:8080/sev-slot/booked-slots`, {
-//                     userId: selectedDoctorDetail.userId,
-//                     date: formattedDate
-//                 });
-//                 setBookedSlots(Array.isArray(bookedSlotsData.data) ? bookedSlotsData.data : []);
 //             }
 //         };
 //         fetchSlots();
@@ -310,15 +298,25 @@ export default BookingForm;
 //         setTotalCost(service ? service.price : 0);
 //     }, [selectedService, services]);
 
+
 //     const handleBooking = async () => {
 //         if (!selectedPet || !selectedService || !selectedDoctor || !selectedSlot || !selectedDate) {
 //             toast.error('Please fill in all fields before booking.');
 //             return;
 //         }
 
+//         // const bookingData = {
+//         //     petId: selectedPet,
+//         //     serviceID: selectedService,
+//         //     doctorId: selectedDoctor,
+//         //     slotId: selectedSlot,
+//         //     date: selectedDate.toISOString().split('T')[0] // Lưu trữ ngày đã chọn
+//         // };
+//         // await bookAppointment(bookingData);
 //         const selectedServiceDetail = services.find(service => service.name === selectedService);
 //         const selectedSlotDetail = slots.find(slot => slot.slot.slotId === parseInt(selectedSlot, 10));
 //         const selectedPetDetail = pets.find(pet => pet.petName === selectedPet);
+
 
 //         onBookingComplete({
 //             petId: selectedPetDetail?.petId,
@@ -331,10 +329,6 @@ export default BookingForm;
 //             totalCost: selectedServiceDetail?.price,
 //             date: selectedDate.toISOString().split('T')[0]
 //         });
-
-//         // Cập nhật bookedSlots với slot mới
-//         setBookedSlots(prevBookedSlots => [...prevBookedSlots, parseInt(selectedSlot, 10)]);
-
 //         // Reset form
 //         setSelectedPet('');
 //         setSelectedService('');
@@ -349,7 +343,7 @@ export default BookingForm;
 
 //     const validateDate = (date) => {
 //         const today = new Date();
-//         today.setHours(0, 0, 0, 0);
+//         today.setHours(0, 0, 0, 0); // Đặt giờ và phút về 0 để so sánh ngày một cách chính xác
 //         return date >= today;
 //     };
 
@@ -364,7 +358,7 @@ export default BookingForm;
 //                             selected={selectedDate}
 //                             onChange={handleDateChange}
 //                             minDate={new Date()}
-//                             filterDate={validateDate}
+//                             filterDate={validateDate} // Hạn chế chọn ngày trong quá khứ
 //                             dateFormat="yyyy-MM-dd"
 //                         />
 //                     </label>
@@ -403,18 +397,18 @@ export default BookingForm;
 //                     </label>
 //                     <label>
 //                         Select Slot:
-//                         <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
-//                             <option value="">Select Slot</option>
+//                         <div className="slot-buttons">
 //                             {slots.map((slot) => (
-//                                 <option
+//                                 <button
 //                                     key={slot.slot.slotId}
-//                                     value={slot.slot.slotId}
-//                                     style={{ color: bookedSlots.includes(slot.slot.slotId) ? 'red' : 'black' }}
+//                                     type="button"
+//                                     className={`slot-button ${selectedSlot === slot.slot.slotId.toString() ? 'selected' : ''}`}
+//                                     onClick={() => setSelectedSlot(slot.slot.slotId.toString())}
 //                                 >
-//                                     Slot {slot.slot.slotId}: {slot.slot.startTime} {bookedSlots.includes(slot.slot.slotId) ? '(Booked)' : ''}
-//                                 </option>
+//                                     Slot {slot.slot.slotId}: {slot.slot.startTime}
+//                                 </button>
 //                             ))}
-//                         </select>
+//                         </div>
 //                     </label>
 //                     <p>Cost: ${totalCost}</p>
 //                     <button type="button" onClick={handleBooking}>Confirm</button>
@@ -435,5 +429,3 @@ export default BookingForm;
 //         </div>
 //     );
 // };
-
-

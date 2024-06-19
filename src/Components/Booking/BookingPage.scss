@@ -17,7 +17,7 @@
   justify-content: space-between;
 }
 
-.booking-form-container, .booking-detail-container {
+.booking-form-container, .booking-detail-wrapper {
   flex: 1;
   padding-right: 10px;
 }
@@ -26,10 +26,18 @@
   border-right: 1px solid #ddd;
 }
 
-.booking-detail-container {
+.booking-detail-wrapper {
+  margin: 2rem auto;
+  padding: 2rem;
+  font-family: 'Arial, sans-serif';
+  border-radius: 10px;
+  background-color: #f9f9f9;
   padding-left: 20px;
-  h2{
+  h3{
     text-align: center;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+    font-weight: 600;
   }
   #paymentbutton{
     color: #ffffff;

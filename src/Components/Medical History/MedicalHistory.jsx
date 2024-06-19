@@ -118,7 +118,7 @@ const MedicalHistory = () => {
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                 />
-                <button onClick={handleDateFilter}>Filter by Date Range</button>
+                <button onClick={handleDateFilter}>Filter by Date</button>
                 <CSVLink data={visitHistoryData} filename={"medical-history.csv"}>
                     <button>Export to CSV</button>
                 </CSVLink>
@@ -158,7 +158,7 @@ const MedicalHistory = () => {
                 <div className="modal">
                     <div className="modal-content">
                         <span className="close-button" onClick={handleCloseModal}>&times;</span>
-                        <h2>Visit Details</h2>
+                        <h2>Medical History Details</h2>
                         <p><strong>Date:</strong> {selectedVisit.date}</p>
                         <p><strong>Doctor:</strong> {selectedVisit.doctor}</p>
                         <p><strong>Diagnosis:</strong> {selectedVisit.diagnosis}</p>

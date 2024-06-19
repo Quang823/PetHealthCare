@@ -91,13 +91,13 @@ const LoginForm = () => {
                         <video src={video} autoPlay muted loop></video>
 
                         <div className="textDiv">
-                            <h2 className="title">Your pet's happiness is our priority</h2>
+                            <h3 className="title">Your pet's happiness is our priority</h3>
                             <p>Furry friends, endless joy</p>
                         </div>
                         <div className="footerDiv flex">
                             <p>
                                 Don't have an account?
-                                <a className="btn" onClick={registerLink}> Register</a>
+                                <a className="butn" onClick={registerLink}> Register</a>
                             </p>
                         </div>
 

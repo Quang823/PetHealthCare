@@ -17,8 +17,8 @@ const HomePage = () => {
         <div className="HomePage">
             <div className="headerDiv">
                 <div className="headerText">
-                    <h2>Fur-ever friends</h2>
-                    <h2>Fur-ever memories</h2>
+                    <h4>Fur-ever friends</h4>
+                    <h4>Fur-ever memories</h4>
                     <p>Owning a pet has evolved beyond mere companionship to become an integral part of many people's lives.
                         This has led to an increased demand for professional healthcare services for pets
                     </p>
