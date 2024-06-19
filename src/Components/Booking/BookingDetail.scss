@@ -9,9 +9,12 @@ $detail-background: #ffffff;
 $divider-color: #dddddd;
 
 .booking-detail-container {
-    max-width: 600px;
+    max-width: 100%;
     margin: 2rem auto;
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
+        
     background-color: $secondary-color;
     border-radius: $border-radius;
     box-shadow: $box-shadow;
@@ -25,26 +28,33 @@ $divider-color: #dddddd;
     }
 
     .booking-detail-card {
-        background-color: transparent;
-        border-radius: $border-radius;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        // box-shadow: $box-shadow;
-
-        p {
-            font-size: 18px;
-            color: #333;
-            margin: 0;
-
-            span {
-                font-weight: bold;
-            }
-        }
-
-        hr {
-            border: none;
-            border-top: 1px solid $divider-color;
-            margin: 1rem 0;
-        }
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        border-radius: 5px;
     }
+    
+    .booking-detail-card p {
+        margin: 0;
+        flex-grow: 1;
+        font-size: 20px;
+     
+    }
+    
+    .booking-detail-card .delete-button {
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 15%;
+    }
+    
+    .booking-detail-card .delete-button:hover {
+        background-color: #ff1a1a;
+    }
+    
 }

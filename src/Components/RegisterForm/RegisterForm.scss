@@ -84,13 +84,18 @@
                 } 
                
 
-                .btn {
+                .butn {
                     background: whitesmoke;
                     color: rgb(0, 0, 0);
                     margin-left: 20px;
                     border-radius: 400;
                     transition: .3s ease;
                     padding: 5px 10px 5px 10px;
+                    text-decoration: none;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    border-radius: 8px;
 
                     &:hover{
                         background: rgb(163, 163, 163);

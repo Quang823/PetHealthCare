@@ -54,7 +54,7 @@ const RegisterForm = () => {
                     <div className="footerDiv flex">
                         <p>
                             Already have an account?
-                            <a className="btn" onClick={loginLink}>Login</a>
+                            <a className="butn" onClick={loginLink}>Login</a>
                         </p>
                     </div>
 

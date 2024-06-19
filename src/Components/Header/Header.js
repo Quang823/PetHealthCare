@@ -54,6 +54,9 @@ const Header = (props) => {
     const handleManageAccount = () => {
         navigate("/manageAcc");
     }
+    const handleBookingHistory = () => {
+        navigate("/booking-history");
+    }
     const location = useLocation();
     return (
         <>
@@ -99,6 +102,9 @@ const Header = (props) => {
                                     <>
                                         <NavDropdown.Item onClick={() => handleManageAccount()}>
                                             Manage Account
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item onClick={() => handleBookingHistory()}>
+                                            Booking History
                                         </NavDropdown.Item>
                                         <NavDropdown.Item onClick={() => handleLogout()}>
                                             <div className='Logout'>Logout</div>

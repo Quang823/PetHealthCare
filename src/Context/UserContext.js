@@ -40,6 +40,8 @@ const UserProvider = ({ children }) => {
     localStorage.removeItem("email");
     localStorage.removeItem("data");
     localStorage.removeItem("user");
+    localStorage.removeItem("bookedInfo");
+    localStorage.removeItem("selectedDate");
     setUser((user) => ({
       email: '',
       auth: false,

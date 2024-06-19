@@ -15,7 +15,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     box-shadow: $box-shadow;
     font-family: $font-family;
 
-    h2 {
+    h3 {
         text-align: center;
         color: $primary-color;
         margin-bottom: 1rem;
@@ -98,12 +98,8 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         
     }
     
-    .slot-button:hover {
-        background-color: #0053be;
-    }
-    
     .slot-button.selected {
-        background-color: #007bff;
+        background-color: #004794;
         color: #fff;
         border-color: #007bff;
     }
