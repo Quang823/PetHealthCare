@@ -78,30 +78,30 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             color: $primary-color;
         }
     }
-    .slot-buttons {
-        display: flex;
-        flex-wrap: wrap;
+    .slots-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
-       
+        margin-top: 10px;
     }
     
     .slot-button {
-        padding: 5px 10px; /* Smaller padding */
+        padding: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        background-color: #1c99ff;
+        background-color: #007bff;
         cursor: pointer;
-        transition: background-color 0.3s ease, color 0.3s ease;
-        flex: 1 1 30%; /* Flex basis to handle the width */
-        text-align: center; /* Center the text */
-        max-width: 170px; /* Set a max-width to ensure buttons are small */
-        
+        text-align: center;
     }
     
     .slot-button.selected {
-        background-color: #004794;
+        background-color: #00356f;
         color: #fff;
-        border-color: #007bff;
+    }
+    
+    .slot-button:not(.selected):hover {
+        background-color: #005dc0;
+        color: #fff;
     }
     
 }
