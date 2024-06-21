@@ -80,7 +80,7 @@ const PaymentPage = () => {
         const bookingData = {
             customerId: user.userId,
             date: selectedDate,
-            status: "Confirmed",
+            status: "Processing",
             totalPrice: bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0),
             bookingDetails: bookings.map(booking => ({
                 petId: booking.petId,

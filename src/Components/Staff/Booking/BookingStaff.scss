@@ -1,16 +1,17 @@
 .container {
     padding: 20px;
-}
-
-.hehe {
+  }
+  
+  .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.back-button {
+  }
+  
+  .back-button {
     margin-left: auto;
     padding: 8px 16px;
+    margin-bottom: 12px;
     background-color: #007bff;
     color: white;
     border: none;
@@ -18,17 +19,48 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.back-button:hover {
+  }
+  
+  .back-button:hover {
     background-color: #0056b3;
     transform: scale(1.05);
-}
-
-.back-button:active {
+  }
+  
+  .back-button:active {
     background-color: #004080;
-}
-.pagination {
+  }
+  
+  .search-input {
+    padding: 8px 16px;
+    
+    margin-right: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .sort-button {
+    padding: 8px 16px;
+    margin-bottom: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .sort-button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+  }
+  
+  .sort-button:active {
+    background-color: #1e7e34;
+  }
+  
+  .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,3 +85,4 @@
     font-weight: bold;
     margin: 0 8px;
   }
+  
