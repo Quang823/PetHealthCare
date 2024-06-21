@@ -107,6 +107,7 @@ const BookingStaff = () => {
         <tbody>
           {currentPosts.map((booking, index) => {
             const { date, time } = formatDateTime(booking.date);
+            console.log('bk', booking);
             return (
               <tr key={index}>
                 <td>{booking.bookingId}</td>
@@ -114,7 +115,7 @@ const BookingStaff = () => {
                 <td>{time}</td>
                 <td>{booking.status}</td>
                 <td>{booking.totalPrice}</td>
-                <td>{booking.customerId}</td>
+                <td>{booking.userId}</td>
                 <td>
                   <button className="edit-button" onClick={() => handleEdit(booking.bookingId)}>Edit</button>
                   <button className="delete-button" onClick={() => handleDelete(booking.bookingId)}>Delete</button>

@@ -15,303 +15,6 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-// const TablePet = () => {
-//     const navigate = useNavigate();
-//     const [data, setData] = useState([]);
-//     const [showForm, setShowForm] = useState(false);
-//     const [showEditForm, setShowEditForm] = useState(false);
-//     const [error, setError] = useState('');
-//     const [userID, setUserID] = useState('');
-//     const [newPet, setNewPet] = useState({
-//         petName: '',
-//         petAge: '',
-//         petGender: '',
-//         petType: '',
-//         vaccination: ''
-//     });
-
-//     useEffect(() => {
-//         const token = localStorage.getItem('token');
-//         if (token) {
-//             const decodedToken = jwtDecode(token);
-//             const userIdFromToken = decodedToken.User.map.userID;
-//             setUserID(userIdFromToken);
-//             fetchData(userIdFromToken);
-//         }
-//     }, [newPet]);
-
-//     const fetchData = async (userId) => {
-//         try {
-//             const res = await axios.get(`http://localhost:8080/pet/getAll/${userId}`);
-//             setData(res.data);
-//         } catch (error) {
-//             console.log(error);
-//         }
-//     };
-
-//     const handleChange = (e) => {
-//         setNewPet({
-//             ...newPet,
-//             [e.target.name]: e.target.value
-//         });
-//     };
-
-//     const handleEditChange = (e) => {
-//         setNewPet({
-//             ...newPet,
-//             [e.target.name]: e.target.value
-//         });
-//     };
-
-//     const handleAddPet = () => {
-//         if (!newPet.petName || !newPet.petAge || !newPet.petGender || !newPet.petType || !newPet.vaccination) {
-//             setError('Please fill in all fields.');
-//             toast.error("Please fill in all fields");
-//             return;
-//         }
-
-//         const petData = { ...newPet };
-//         axios.post(`http://localhost:8080/pet/create/${userID}`, petData)
-//             .then(res => {
-//                 setData([...data, res.data]);
-//                 setNewPet({
-//                     petName: '',
-//                     petAge: '',
-//                     petGender: '',
-//                     petType: '',
-//                     vaccination: ''
-//                 });
-//                 setShowForm(false);
-//                 setError('');
-//                 toast.success("Add new pet success");
-//             })
-//             .catch(err => console.log(err));
-//     };
-
-//     const handleDeletePet = (petId) => {
-//         axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
-//             .then(() => {
-//                 setData(data.filter(pet => pet.petId !== petId));
-//                 toast.success("Delete pet success");
-//             })
-//             .catch(err => {
-//                 console.log(err);
-//                 toast.error("Failed to delete pet");
-//             });
-//     };
-
-//     const handleEditPet = (pet) => {
-//         setNewPet(pet);
-//         setShowEditForm(true);
-//     };
-
-//     const handleUpdatePet = () => {
-//         const { petId, ...petData } = newPet;
-
-//         axios.put(`http://localhost:8080/pet/update/${userID}/${petId}`, petData)
-//             .then(res => {
-//                 setData(data.map(pet => (pet.petId === petId ? res.data : pet)));
-//                 setShowEditForm(false);
-//                 setNewPet({
-//                     petName: '',
-//                     petAge: '',
-//                     petGender: '',
-//                     petType: '',
-//                     vaccination: ''
-//                 });
-//                 toast.success("Update pet success");
-//             })
-//             .catch(err => {
-//                 console.log(err);
-//                 toast.error("Failed to update pet");
-//             });
-//     };
-
-//     const handleViewVaccine = (petId, petName) => {
-//         navigate(`/vaccine/${petId}`, { state: { petName } });
-//     };
-
-//     const handleViewMedicalHistory = (petId, petName) => {
-//         navigate(`/medical-history/${petId}`);
-//     };
-
-//     return (
-//         <div className="table-container">
-//             <span><h2>List of pets:</h2></span>
-//             <table className="styled-table">
-//                 <thead>
-//                     <tr>
-//                         <th>Pet Name</th>
-//                         <th>Pet Age</th>
-//                         <th>Pet Gender</th>
-//                         <th>Pet Type</th>
-//                         <th>Vaccination</th>
-//                         <th>Actions</th>
-//                     </tr>
-//                 </thead>
-//                 <tbody>
-//                     {data.map((pet, index) => (
-//                         <tr key={index}>
-//                             <td>{pet.petName}</td>
-//                             <td>{pet.petAge}</td>
-//                             <td>{pet.petGender}</td>
-//                             <td>{pet.petType}</td>
-//                             <td>{pet.vaccination}</td>
-//                             <td className="btn-container">
-//                                 <button className='btn btn-warning' onClick={() => handleEditPet(pet)} >Edit</button>
-//                                 <button className='btn btn-danger' onClick={() => handleDeletePet(pet.petId)}>Delete</button>
-//                                 <button className='btn btn-view' onClick={() => handleViewVaccine(pet.petId, pet.petName)}>Vaccine</button>
-//                                 <button className='btn btn-med' onClick={() => handleViewMedicalHistory(pet.petId)}>MedHistory</button>
-//                             </td>
-//                         </tr>
-//                     ))}
-//                 </tbody>
-//             </table>
-//             <button className='btn btn-add' onClick={() => setShowForm(true)}>
-//                 <FaPlus /> Add your new pet
-//             </button>
-
-//             {/* Add New Pet Modal */}
-//             <Modal show={showForm} onHide={() => setShowForm(false)} centered>
-//                 <Modal.Header closeButton>
-//                     <Modal.Title>Add a new pet</Modal.Title>
-//                 </Modal.Header>
-//                 <Modal.Body>
-//                     <Form>
-//                         <Form.Group controlId="petName">
-//                             <Form.Label>Pet Name</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="petName"
-//                                 placeholder="Pet Name"
-//                                 value={newPet.petName}
-//                                 onChange={handleChange}
-//                             />
-//                         </Form.Group>
-//                         <Form.Group controlId="petAge">
-//                             <Form.Label>Pet Age</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="petAge"
-//                                 placeholder="Pet Age"
-//                                 value={newPet.petAge}
-//                                 onChange={handleChange}
-//                             />
-//                         </Form.Group>
-//                         <Form.Group controlId="petGender">
-//                             <Form.Label>Pet Gender</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="petGender"
-//                                 placeholder="Pet Gender"
-//                                 value={newPet.petGender}
-//                                 onChange={handleChange}
-//                             />
-//                         </Form.Group>
-//                         <Form.Group controlId="petType">
-//                             <Form.Label>Pet Type</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="petType"
-//                                 placeholder="Pet Type"
-//                                 value={newPet.petType}
-//                                 onChange={handleChange}
-//                             />
-//                         </Form.Group>
-//                         <Form.Group controlId="vaccination">
-//                             <Form.Label>Vaccination</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="vaccination"
-//                                 placeholder="Vaccination"
-//                                 value={newPet.vaccination}
-//                                 onChange={handleChange}
-//                             />
-//                         </Form.Group>
-//                     </Form>
-//                 </Modal.Body>
-//                 <Modal.Footer>
-//                     <Button variant="secondary" onClick={() => setShowForm(false)}>
-//                         Cancel
-//                     </Button>
-//                     <Button variant="success" onClick={handleAddPet}>
-//                         Save
-//                     </Button>
-//                 </Modal.Footer>
-//             </Modal>
-
-//             {/* Edit Pet Modal */}
-//             <Modal show={showEditForm} onHide={() => setShowEditForm(false)} centered>
-//                 <Modal.Header closeButton>
-//                     <Modal.Title>Edit pet</Modal.Title>
-//                 </Modal.Header>
-//                 <Modal.Body>
-//                     <Form>
-//                         <Form.Group controlId="petName">
-//                             <Form.Label>Pet Name</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="petName"
-//                                 placeholder="Pet Name"
-//                                 value={newPet.petName}
-//                                 onChange={handleEditChange}
-//                             />
-//                         </Form.Group>
-//                         <Form.Group controlId="petAge">
-//                             <Form.Label>Pet Age</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="petAge"
-//                                 placeholder="Pet Age"
-//                                 value={newPet.petAge}
-//                                 onChange={handleEditChange}
-//                             />
-//                         </Form.Group>
-//                         <Form.Group controlId="petGender">
-//                             <Form.Label>Pet Gender</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="petGender"
-//                                 placeholder="Pet Gender"
-//                                 value={newPet.petGender}
-//                                 onChange={handleEditChange}
-//                             />
-//                         </Form.Group>
-//                         <Form.Group controlId="petType">
-//                             <Form.Label>Pet Type</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="petType"
-//                                 placeholder="Pet Type"
-//                                 value={newPet.petType}
-//                                 onChange={handleEditChange}
-//                             />
-//                         </Form.Group>
-//                         <Form.Group controlId="vaccination">
-//                             <Form.Label>Vaccination</Form.Label>
-//                             <Form.Control
-//                                 type="text"
-//                                 name="vaccination"
-//                                 placeholder="Vaccination"
-//                                 value={newPet.vaccination}
-//                                 onChange={handleEditChange}
-//                             />
-//                         </Form.Group>
-//                     </Form>
-//                 </Modal.Body>
-//                 <Modal.Footer>
-//                     <Button variant="secondary" onClick={() => setShowEditForm(false)}>
-//                         Cancel
-//                     </Button>
-//                     <Button variant="success" onClick={handleUpdatePet}>
-//                         Update
-//                     </Button>
-//                 </Modal.Footer>
-//             </Modal>
-//         </div>
-//     );
-// };
-
 const TablePet = () => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
@@ -336,7 +39,7 @@ const TablePet = () => {
             fetchData(userIdFromToken);
         }
 
-    }, [newPet]); // Empty dependency array means it runs once after the initial render
+    }, [newPet]);
 
     const fetchData = async (userId) => {
         try {
@@ -346,7 +49,6 @@ const TablePet = () => {
             console.log(error);
         }
     };
-
 
     const handleChange = (e) => {
         setNewPet({
@@ -412,7 +114,6 @@ const TablePet = () => {
                 setData(data.map(pet => (pet.petId === petId ? res.data : pet)));
                 setShowEditForm(false);
                 setNewPet({
-
                     petName: '',
                     petAge: '',
                     petGender: '',
@@ -426,13 +127,14 @@ const TablePet = () => {
                 toast.error("Failed to update pet");
             });
     };
+
     const handleViewVaccine = (petId, petName) => {
         navigate(`/vaccine/${petId}`, { state: { petName } });
     };
+
     const handleViewMedicalHistory = (petId, petName) => {
         navigate(`/medical-history/${petId}`);
     };
-
 
     return (
         <div className="table-container">
@@ -440,7 +142,6 @@ const TablePet = () => {
             <table className="styled-table">
                 <thead>
                     <tr>
-                        {/* <th>Pet Id</th> */}
                         <th>Pet Name</th>
                         <th>Pet Age</th>
                         <th>Pet Gender</th>
@@ -452,7 +153,6 @@ const TablePet = () => {
                 <tbody>
                     {data.map((pet, index) => (
                         <tr key={index}>
-                            {/* <td>{pet.petId}</td> */}
                             <td>{pet.petName}</td>
                             <td>{pet.petAge}</td>
                             <td>{pet.petGender}</td>
