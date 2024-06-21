@@ -10,6 +10,7 @@ const ServicePet = () => {
     const navigate = useNavigate();
     const [service, setService] = useState([]);
     const [newService, setNewService] = useState({
+        
         name: '',
         price: '',
         description: ''
@@ -67,6 +68,7 @@ const ServicePet = () => {
             .then(res => {
                 setService([...service, res.data]);
                 setNewService({
+                    
                     name: '',
                     price: '',
                     description: ''
@@ -90,6 +92,7 @@ const ServicePet = () => {
                 setService(service.map(s => (s.serviceID === serviceID ? res.data : s)));
                 setShowEditForm(false);
                 setNewService({
+                    
                     name: '',
                     price: '',
                     description: ''
@@ -137,7 +140,7 @@ const ServicePet = () => {
                     <tbody>
                         {currentPosts.map((service, index) => (
                             <tr key={index}>
-                                <td>{service.serviceID}</td>
+                                <td>{service.serviceId}</td>
                                 <td>{service.name}</td>
                                 <td>{service.price}</td>
                                 <td>{service.description}</td>

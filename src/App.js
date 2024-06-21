@@ -17,6 +17,7 @@ import Schedule from './Components/Doctors/Schedule/Schedule';
 import BookingStaff from './Components/Staff/Booking/BookingStaff';
 import HomeStaff from './Components/Staff/Home';
 import Cage from './Components/Staff/Cage/Cage';
+import AddSlot from './Components/Staff/Slot/AddSlot';
 
 
 
@@ -44,9 +45,12 @@ function App() {
           <Route path='/staff' element={<StaffLayout />} />
           <Route path='/homeStaff' element={<HomeStaff />} />
           <Route path='/scheduleDoctor' element={<Schedule />} />
-          <Route path='/bookingstaff' element={<BookingStaff />} />
-          <Route path='/cagestaff' element={<Cage />} />
+
+          <Route path='/bookingstaff' element={<BookingStaff/>} />
+          <Route path='/cagestaff' element={<Cage/>} />
+          <Route path='/addslotStaff' element={<AddSlot/>} />
           <Route path='/doctor' element={<Doctor />} />
+
 
         </Routes>
       </div>
