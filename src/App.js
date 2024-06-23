@@ -17,6 +17,9 @@ import Schedule from './Components/Doctors/Schedule/Schedule';
 import BookingStaff from './Components/Staff/Booking/BookingStaff';
 import Cage from './Components/Staff/Cage/Cage';
 import AddSlot from './Components/Staff/Slot/AddSlot';
+import TestAdmin from './Components/Test/TestAdmin';
+import Test from './Routes/Test';
+import UserATest from './Components/Test/User/UserATest';
 
 
 
@@ -47,7 +50,8 @@ function App() {
           <Route path='/bookingstaff' element={<BookingStaff/>} />
           <Route path='/cagestaff' element={<Cage/>} />
           <Route path='/addslotStaff' element={<AddSlot/>} />
-
+          <Route path='/testadmin/' element={<Test/>} />
+          <Route path='/testadminUser/' element={<Test/>} />
         </Routes>
       </div>
       <ToastContainer

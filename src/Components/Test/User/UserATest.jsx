@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import './UserList.scss';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import './UserATest.scss';
 import ReactPaginate from 'react-paginate';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import SideBar from '../SideBar/SideBar';
 
-function CustomerList() {
+function UserATest() {
   const [users, setUsers] = useState([]);
+  const [showForm, setShowForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [newRole, setNewRole] = useState('');
@@ -16,6 +18,14 @@ function CustomerList() {
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
   const currentPosts = users.slice(indexOfFirstPost, indexOfLastPost);
+  
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    role: ''
+  });
 
   useEffect(() => {
     fetch('http://localhost:8080/account/getAll')
@@ -28,25 +38,25 @@ function CustomerList() {
     navigate('/admin');
   };
 
+  const handleAddNew = () => {
+    // Add functionality for adding a new user
+  };
+
   const handleEdit = (user) => {
     setCurrentUser(user);
     setNewRole(user.role);
     setShowEditForm(true);
+    setShowForm(false);
   };
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:8080/account/manageRole/${currentUser.userId}`, { newrole: newRole })
+    axios.put(`http://localhost:8080/account/manageRole/${currentUser.userId}`, { role: newRole })
       .then(response => {
-        console.log('Response:', response.data);
-        if (response.data.status === 'ok') {
-          toast.success(response.data.message);
-          setUsers(users.map(user => user.userId === currentUser.userId ? { ...user, role: newRole } : user));
-          setShowEditForm(false);
-          setCurrentUser(null);
-        } else {
-          toast.error('Failed to update role');
-        }
+        toast.success('Role updated successfully');
+        setUsers(users.map(user => user.userId === currentUser.userId ? { ...user, role: newRole } : user));
+        setShowEditForm(false);
+        setCurrentUser(null);
       })
       .catch(error => {
         toast.error('Error updating role');
@@ -58,7 +68,16 @@ function CustomerList() {
     // Add functionality for deleting a user
   };
 
+  const handleChange = (e) => {
+    setNewUser({
+      ...newUser,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
+<>
+
     <div className="container">
       <div className='hehe'>
         <h2 className="my-4">Customer List</h2>
@@ -72,7 +91,6 @@ function CustomerList() {
             <th>Phone</th>
             <th>Address</th>
             <th>Role</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -85,7 +103,7 @@ function CustomerList() {
               <td>{user.role}</td>
               <td>
                 <button className="edit-button" onClick={() => handleEdit(user)}>Edit</button>
-                <button className="delete-button" onClick={() => handleDelete(user.userId)}>Delete</button>
+                <button className="delete-button" onClick={() => handleDelete(user.id)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -119,7 +137,8 @@ function CustomerList() {
         </div>
       )}
     </div>
+    </>
   );
 }
 
-export default CustomerList;
+export default UserATest;
