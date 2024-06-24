@@ -64,6 +64,9 @@ const LoginForm = () => {
 
                 } else if (role === "Staff") {
                     navigate('/staff')
+
+                } else if (role === "Veterinarian") {
+                    navigate('/doctor')
                 } else {
 
                     navigate('/'); // Điều hướng mặc định

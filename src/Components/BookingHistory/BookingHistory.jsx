@@ -1,7 +1,8 @@
-// src/BookingHistory.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './BookingHistory.scss';
 
 const BookingHistory = () => {
@@ -11,8 +12,8 @@ const BookingHistory = () => {
     const [selectedBooking, setSelectedBooking] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     useEffect(() => {
         const fetchBookingHistory = async () => {
@@ -92,7 +93,7 @@ const BookingHistory = () => {
             <div className="search-sort-container">
                 <input
                     type="text"
-                    placeholder="Search by date, booking ID, or status..."
+                    placeholder="Search by booking ID or status..."
                     value={searchTerm}
                     onChange={handleSearch}
                 />
@@ -101,15 +102,17 @@ const BookingHistory = () => {
                 </button>
             </div>
             <div className="filters">
-                <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
+                <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    placeholderText="Start Date"
+                    dateFormat="yyyy/MM/dd"
                 />
-                <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    placeholderText="End Date"
+                    dateFormat="yyyy/MM/dd"
                 />
                 <button onClick={handleDateFilter}>Filter by Date Range</button>
             </div>
@@ -120,7 +123,7 @@ const BookingHistory = () => {
                     <div className="timetable-header-item">Status</div>
                     <div className="timetable-header-item">Total Price</div>
                 </div>
-                {filteredData.map((booking, index) => {
+                {filteredData.map((booking) => {
                     const date = new Date(booking.date);
                     const formattedDate = date.toLocaleDateString();
                     const formattedTime = date.toLocaleTimeString();

@@ -159,20 +159,20 @@ const TablePet = () => {
                             <td>{pet.petType}</td>
                             <td>{pet.vaccination}</td>
                             <td>
-                                <button className='btn btn-warning' onClick={() => {
+                                <button className='btnx btn-warning' onClick={() => {
                                     handleEditPet(pet);
                                     setShowEditForm(true);
                                     setShowForm(false);
                                 }} >Edit</button>
-                                <button className='btn btn-danger' onClick={() => handleDeletePet(pet.petId)}>Delete</button>
-                                <button className='btn btn-view' onClick={() => handleViewVaccine(pet.petId, pet.petName)}> Vaccine</button>
-                                <button className='btn btn-med' onClick={() => handleViewMedicalHistory(pet.petId, pet.petName)}> MedHistory</button>
+                                <button className='btnx btn-danger' onClick={() => handleDeletePet(pet.petId)}>Delete</button>
+                                <button className='btnx btn-view' onClick={() => handleViewVaccine(pet.petId, pet.petName)}> Vaccine</button>
+                                <button className='btnx btn-med' onClick={() => handleViewMedicalHistory(pet.petId, pet.petName)}> MedHistory</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <button className='btn btn-add' onClick={() => {
+            <button className='btnx btn-add' onClick={() => {
                 setShowForm(true);
                 setShowEditForm(false);
             }}>
@@ -216,10 +216,10 @@ const TablePet = () => {
                         value={newPet.vaccination}
                         onChange={handleChange}
                     />
-                    <button className='btn btn-success' onClick={handleAddPet}>
+                    <button className='btnx btn-success' onClick={handleAddPet}>
                         Save
                     </button>
-                    <button className='btn btn-danger' onClick={() => setShowForm(false)}>
+                    <button className='btnx btn-danger' onClick={() => setShowForm(false)}>
                         Cancel
                     </button>
                 </div>
@@ -262,10 +262,10 @@ const TablePet = () => {
                     value={newPet.vaccination}
                     onChange={handleEditChange}
                 />
-                <button className='btn btn-success' onClick={handleUpdatePet}>
+                <button className='btnx btn-success' onClick={handleUpdatePet}>
                     Update
                 </button>
-                <button className='btn btn-danger' onClick={() => setShowEditForm(false)}>
+                <button className='btnx btn-danger' onClick={() => setShowEditForm(false)}>
                     Cancel
                 </button>
             </div>
