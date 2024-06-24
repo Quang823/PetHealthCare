@@ -25,6 +25,7 @@ import UserATest from './Components/Test/User/UserATest';
 
 
 
+
 function App() {
   const { user, loginContext } = useContext(UserContext);
   console.log("user", user)
@@ -53,6 +54,7 @@ function App() {
           <Route path='/addslotStaff' element={<AddSlot />} />
           <Route path='/testadmin/' element={<Test />} />
           <Route path='/testadminUser/' element={<Test />} />
+
         </Routes>
       </div>
       <ToastContainer

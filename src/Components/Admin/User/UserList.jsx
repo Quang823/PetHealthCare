@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import './UserList.scss';
@@ -25,6 +26,7 @@ const CustomerList = () => {
   const currentPosts = filteredUsers.slice(indexOfFirstPost, indexOfLastPost);
 
   const [editUser, setEditUser] = useState({
+
     name: '',
     email: '',
     phone: '',
@@ -45,6 +47,7 @@ const CustomerList = () => {
   const handleBack = () => {
     navigate('/admin');
   };
+
 
   const handleEdit = (user) => {
     console.log('Editing user:', user);
@@ -94,6 +97,7 @@ const CustomerList = () => {
       .catch(error => console.error('Error updating user:', error));
   };
 
+
   return (
     <div className="container">
       <div className='header'>
@@ -125,6 +129,7 @@ const CustomerList = () => {
         <tbody>
           {currentPosts.map((user, index) => (
             <tr key={index}>
+
               <td>{user.userId}</td>
               <td>{user.name}</td>
               <td>{user.email}</td>
@@ -134,11 +139,14 @@ const CustomerList = () => {
               <td>
                 <button className="edit-button" onClick={() => handleEdit(user)}>Edit</button>
                 <button className="delete-button" onClick={() => handleDelete(user.userId)}>Delete</button>
+
+
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      
       <ReactPaginate
         previousLabel={'Previous'}
         nextLabel={'Next'}

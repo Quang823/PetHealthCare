@@ -31,9 +31,9 @@ function Sidebar() {
           <i className='bi bi-bag-fill fs-5 me-3'></i>
           <span>Booking</span>
         </a>
-        <a className='list-group-item py-2' href="">
+        <a className='list-group-item py-2' href="/addslotStaff">
         <i class="bi bi-android fs-5 me-3 "></i>
-          <span>Manage Pet</span>
+          <span>Add slot</span>
         </a>
         <a className='list-group-item py-2' href="">
           <i className='bi bi-power fs-5 me-3'></i>
