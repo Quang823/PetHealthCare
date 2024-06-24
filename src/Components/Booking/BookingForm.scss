@@ -21,11 +21,13 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 1rem;
         font-weight: 600;
     }
-
+   
+ 
+ 
     form {
         display: flex;
         flex-direction: column;
-        
+
         label {
             margin-bottom: 1rem;
             font-weight: bold;
@@ -92,6 +94,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         background-color: #ffffff;
         cursor: pointer;
         text-align: center;
+        color: #000000;
     }
     
     .slot-button.selected {
@@ -104,39 +107,11 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         color: #000000;
     }
     
-}
-
-.booking-middle {
-    text-align: center;
-    margin: 2rem auto;
-    font-family: $font-family;
-    font-size: 1rem;
-    color: #333;
-}
-
-.booking-footer {
-    margin: 2rem auto;
-    padding: 1rem;
-    background-color: lighten($primary-color, 45%);
-    border-radius: $border-radius;
-    font-family: $font-family;
-
-    h7 {
-        font-size: 1.5rem;
-        color: $primary-color;
-        margin-bottom: 0.5rem;
-    }
-
-    p {
-        margin-bottom: 0.5rem;
-    }
-
-    ul {
-        margin-top: 0.5rem;
-        padding-left: 1rem;
-
-        li {
-            margin-bottom: 0.5rem;
-        }
+    .booking-total-cost {
+        font-size: large;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 600;
+        margin-top: 10px;
     }
 }
+

@@ -107,4 +107,91 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.container-test{
+  position: relative;
+  width: 95vw;
+  height: 95vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bgColor);
+  overflow: hidden;
+  border-radius: 1rem;
+  box-shadow: 2px 2px 8px var(--greyText);
+  a{
+    text-decoration: none;
+  }
+  li{
+    list-style: none;
+  }
+  .icon{
+    font-size: var(--h2FontSize);
+    cursor: pointer;
+  }
+  img{
+    width: 100%;
+    height: auto;
+  }
+  .flex{
+    display: flex;
+    align-items: center;
+  }
+  .grid{
+    // display: flex;
+    align-items: center;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .btn{
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--inputColor);
+    padding: .8rem 1rem ;
+    color: var(--textColor);
+  
+  }
+  .btn .icon{
+    margin-left: .5rem;
+  
+  
+  }
+  .btn:hover{
+    background-color: var(--paleGreen);
+    color: var(--PrimaryColor);
+  }
+  body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    padding: 1rem;
+  }
+  :root{
+    --PrimaryColor: hs1(94, 59%, 35%);
+    --HoverColor: #bdf994;
+    --paleGreen: hs1(96, 75%, 89%);
+    --whiteColor: hsl(8, 0%, 100%);
+    --blackColor: hsl(0, 0%, 18%);
+    --textColor: hsl(240, 1%, 48%);
+    --bgColor: hsl (220, 10%, 94%);
+    --greyText: rgb(199, 190, 190);
+    --inputColor: hs1(330, 12%, 97%);
+    /* Font ong Typography */
+    --biggestFontSize: 2.5rem;
+    --h1FontSize: 1.5rem;
+    --h2FontSize: 1.25rem;
+    --h3FontSize: 1rem;
+    --normalFontSize: .938rem;
+    --smallFontSize: .815rem;
+    --smallestFontSize: .75rem;
+    }
+    html{
+      font-size: 90%;
+    }
+    ::-webkit-scrollbar{
+      display: none;
 
+    }
+}

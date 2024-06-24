@@ -1,5 +1,6 @@
 
 
+
 import { ToastContainer, toast } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
 import './App.scss';
@@ -15,8 +16,11 @@ import StaffLayout from './Components/Staff/StaffLayout';
 import Doctor from './Components/Doctors/Doctor';
 import Schedule from './Components/Doctors/Schedule/Schedule';
 import BookingStaff from './Components/Staff/Booking/BookingStaff';
-import HomeStaff from './Components/Staff/Home';
 import Cage from './Components/Staff/Cage/Cage';
+import AddSlot from './Components/Staff/Slot/AddSlot';
+import TestAdmin from './Components/Test/TestAdmin';
+import Test from './Routes/Test';
+import UserATest from './Components/Test/User/UserATest';
 
 
 
@@ -42,12 +46,13 @@ function App() {
           <Route path='/servicePet' element={<ServicePet />} />
           {/* Routes for staff */}
           <Route path='/staff' element={<StaffLayout />} />
-          <Route path='/homeStaff' element={<HomeStaff />} />
+          <Route path='/doctor' element={<Doctor />} />
           <Route path='/scheduleDoctor' element={<Schedule />} />
           <Route path='/bookingstaff' element={<BookingStaff />} />
           <Route path='/cagestaff' element={<Cage />} />
-          <Route path='/doctor' element={<Doctor />} />
-
+          <Route path='/addslotStaff' element={<AddSlot />} />
+          <Route path='/testadmin/' element={<Test />} />
+          <Route path='/testadminUser/' element={<Test />} />
         </Routes>
       </div>
       <ToastContainer
