@@ -4,6 +4,7 @@ import SideBar from '../Components/Test/SideBar/SideBar';
 import Body from '../Components/Test/Body/Body';
 import TestAdmin from '../Components/Test/TestAdmin';
 import UserATest from '../Components/Test/User/UserATest';
+import ServicePet from '../Components/Admin/Service/ServicePet';
 const Test = () => {
     return (
 
@@ -13,6 +14,8 @@ const Test = () => {
             <Routes>
                 <Route path='/testadmin' element={<TestAdmin />} />
                 <Route path='/testadminUser' element={<UserATest />} />
+               
+                <Route path='/servicePet' element={<ServicePet />} />
             </Routes>
         </div>
 

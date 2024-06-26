@@ -1,19 +1,21 @@
-
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import './AddSlot.scss';
 import { useNavigate } from "react-router-dom";
+
 const AddSlot = () => {
     const [veterians, setVeterians] = useState([]);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedVeterinarian, setSelectedVeterinarian] = useState(null);
-    const [selectedSlot, setSelectedSlot] = useState('');
+    const [selectedSlots, setSelectedSlots] = useState([]);
     const [availableSlots, setAvailableSlots] = useState([]);
     const navigate = useNavigate();
+    
     const handleBack = () => {
         navigate('/staff');
     };
+
     useEffect(() => {
         fetchVeterians();
     }, []);
@@ -47,7 +49,7 @@ const AddSlot = () => {
     };
 
     const handleSlotAdd = async () => {
-        if (selectedVeterinarian && selectedDate && selectedSlot) {
+        if (selectedVeterinarian && selectedDate && selectedSlots.length > 0) {
             try {
                 // Validate the date format (YYYY-MM-DD)
                 const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(selectedDate);
@@ -56,25 +58,37 @@ const AddSlot = () => {
                     return;
                 }
 
-
-                const data = {
+                const slotsData = selectedSlots.map(slotId => ({
                     userId: selectedVeterinarian,
-                    slotId: selectedSlot,
+                    slotId,
                     date: selectedDate
-                };
-                const res = await axios.post("http://localhost:8080/sev-slot/add", data);
-                console.log(res.data);
-                toast.success("Add slot success");
+                }));
 
-                // Refresh the available slots after adding a new slot
+                const res = await axios.post("http://localhost:8080/sev-slot/add", slotsData);
+                console.log(res.data);
+                toast.success("Add slots success");
+
+                // Refresh the available slots after adding new slots
                 checkSlotAvailability();
+                // Clear the selected slots
+                setSelectedSlots([]);
             } catch (err) {
                 console.log(err);
                 toast.error("ServiceSlot is existed");
             }
         } else {
-            alert("Please select a veterinarian, enter a date, and select a slot.");
+            alert("Please select a veterinarian, enter a date, and select at least one slot.");
         }
+    };
+
+    const handleSlotSelection = (slotId) => {
+        setSelectedSlots(prev => {
+            if (prev.includes(slotId)) {
+                return prev.filter(id => id !== slotId);
+            } else {
+                return [...prev, slotId].slice(0, 8); // Max 10 slots
+            }
+        });
     };
 
     return (
@@ -110,22 +124,23 @@ const AddSlot = () => {
                     </select>
                 </div>
                 <div className='slot-picker'>
-                    <label htmlFor="slot">Select Slot:</label>
-                    <select
-                        id="slot"
-                        value={selectedSlot}
-                        onChange={(e) => setSelectedSlot(e.target.value)}
-                        className="form-control"
-                    >
-                        <option value="">Select Slot</option>
-                        {[1, 2, 3, 4, 5, 6].map((slot) => (
-                            <option key={slot} value={slot} disabled={availableSlots.some(s => s.slot.slotId === slot)}>
-                                Slot {slot} {availableSlots.some(s => s.slot.slotId === slot) && '(Booked)'}
-                            </option>
+                    <label htmlFor="slot">Select Slots:</label>
+                    <div id="slot" className="form-control">
+                        {[1, 2, 3, 4, 5, 6,7,8].map((slot) => (
+                            <div key={slot}>
+                                <input
+                                    type="checkbox"
+                                    value={slot}
+                                    onChange={() => handleSlotSelection(slot)}
+                                    disabled={availableSlots.some(s => s.slot.slotId === slot)}
+                                    checked={selectedSlots.includes(slot)}
+                                />
+                                <label>Slot {slot} {availableSlots.some(s => s.slot.slotId === slot) && '(Booked)'}</label>
+                            </div>
                         ))}
-                    </select>
+                    </div>
                 </div>
-                <button onClick={handleSlotAdd} className="btn btn-primary mt-3">Add Slot</button>
+                <button onClick={handleSlotAdd} className="btn btn-primary mt-3">Add Slots</button>
             </div>
         </>
     );
