@@ -76,7 +76,6 @@ import './Payment.scss';
 //             console.error('User information is missing.');
 //             return;
 //         }
-
 //         const bookingData = {
 //             customerId: user.userId,
 //             date: selectedDate,
@@ -221,12 +220,13 @@ import './Payment.scss';
 // };
 
 
+
 const PaymentPage = () => {
     const { date } = useParams();
     const [bookings, setBookings] = useState([]);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize with current date
     const [billCode, setBillCode] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const navigate = useNavigate();
@@ -262,10 +262,6 @@ const PaymentPage = () => {
         if (bookedInfo) {
             setBookings(bookedInfo);
         }
-        const storedDate = localStorage.getItem('selectedDate');
-        if (storedDate) {
-            setSelectedDate(new Date(storedDate)); // Ensure the date is correctly parsed
-        }
 
         // Generate a new bill code
         setBillCode(uuidv4());
@@ -292,7 +288,7 @@ const PaymentPage = () => {
             totalPrice: bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0),
             bookingDetails: bookings.map(booking => ({
                 petId: booking.petId,
-                veterinarianId: booking.doctorId,
+veterinarianId: booking.doctorId,
                 serviceId: booking.serviceId,
                 needCage: false,
                 date: booking.date,
@@ -364,7 +360,7 @@ const PaymentPage = () => {
     };
 
     return (
-        <div className='paymentPage'>
+<div className='paymentPage'>
             <h3>PAYMENT</h3>
             <button className="go-back-button" onClick={handleGoBack}>Go Back</button>
             <div className="payment-page-container">
@@ -425,7 +421,7 @@ const PaymentPage = () => {
                 </div>
             </div>
         </div>
-    );
+);
 };
 
 export default PaymentPage;

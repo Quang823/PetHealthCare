@@ -97,15 +97,50 @@ const BookingPage = () => {
         navigate('/payment');
     };
 
+    // const handleBookingComplete = (newBooking) => {
+    //     const existingBooking = bookings.find(
+    //         (booking) =>
+    //             booking.petId === newBooking.petId && booking.slotTime === newBooking.slotTime ||
+    //             booking.doctorId === newBooking.doctorId && booking.slotTime === newBooking.slotTime
+    //     );
+
+    //     if (existingBooking) {
+    //         alert('This pet already has a booking for this slot or this slot is already booked by another pet.');
+    //         return;
+    //     }
+
+    //     const updatedBookings = [...bookings, newBooking];
+    //     setBookings(updatedBookings);
+    //     localStorage.setItem('bookedInfo', JSON.stringify(updatedBookings));
+
+    //     // Update the booked slots in local storage
+    //     const bookedSlots = JSON.parse(localStorage.getItem('bookedSlots')) || {};
+    //     const doctorSlots = bookedSlots[newBooking.doctorId] || [];
+    //     bookedSlots[newBooking.doctorId] = [...doctorSlots, newBooking.slotTime];
+    //     localStorage.setItem('bookedSlots', JSON.stringify(bookedSlots));
+    // };
+
+    // const handleDelete = (updatedBookings) => {
+    //     setBookings(updatedBookings);
+
+    //     // Update the booked slots in local storage
+    //     const bookedSlots = {};
+    //     updatedBookings.forEach(booking => {
+    //         if (!bookedSlots[booking.doctorId]) {
+    //             bookedSlots[booking.doctorId] = [];
+    //         }
+    //         bookedSlots[booking.doctorId].push(booking.slotTime.toString());
+    //     });
+    //     localStorage.setItem('bookedSlots', JSON.stringify(bookedSlots));
+    // };
     const handleBookingComplete = (newBooking) => {
         const existingBooking = bookings.find(
             (booking) =>
-                booking.petId === newBooking.petId && booking.slotTime === newBooking.slotTime ||
-                booking.doctorId === newBooking.doctorId && booking.slotTime === newBooking.slotTime
+                (booking.petId === newBooking.petId && booking.slotTime === newBooking.slotTime && booking.date === newBooking.date) ||
+                (booking.doctorId === newBooking.doctorId && booking.slotTime === newBooking.slotTime && booking.date === newBooking.date)
         );
-
-        if (existingBooking) {
-            alert('This pet already has a booking for this slot or this slot is already booked by another pet.');
+if (existingBooking) {
+            alert('This pet already has a booking for this slot on this date or this slot is already booked by another pet on this date.');
             return;
         }
 
@@ -116,7 +151,7 @@ const BookingPage = () => {
         // Update the booked slots in local storage
         const bookedSlots = JSON.parse(localStorage.getItem('bookedSlots')) || {};
         const doctorSlots = bookedSlots[newBooking.doctorId] || [];
-        bookedSlots[newBooking.doctorId] = [...doctorSlots, newBooking.slotTime];
+        bookedSlots[newBooking.doctorId] = [...doctorSlots, `${newBooking.slotTime}-${newBooking.date}`];
         localStorage.setItem('bookedSlots', JSON.stringify(bookedSlots));
     };
 
@@ -129,7 +164,7 @@ const BookingPage = () => {
             if (!bookedSlots[booking.doctorId]) {
                 bookedSlots[booking.doctorId] = [];
             }
-            bookedSlots[booking.doctorId].push(booking.slotTime.toString());
+            bookedSlots[booking.doctorId].push(`${booking.slotTime}-${booking.date}`);
         });
         localStorage.setItem('bookedSlots', JSON.stringify(bookedSlots));
     };

@@ -65,10 +65,9 @@ const BookingDetail = ({ bookings, onDelete, showDeleteButton = true }) => {
             {bookings.map((booking, index) => (
                 <div key={index} className="booking-detail-card">
                     <p>Pet: {booking.petName} ; Service: {booking.serviceName} ; Doctor: {booking.doctorName} ;
-                        Slot: {booking.slotTime} ; Cost: ${booking.totalCost}
+                        Slot: {booking.slotTime} ; Cost: ${booking.totalCost}; Date: {booking.date}
                     </p>
-                    {showDeleteButton && (
-                        <button onClick={() => handleDelete(index)} className="delete-button">Delete</button>
+                    {showDeleteButton && (<button onClick={() => handleDelete(index)} className="delete-button">Delete</button>
                     )}
                     {index < bookings.length - 1 && <hr />}
                 </div>
