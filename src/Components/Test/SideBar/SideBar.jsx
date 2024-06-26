@@ -28,7 +28,7 @@ const SideBar = () => {
                         </a>
                     </li>
                     <li className="listItem">
-                        <a href="" className="menuLink flex">
+                        <a href="/servicePet" className="menuLink flex">
                             <RiServiceLine className="icon" />
                             <span className="smallText">Service</span>
                         </a>

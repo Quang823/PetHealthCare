@@ -1,28 +1,150 @@
-/* src/components/Cinema.css */
-.cinema {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10%;
-  }
-  
-  .row {
-    display: flex;
-    margin: 5px 0;
-  }
-  
-  .seat {
-    width: 30px;
-    height: 30px;
-    background-color: #ccc;
-    margin: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .seat.selected {
-    background-color: #6c3;
-  }
-  
+/* Cage.scss */
+.cage-layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  z-index: 1000;
+  border-right: 1px solid #ccc;
+}
+
+.content {
+  margin-left: 200px; /* Same as sidebar width */
+  padding: 20px;
+  flex: 1;
+}
+
+.search-filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background-color: #0056b3;
+}
+
+.cage-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.card {
+  width: calc(20% - 20px); /* 20% width for 5 cards per row, minus gap */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+}
+
+.card-content {
+  padding: 10px;
+}
+
+.card-content h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.card-content p {
+  font-size: 14px;
+  color: #666;
+}
+
+.card .info {
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.card-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.card-button:hover {
+  background-color: #0056b3;
+}
+/* Cage.scss */
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+  background-color: #0056b3;
+}
+
+/* Ensure all buttons have the same width */
+.filter-button {
+  flex: 1; /* Distribute equal width */
+  text-align: center;
+}
+
+/* Adjust specific styles for each button */
+.filter-button:nth-child(1) {
+  background-color: #007bff;
+}
+
+.filter-button:nth-child(2) {
+  background-color: #28a745; /* Green for Available */
+}
+
+.filter-button:nth-child(3) {
+  background-color: #dc3545; /* Red for Booked */
+}
+.info{
+  text-align: center;
+  font-weight: 700;
+}

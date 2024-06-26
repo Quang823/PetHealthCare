@@ -10,7 +10,7 @@ const Staff = () => {
         <>
             <Routes>
                 <Route path='/staff' element={<StaffLayout />} />
-                <Route path='/homeStaff' element={<HomeStaff />} />
+                {/* <Route path='/homeStaff' element={<HomeStaff />} /> */}
                 <Route path='/bookingstaff' element={<BookingStaff />} />
                 <Route path='/cagestaff' element={<Cage />} />
                    <Route path='/addslotStaff' element={<AddSlot/>} />
