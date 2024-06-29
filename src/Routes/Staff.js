@@ -5,6 +5,7 @@ import BookingStaff from '../Components/Staff/Booking/BookingStaff';
 import Cage from '../Components/Staff/Cage/Cage';
 
 import AddSlot from '../Components/Staff/Slot/AddSlot';
+import BKNeedCage from '../Components/Staff/BKNeedCage/BKNeedCage';
 const Staff = () => {
     return (
         <>
@@ -14,7 +15,7 @@ const Staff = () => {
                 <Route path='/bookingstaff' element={<BookingStaff />} />
                 <Route path='/cagestaff' element={<Cage />} />
                    <Route path='/addslotStaff' element={<AddSlot/>} />
-
+                   <Route path='/bkneedCage' element={<BKNeedCage/>} />
 
             </Routes>
         </>
