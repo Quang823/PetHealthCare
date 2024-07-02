@@ -10,9 +10,28 @@ import { FaHeart } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa6";
 import { UserContext } from '../../Context/UserContext';
 import { useContext, useEffect, useState } from 'react';
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 const HomePage = () => {
     // localStorage.clear;
     const { user } = useContext(UserContext);
+    let navigate = useNavigate();
+    const [service,SetService] = useState([]);
+    const handleShowAll = () => {
+        
+        navigate('/allservices'); // Route to the new page
+    };
+    useEffect(() =>{
+       const fetchService = async () =>{
+        try{
+             const rs =  await  axios.get("http://localhost:8080/Service/getAll");
+             SetService(rs.data);
+        }catch(er){
+            console.log(er);
+        }
+       }
+       fetchService();
+    },[])
     return (
         <div className="HomePage">
             <div className="headerDiv">
@@ -77,28 +96,21 @@ const HomePage = () => {
             <div className="section services">
                 <Container>
                     <h3 className="section-title">Our Services</h3>
+                    <div className="showAllButtonDiv">
+                        <button onClick={handleShowAll} className="showAllButton">Show All</button>
+                    </div>
                     <Row>
-                        <Col md={4}>
-                            <div className="serviceBox">
-                                <img src={image3} alt="Veterinarian Consultation" className="serviceImage" />
-                                <h4>Veterinarian Consultation</h4>
-                                <p>Schedule appointments with our expert veterinarians.</p>
-                            </div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="serviceBox">
-                                <img src={image2} alt="Pet Shop" className="serviceImage" />
-                                <h4>Pet Shop</h4>
-                                <p>Find the best products and accessories for your pets.</p>
-                            </div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="serviceBox">
-                                <img src={image1} alt="Pet Food" className="serviceImage" />
-                                <h4>Pet Food</h4>
-                                <p>High-quality pet food to keep your pets healthy and happy.</p>
-                            </div>
-                        </Col>
+                    {service.slice(0, 3).map(service => (
+                            <Col md={4} key={service.id}>
+                                <div className="serviceBox">
+                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" />
+                                    <h4>{service.name}</h4>
+                                    <p>{service.description}</p>
+                                    <p>{service.price}</p>
+                                </div>
+                            </Col>
+                        ))}
+                      
                     </Row>
                 </Container>
             </div>

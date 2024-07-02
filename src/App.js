@@ -11,7 +11,7 @@ import AppRoute from './Routes/AppRoute';
 import './ToastifyCustom.css';
 import AdminLayout from './Routes/AdminLayout';
 import CustomerList from './Components/Admin/User/UserList';
-import ServicePet from './Components/Admin/Service/ServicePet';
+
 import StaffLayout from './Components/Staff/StaffLayout';
 import Doctor from './Components/Doctors/Doctor';
 import Schedule from './Components/Doctors/Schedule/Schedule';
@@ -21,7 +21,8 @@ import AddSlot from './Components/Staff/Slot/AddSlot';
 
 import Test from './Routes/Test';
 import UserATest from './Components/Test/User/UserATest';
-
+import ServicePet from './Components/Test/Service/ServicePet';
+import BKNeedCage from './Components/Staff/BKNeedCage/BKNeedCage';
 
 
 
@@ -54,7 +55,7 @@ function App() {
           <Route path='/addslotStaff' element={<AddSlot />} />
           <Route path='/testadmin/' element={<Test />} />
           <Route path='/testadminUser/' element={<UserATest/>} />
-  
+          <Route path='/bkneedCage' element={<BKNeedCage/>} />
         </Routes>
       </div>
       <ToastContainer

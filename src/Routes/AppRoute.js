@@ -20,6 +20,7 @@ import BookingHistory from '../Components/BookingHistory/BookingHistory';
 import BookingDetail from '../Components/Booking/BookingDetail';
 import Header from '../Components/Header/Header';
 import Footer from '../Components/Footer/Footer';
+import AllService from '../Components/Home/AllService';
 
 const AppRoute = () => {
     return (
@@ -53,7 +54,7 @@ const AppRoute = () => {
                 <Route path="/medical-history/:petID" element={<MedicalHistory />} />
                 <Route path='/booking-history' element={<BookingHistory />} />
                 <Route path='/booking-detail/:id' element={<BookingDetail />} />
-
+                <Route path='/allservices' element={<AllService />} />
             </Routes>
             <Footer></Footer>
         </>
