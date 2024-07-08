@@ -1,0 +1,149 @@
+.vetexaminate-form {
+    max-width: 85%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+  }
+
+    
+
+.logo-contain {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px; /* Đặt kích thước chiều rộng cho khung tròn */
+    height: 120px; /* Đặt kích thước chiều cao cho khung tròn */
+    background-color: #cff8ca9c; /* Màu nền trắng */
+    border: 2px solid #000; /* Viền đen */
+    border-radius: 50%; /* Tạo khung tròn */
+    padding: 10px; /* Khoảng cách giữa ảnh và viền */
+    margin-right: 20px;
+    .logovet {
+        max-width: 100%; /* Đảm bảo logo không vượt quá khung */
+        max-height: 100%; /* Đảm bảo logo không vượt quá khung */
+        border-radius: 50%; /* Đảm bảo logo có góc bo tròn nếu cần */
+    }
+}
+
+  .Headers {
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+  }
+  
+  .Headers img {
+    max-height: 80px;
+  }
+  
+  .clinic-info {
+    text-align: left;
+  }
+  
+  .clinic-info h1 {
+   text-align: left;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .clinic-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  main {
+    margin-top: 20px;
+  }
+  
+  .owner-info, .medical-table, .booking-info, .doctor-notes {
+    margin-bottom: 20px;
+  }
+  
+  .forms-group, .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .forms-group label, .form-group label {
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .forms-group input, .forms-group textarea, .form-group input, .form-group textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .medical-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .medical-table table th, .medical-table table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  
+  .medical-table table th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  button {
+    padding: 10px 15px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 1rem;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .booking-info {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .booking-details, .total-amount {
+    width: 48%;
+  }
+  
+  .total-amount {
+    text-align: right;
+  }
+  
+  .signatures {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .signature-box {
+    border: 1px solid #ddd;
+    height: 50px;
+    width: 200px;
+  }
+  
+  .owner-signature p, .doctor-signature p {
+    margin: 5px 0;
+    color: #333;
+  }
+  
