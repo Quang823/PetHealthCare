@@ -284,11 +284,11 @@ const PaymentPage = () => {
         const bookingData = {
             customerId: user.userId,
             date: selectedDate,
-            status: "Processing",
+            status: "Paid",
             totalPrice: bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0),
             bookingDetails: bookings.map(booking => ({
                 petId: booking.petId,
-veterinarianId: booking.doctorId,
+                veterinarianId: booking.doctorId,
                 serviceId: booking.serviceId,
                 needCage: false,
                 date: booking.date,
@@ -311,13 +311,13 @@ veterinarianId: booking.doctorId,
             // After successful payment, clear localStorage and redirect to booking history
             localStorage.removeItem('bookedInfo');
             localStorage.removeItem('selectedDate');
-            alert("Payment Successful");
-            navigate('/booking-history');
+            navigate('/payment-success');
         } catch (error) {
-            alert(`Payment failed: ${error.response?.data?.message || error.message}`);
             console.error('Payment failed:', error.response?.data || error);
+            navigate('/payment-failure');
         }
     };
+
 
     if (loading) {
         return <p className="loading-text">Loading...</p>;
@@ -360,7 +360,7 @@ veterinarianId: booking.doctorId,
     };
 
     return (
-<div className='paymentPage'>
+        <div className='paymentPage'>
             <h3>PAYMENT</h3>
             <button className="go-back-button" onClick={handleGoBack}>Go Back</button>
             <div className="payment-page-container">
@@ -421,7 +421,7 @@ veterinarianId: booking.doctorId,
                 </div>
             </div>
         </div>
-);
+    );
 };
 
 export default PaymentPage;

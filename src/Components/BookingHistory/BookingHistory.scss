@@ -1,4 +1,3 @@
-/* src/BookingHistory.css */
 .booking-history-container {
     padding: 20px;
     max-width: 900px;
@@ -16,7 +15,9 @@
     font-weight: bold;
     color: #333;
     font-family: 'Arial, sans-serif';
-   h2 {
+}
+
+.header-text h2 {
     font-size: 24px;
     font-weight: bold;
     text-transform: uppercase;
@@ -24,8 +25,6 @@
     padding: 10px 0;
     border-bottom: 2px solid #007bff;
     display: inline-block;
-
-   }
 }
 
 .search-sort-container {
@@ -33,48 +32,42 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    input[type="text"] {
-        margin-top: 13px;
+    .SortbyDate {
+        width: 40%;
+        max-width: 40%;
     }
 }
 
-.search-sort-container input[type="text"], .filters input[type="date"] {
+.search-sort-container input[type="text"] {
+    margin-top: 13px;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 100%;
-    max-width: 300px;
+    width: 60%;
+    max-width: 55%;
 }
 
-button {
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    
-}
 
-button :hover {
-    background-color: #0056b3;
-}
-
-.filters {
+.filtersdate {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    .FilterbyDateRange {
+        width: 40%;
+        max-width: 40%;
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
 }
 
-.filters select, .filters input[type="date"] {
-    margin-right: 10px;
+.filtersdate select, .filtersdate input[type="date"] {
+    margin-right: 2px;
 }
 
-.filters input[type="date"] {
-    width: calc(50% - 10px);
+.filtersdate input[type="date"] {
+    width: calc(70%);
 }
 
 .timetable {
@@ -99,6 +92,14 @@ button :hover {
     flex: 1;
     text-align: center;
     padding: 10px;
+}
+
+.timetable-item.status.confirmed {
+    color: green;
+}
+
+.timetable-item.status.paid {
+    color: red;
 }
 
 .timetable-row {

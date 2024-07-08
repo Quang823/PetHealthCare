@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {jwtDecode}from 'jwt-decode';  // Ensure correct import without destructuring
+import { jwtDecode } from 'jwt-decode';  // Ensure correct import without destructuring
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './BookingHistory.scss';
@@ -95,7 +95,12 @@ const BookingHistory = () => {
             bookingStatus.includes(searchTerm.toLowerCase());
     });
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (
+        <div className="loading">
+            <span role="imgx" aria-label="dog running">🐕‍🦺</span>
+            <p>Loading...</p>
+        </div>
+    );
     if (error) return <p>Error: {error.message}</p>;
 
     return (
@@ -110,11 +115,11 @@ const BookingHistory = () => {
                     value={searchTerm}
                     onChange={handleSearch}
                 />
-                <button onClick={handleSort}>
+                <button className='SortbyDate' onClick={handleSort}>
                     Sort by Date ({sortOrder === 'asc' ? 'Ascending' : 'Descending'})
                 </button>
             </div>
-            <div className="filters">
+            <div className="filtersdate">
                 <DatePicker
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
@@ -127,7 +132,7 @@ const BookingHistory = () => {
                     placeholderText="End Date"
                     dateFormat="yyyy/MM/dd"
                 />
-                <button onClick={handleDateFilter}>Filter by Date Range</button>
+                <button className='FilterbyDateRange' onClick={handleDateFilter}>Filter by Date Range</button>
             </div>
             <div className="timetable">
                 <div className="timetable-header">
@@ -141,6 +146,11 @@ const BookingHistory = () => {
                     const date = new Date(booking.date);
                     const formattedDate = date.toLocaleDateString();
                     const formattedTime = date.toLocaleTimeString();
+
+                    // Định nghĩa class cho status tương ứng
+                    const statusClass = `timetable-item status ${booking.status.toLowerCase()}`;
+                    const statusColor = booking.status.toLowerCase() === 'confirmed' ? 'green' : booking.status.toLowerCase() === 'paid' ? 'red' : '';
+
                     return (
                         <div
                             key={booking.bookingId}
@@ -150,7 +160,7 @@ const BookingHistory = () => {
                             <div className="timetable-item">{formattedDate}</div>
                             <div className="timetable-item">{formattedTime}</div>
                             <div className="timetable-item">{booking.bookingId}</div>
-                            <div className="timetable-item">{booking.status}</div>
+                            <div className={`${statusClass} ${statusColor}`}>{booking.status}</div>
                             <div className="timetable-item">${booking.totalPrice}</div>
                         </div>
                     );
