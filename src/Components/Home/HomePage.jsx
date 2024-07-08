@@ -6,32 +6,46 @@ import image from "../../Assets/Puppy-PNG-Image.png";
 import image1 from "../../Assets/th.jpg";
 import image2 from "../../Assets/vet-1.jpg";
 import image3 from "../../Assets/tieng-anh-nganh-y-chuc-danh-bac-si.jpg";
-import { FaHeart } from "react-icons/fa";
-import { FaPhone } from "react-icons/fa6";
+import { FaHeart, FaPhone } from "react-icons/fa";
 import { UserContext } from '../../Context/UserContext';
 import { useContext, useEffect, useState } from 'react';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+
 const HomePage = () => {
-    // localStorage.clear;
     const { user } = useContext(UserContext);
     let navigate = useNavigate();
-    const [service,SetService] = useState([]);
+    const [service, setService] = useState([]);
+    const [veterinarians, setVeterinarians] = useState([]);
+
     const handleShowAll = () => {
-        
         navigate('/allservices'); // Route to the new page
     };
-    useEffect(() =>{
-       const fetchService = async () =>{
-        try{
-             const rs =  await  axios.get("http://localhost:8080/Service/getAll");
-             SetService(rs.data);
-        }catch(er){
-            console.log(er);
-        }
-       }
-       fetchService();
-    },[])
+
+    useEffect(() => {
+        const fetchService = async () => {
+            try {
+                const rs = await axios.get("http://localhost:8080/Service/getAll");
+                setService(rs.data);
+            } catch (er) {
+                console.log(er);
+            }
+        };
+        fetchService();
+    }, []);
+
+    useEffect(() => {
+        const fetchVeterinarians = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/account/getVeterinarian");
+                setVeterinarians(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchVeterinarians();
+    }, []);
+
     return (
         <div className="HomePage">
             <div className="headerDiv">
@@ -52,7 +66,7 @@ const HomePage = () => {
                 </div>
                 <div className="headerImage">
                     <img src={image} alt="image" className="image"></img>
-                </div >
+                </div>
             </div>
 
             <div className="middleDiv">
@@ -100,7 +114,7 @@ const HomePage = () => {
                         <button onClick={handleShowAll} className="showAllButton">Show All</button>
                     </div>
                     <Row>
-                    {service.slice(0, 3).map(service => (
+                        {service.slice(0, 3).map(service => (
                             <Col md={4} key={service.id}>
                                 <div className="serviceBox">
                                     <img src={service.imageUrl} alt={service.name} className="serviceImage" />
@@ -110,7 +124,6 @@ const HomePage = () => {
                                 </div>
                             </Col>
                         ))}
-                      
                     </Row>
                 </Container>
             </div>
@@ -119,27 +132,15 @@ const HomePage = () => {
                 <Container>
                     <h3 className="section-title">Meet Our Veterinarians</h3>
                     <Row>
-                        <Col md={4}>
-                            <div className="vetBox">
-                                <img src={image2} alt="Veterinarian 1" className="vetImage" />
-                                <h4>Dr. John Doe</h4>
-                                <p>Specializes in small animals and surgeries.</p>
-                            </div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="vetBox">
-                                <img src={image3} alt="Veterinarian 2" className="vetImage" />
-                                <h4>Dr. Jane Smith</h4>
-                                <p>Expertise in exotic pets and dermatology.</p>
-                            </div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="vetBox">
-                                <img src={image1} alt="Veterinarian 3" className="vetImage" />
-                                <h4>Dr. Michael Brown</h4>
-                                <p>Passionate about preventive care and nutrition.</p>
-                            </div>
-                        </Col>
+                        {veterinarians.map(vet => (
+                            <Col md={4} key={vet.userId}>
+                                <div className="vetBox">
+                                    <img src={image2} alt={`Veterinarian ${vet.name}`} className="vetImage" />
+                                    <h4>{vet.name}</h4>
+                                    
+                                </div>
+                            </Col>
+                        ))}
                     </Row>
                 </Container>
             </div>
@@ -203,6 +204,6 @@ const HomePage = () => {
             </div>
         </div>
     );
-}
+};
 
 export default HomePage;
