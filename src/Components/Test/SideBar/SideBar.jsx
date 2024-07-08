@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import './SideBar.scss';
 import { IoMdSpeedometer } from "react-icons/io";
 import v186_574 from '../../../Assets/v186_574.png';
@@ -11,12 +11,22 @@ import { RiServiceLine } from "react-icons/ri";
 import { MdOutlineSell } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
+import { UserContext } from "../../../Context/UserContext";
+import { jwtDecode } from "jwt-decode";
+import { useLocation, NavLink, useNavigate } from 'react-router-dom';
+import { CiLogout } from "react-icons/ci";
 const SideBar = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate("/");
+        
+    }
     return (
         <div className="sideBar grid">
             <div className="logoDiv flex">
                 <img src={v186_574} alt="Image Name" />
-                <h2>Pet Heo Ke</h2>
+                <h2>Pet Health Care</h2>
             </div>
             <div className="menuDiv">
                 <h3 className="divTitle">QUICK MENU</h3>
@@ -43,6 +53,12 @@ const SideBar = () => {
                         <a href="/testadminUser" className="menuLink flex">
                             <FaUser className="icon" />
                             <span className="smallText">User</span>
+                        </a>
+                    </li>
+                    <li className="listItem">
+                        <a href="/" className="menuLink flex">
+                            <CiLogout className="icon" />
+                            <span className="smallText" onClick={() => handleLogout()}>Logout</span>
                         </a>
                     </li>
                 </ul>

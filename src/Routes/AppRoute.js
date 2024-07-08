@@ -22,6 +22,7 @@ import SuccessPaymentPage from '../Components/SuccessPage/SuccessPaymentPage';
 import FailurePaymentPage from '../Components/SuccessPage/FailurePaymentPage';
 import Header from '../Components/Header/Header';
 import Footer from '../Components/Footer/Footer';
+import AllService from '../Components/Home/AllService';
 
 const AppRoute = () => {
     return (
@@ -57,6 +58,7 @@ const AppRoute = () => {
                 <Route path='/booking-detail/:id' element={<BookingDetail />} />
                 <Route path="/payment-success" element={<SuccessPaymentPage />} />
                 <Route path="/payment-failure" element={<FailurePaymentPage />} />
+                <Route path='/allservices' element={<AllService />} />
 
             </Routes>
             <Footer></Footer>
