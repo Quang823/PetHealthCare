@@ -23,7 +23,7 @@ const BKNeedCage = () => {
 
   const handleAddCage = (bookingDetailId, petType) => {
     localStorage.setItem('bookingDetailId', bookingDetailId);
-    navigate(`/cagestaff`, { state: { petType } });
+    navigate(`/staff/cagestaff`, { state: { petType } });
   };
 
   const indexOfLastPost = currentPage * postPerPage;
@@ -33,7 +33,7 @@ const BKNeedCage = () => {
   return (
     <div className="container">
       <h2 className="my-4">List Booking Need Cage</h2>
-      <button className="back-button">Back</button>
+     
       <table className="table table-striped">
         <thead>
           <tr>

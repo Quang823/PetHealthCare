@@ -80,7 +80,7 @@ const BookingStaff = () => {
     <div className="container">
       <h2 className="my-4">Booking List</h2>
       <div className='header'>
-        <button className="back-button" onClick={handleBack}>Back</button>
+        
         <input
           type="text"
           placeholder="Search by Booking ID, User ID, Date"

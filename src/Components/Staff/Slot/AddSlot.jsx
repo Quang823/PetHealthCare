@@ -94,7 +94,7 @@ const AddSlot = () => {
     return (
         <>
             <div className='slot-scheduler'>
-                <button className="back-button" onClick={handleBack}>Back</button>
+                
                 <h2 className="my-4">Schedule Veterinarian Slot</h2>
 
                 <div className="date-input">

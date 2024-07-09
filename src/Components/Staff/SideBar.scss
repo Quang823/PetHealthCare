@@ -1,0 +1,9 @@
+/* SideBar.scss */
+
+.list-group-item.active {
+    z-index: inherit;
+    color: inherit;
+    background-color: inherit;
+    border-color: inherit;
+    /* Optional: add any other styles you want to inherit or set to default */
+}

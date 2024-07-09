@@ -1,31 +1,35 @@
-import React, { useState,useContext,useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Context/UserContext';
-import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from 'jwt-decode';
+import './SideBar.scss';
+
 function Sidebar() {
-    const { logout, user } = useContext(UserContext);
-    const navigate = useNavigate();
-    const handleLogout = () =>{
-        logout();
-        navigate("/");
-        toast.success("Sucess")
-    }
-    const [userName,setUserName] = useState('');
-    useEffect(()=>{
-      const token = localStorage.getItem('token');
-      if( token){
-        try{
-          const decodedToken = jwtDecode(token);
-          if (decodedToken && decodedToken.User) {
-            setUserName(decodedToken.User.map.name); 
+  const { logout, user } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    toast.success("Success");
+  };
+
+  const [userName, setUserName] = useState('');
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        if (decodedToken && decodedToken.User) {
+          setUserName(decodedToken.User.map.name);
         }
-        }catch(err){
-            console.error('Invalid token:', err);
-        }
+      } catch (err) {
+        console.error('Invalid token:', err);
       }
-    },[]);
+    }
+  }, []);
+
   return (
     <div className='bg-white sidebar p-2'>
       <div className='m-2'>
@@ -34,26 +38,30 @@ function Sidebar() {
       </div>
       <hr className='text-dark' />
       <div className='list-group list-group-flush'>
-                <a className='list-group-item py-2' href="/staff">
+        <NavLink className='list-group-item py-2' to="/staff" activeClassName="active">
           <i className='bi bi-house fs-5 me-3'></i>
           <span>Home</span>
-        </a>
-        <a className='list-group-item py-2' href="/bkneedCage">
-          <i className='bi bi-archive-fill me-3'></i> 
-          <span>Cage</span>
-        </a>
-        <a className='list-group-item py-2' href="/bookingstaff">
+        </NavLink>
+        <NavLink className='list-group-item py-2' to="/staff/addslot" activeClassName="active">
+          <i className='bi bi-archive-fill me-3'></i>
+          <span>Add Slot</span>
+        </NavLink>
+        <NavLink className='list-group-item py-2' to="/staff/bookingstaff" activeClassName="active">
           <i className='bi bi-bag-fill fs-5 me-3'></i>
           <span>Booking</span>
-        </a>
-        <a className='list-group-item py-2' href="/addslotStaff">
-        <i class="bi bi-android fs-5 me-3 "></i>
-          <span>Add slot</span>
-        </a>
-        <a className='list-group-item py-2' href="">
+        </NavLink>
+        {/* <NavLink className='list-group-item py-2' to="/staff/cagestaff" activeClassName="active">
+          <i className='bi bi-cup fs-5 me-3'></i>
+          <span>Cage</span>
+        </NavLink> */}
+        <NavLink className='list-group-item py-2' to="/staff/bkneedCage" activeClassName="active">
+          <i className='bi bi-briefcase-fill fs-5 me-3'></i>
+          <span>BK Need Cage</span>
+        </NavLink>
+        <button className='list-group-item py-2' onClick={handleLogout}>
           <i className='bi bi-power fs-5 me-3'></i>
-          <span onClick={() => handleLogout()}>Logout</span>
-        </a>
+          <span>Logout</span>
+        </button>
       </div>
     </div>
   );
