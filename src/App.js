@@ -1,15 +1,13 @@
-
-
-
-import { ToastContainer, toast } from 'react-toastify';
-import { useContext, useEffect, useState } from 'react';
-import './App.scss';
-import Container from 'react-bootstrap/esm/Container';
-import { Routes, Route, Link } from 'react-router-dom'
+import React, { useContext, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import { Routes, Route } from 'react-router-dom';
 import { UserContext } from './Context/UserContext';
+import './App.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 import AppRoute from './Routes/AppRoute';
-import './ToastifyCustom.css';
-import AdminLayout from './Routes/AdminLayout';
+
 import CustomerList from './Components/Admin/User/UserList';
 
 import StaffLayout from './Components/Staff/StaffLayout';
@@ -23,30 +21,35 @@ import Test from './Routes/Test';
 import UserATest from './Components/Test/User/UserATest';
 import ServicePet from './Components/Test/Service/ServicePet';
 import BKNeedCage from './Components/Staff/BKNeedCage/BKNeedCage';
-
-
-
+import TestAdminLayout from './Components/Test/TestAdminLayout';
+import TestAdmin from './Components/Test/TestAdmin';
+import Body from './Components/Test/Body/Body';
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
-  console.log("user", user)
+  console.log("user", user);
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      loginContext(localStorage.getItem("email"), localStorage.getItem("token"))
-
+      loginContext(localStorage.getItem("email"), localStorage.getItem("token"));
     }
-  }, [])
+  }, []);
+
   return (
     <>
       <div className='app-container'>
         <Routes>
           {/* Routes for customer */}
           <Route path="/*" element={<AppRoute />} />
-          {/* Routes for admin */}
-          <Route path="/admin/*" element={<AdminLayout />} />
-          <Route path="/customers" element={<CustomerList />} />
-          <Route path='/servicePet' element={<ServicePet />} />
+          {/* Routes for testAdmin */}
+          <Route path="/testadmin/*" element={<TestAdminLayout />}>
+            <Route path="testadminUser" element={<UserATest />} />
+            <Route path="servicePet" element={<ServicePet />} />
+            <Route path="dashboard" element={<Body />} />
+          
+          </Route>
           {/* Routes for staff */}
+
           <Route path='/staff' element={<StaffLayout />} />
           <Route path='/bookingstaff' element={<BookingStaff />} />
           <Route path='/cagestaff' element={<Cage />} />
@@ -58,6 +61,7 @@ function App() {
           <Route path='/scheduleDoctor' element={<Schedule />} />
           <Route path='/examineDoctor' element={<VetExaminationForm />} />
           <Route path='/bkneedCage' element={<BKNeedCage/>} />
+
 
         </Routes>
       </div>
