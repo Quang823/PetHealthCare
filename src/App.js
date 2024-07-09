@@ -16,7 +16,7 @@ import Schedule from './Components/Doctors/Schedule/Schedule';
 import BookingStaff from './Components/Staff/Booking/BookingStaff';
 import Cage from './Components/Staff/Cage/Cage';
 import AddSlot from './Components/Staff/Slot/AddSlot';
-
+import VetExaminationForm from './Components/Doctors/VetExaminationForm';
 import Test from './Routes/Test';
 import UserATest from './Components/Test/User/UserATest';
 import ServicePet from './Components/Test/Service/ServicePet';
@@ -49,14 +49,20 @@ function App() {
           
           </Route>
           {/* Routes for staff */}
-          <Route path='/staff/*' element={<StaffLayout />}>
-            <Route path="bookingstaff" element={<BookingStaff />} />
-            <Route path="cagestaff" element={<Cage />} />
-            <Route path="addslot" element={<AddSlot />} />
-            <Route path="bkneedCage" element={<BKNeedCage />} />
-          </Route>
+
+          <Route path='/staff' element={<StaffLayout />} />
+          <Route path='/bookingstaff' element={<BookingStaff />} />
+          <Route path='/cagestaff' element={<Cage />} />
+          <Route path='/addslotStaff' element={<AddSlot />} />
+          <Route path='/testadmin/' element={<Test />} />
+          <Route path='/testadminUser/' element={<UserATest />} />
+          {/* Routes for doctor */}
           <Route path='/doctor' element={<Doctor />} />
           <Route path='/scheduleDoctor' element={<Schedule />} />
+          <Route path='/examineDoctor' element={<VetExaminationForm />} />
+          <Route path='/bkneedCage' element={<BKNeedCage/>} />
+
+
         </Routes>
       </div>
       <ToastContainer
