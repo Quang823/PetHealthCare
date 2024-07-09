@@ -275,12 +275,12 @@ const BookingStaff = () => {
       bookingStatus.includes(searchTerm.toLowerCase());
   });
 
-  if (loading) return (
-    <div className="loading-indicator">
-      <span role="img" aria-label="dog running">🐕‍🦺</span>
-      <p>Loading...</p>
-    </div>
-  );
+  // if (loading) return (
+  //   <div className="loading-indicator">
+  //     <span role="img" aria-label="dog running">🐕‍🦺</span>
+  //     <p>Loading...</p>
+  //   </div>
+  // );
   if (error) return <p>Error: {error.message}</p>;
 
   return (
