@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Cage.scss';
-import img from '../../../Assets/dat09.jpg';
+import img from '../../../Assets/zg6gynwuhdo3b44dou8fqz12l8ss_chuong-cho-hinh-ngoi-nha-4.webp';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CageInfo from './CageInfo';
 
@@ -76,7 +76,7 @@ const Cage = ({ Toggle }) => {
   });
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate("/bkneedCage");
+    navigate("/staff/bkneedCage");
 }
 
   return (
