@@ -1,17 +1,20 @@
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import './AddSlot.scss';
 import { useNavigate } from "react-router-dom";
 
 const AddSlot = () => {
     const [veterians, setVeterians] = useState([]);
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDate, setSelectedDate] = useState(new Date()); // Ngày hiện tại là ngày mặc định
     const [selectedVeterinarian, setSelectedVeterinarian] = useState(null);
     const [selectedSlots, setSelectedSlots] = useState([]);
     const [availableSlots, setAvailableSlots] = useState([]);
     const navigate = useNavigate();
-    
+
     const handleBack = () => {
         navigate('/staff');
     };
@@ -39,7 +42,7 @@ const AddSlot = () => {
         try {
             const data = {
                 userId: selectedVeterinarian,
-                date: selectedDate
+                date: selectedDate.toISOString().split("T")[0] // format date to YYYY-MM-DD
             };
             const res = await axios.post("http://localhost:8080/sev-slot/slot-available", data);
             setAvailableSlots(res.data);
@@ -51,17 +54,10 @@ const AddSlot = () => {
     const handleSlotAdd = async () => {
         if (selectedVeterinarian && selectedDate && selectedSlots.length > 0) {
             try {
-                // Validate the date format (YYYY-MM-DD)
-                const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(selectedDate);
-                if (!isValidDate) {
-                    alert("Please enter a valid date in the format YYYY-MM-DD");
-                    return;
-                }
-
                 const slotsData = selectedSlots.map(slotId => ({
                     userId: selectedVeterinarian,
                     slotId,
-                    date: selectedDate
+                    date: selectedDate.toISOString().split("T")[0] // format date to YYYY-MM-DD
                 }));
 
                 const res = await axios.post("http://localhost:8080/sev-slot/add", slotsData);
@@ -86,7 +82,7 @@ const AddSlot = () => {
             if (prev.includes(slotId)) {
                 return prev.filter(id => id !== slotId);
             } else {
-                return [...prev, slotId].slice(0, 8); // Max 10 slots
+                return [...prev, slotId].slice(0, 8); // Max 8 slots
             }
         });
     };
@@ -94,16 +90,16 @@ const AddSlot = () => {
     return (
         <>
             <div className='slot-scheduler'>
-                <button className="back-button" onClick={handleBack}>Back</button>
+                
                 <h2 className="my-4">Schedule Veterinarian Slot</h2>
 
                 <div className="date-input">
-                    <label htmlFor="date">Enter Date (YYYY-MM-DD):</label>
-                    <input
-                        type="text"
-                        id="date"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
+                    <label htmlFor="date">Enter Date:</label>
+                    <DatePicker
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        minDate={new Date()} // Chỉ cho phép chọn ngày từ ngày hiện tại trở đi
                         className="form-control"
                     />
                 </div>
@@ -126,7 +122,7 @@ const AddSlot = () => {
                 <div className='slot-picker'>
                     <label htmlFor="slot">Select Slots:</label>
                     <div id="slot" className="form-control">
-                        {[1, 2, 3, 4, 5, 6,7,8].map((slot) => (
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map((slot) => (
                             <div key={slot}>
                                 <input
                                     type="checkbox"

@@ -5,20 +5,19 @@ import Body from '../Components/Test/Body/Body';
 import TestAdmin from '../Components/Test/TestAdmin';
 import UserATest from '../Components/Test/User/UserATest';
 import ServicePet from '../Components/Admin/Service/ServicePet';
+import TestAdminLayout from '../Components/Test/TestAdminLayout';
 const Test = () => {
     return (
 
-        <div className='container-test'>
-            <SideBar />
-            <Body />
+       
+           
             <Routes>
-                <Route path='/testadmin' element={<TestAdmin />} />
+                <Route path='/testadmin' element={<TestAdminLayout />} />
                 <Route path='/testadminUser' element={<UserATest />} />
                
                 <Route path='/servicePet' element={<ServicePet />} />
             </Routes>
-        </div>
-
+        
     )
 }
 export default Test

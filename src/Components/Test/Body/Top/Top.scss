@@ -40,6 +40,8 @@
         border-radius: 5px;
         gap:1rem;
         box-shadow: 0 2px 4px var(--inputColor);
+        height: 40px;
+        margin-top: 20px;
         
         input{
             border: none;
@@ -66,6 +68,7 @@
         .adminImage{
             border: 3px solid var(--whiteColor);
             width: 2.8rem;
+            height: 2.8rem;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 2px 4px var(--inputColor);
@@ -99,11 +102,13 @@ gap:1rem;
     right: 0;
     bottom: 0;
     left: 0;
-
+    overflow: hidden; 
     video{
+        position: absolute;
        width: 100%;
-       height: 100%;
+       
        object-fit: cover;
+       top: -130%;
     }
 
    }

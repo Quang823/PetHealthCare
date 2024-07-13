@@ -1,0 +1,26 @@
+
+.list-group-item.active {
+    z-index: initial !important; /* Đặt lại z-index về giá trị mặc định */
+    color: initial !important; /* Đặt lại màu sắc về giá trị mặc định */
+    background-color: initial !important; /* Đặt lại màu nền về giá trị mặc định */
+    border-color: initial !important; /* Đặt lại màu viền về giá trị mặc định */
+    border: none !important;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+  
+    border: none !important;
+}  
+.logoDiv {
+    padding: 1.5rem 1.5rem 0;
+    cursor: pointer;
+
+    img {
+        max-width: 100px;
+        margin-right: 0.5rem;
+       
+        padding: 0.2rem;
+    }
+
+}

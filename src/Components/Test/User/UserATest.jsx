@@ -82,7 +82,7 @@ function UserATest() {
             <div className="container">
                 <div className='hehe'>
                     <h2 className="my-4">Customer List</h2>
-                    <button className="back-button" onClick={handleBack}>Back</button>
+                    {/* <button className="back-button" onClick={handleBack}>Back</button> */}
                 </div>
                 <table className="table table-striped">
                     <thead>

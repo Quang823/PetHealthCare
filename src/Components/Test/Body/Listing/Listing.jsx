@@ -41,7 +41,7 @@ const Listing = () => {
                     <h3>Chill</h3>
                 </div>
             </div>
-            <div className="sellers flex">
+            {/* <div className="sellers flex">
                 <div className="topSellers">
                     <div className="heading flex">
                         <h3>Top seller</h3>
@@ -84,7 +84,7 @@ const Listing = () => {
                     </div>
 
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
