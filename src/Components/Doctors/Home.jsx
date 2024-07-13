@@ -8,9 +8,10 @@ import { Spinner } from 'react-bootstrap';
 import Nav from './Nav';
 import BookingDetailModal from './BookingDetailModal';
 import './Homee.scss'; // Ensure this file is correctly imported and exists
+import { jwtDecode } from "jwt-decode";
 
 function Home({ Toggle }) {
-    const [booking, setBooking] = useState([]);
+    const [bookingDetails, setBookingDetails] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedBookingDetail, setSelectedBookingDetail] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -22,41 +23,41 @@ function Home({ Toggle }) {
     };
 
     useEffect(() => {
-        fetchBooking();
+        const fetchBookingDetails = async () => {
+            setLoading(true);
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('No token found');
+                }
+                const decodedToken = jwtDecode(token);
+                const userId = decodedToken.User.map.userID; // Adjust this based on your token structure
+
+                const res = await axios.get(`http://localhost:8080/bookingDetail/getAllBookingDetail_ByUserId?userId=${userId}`);
+                setBookingDetails(res.data);
+                console.log("bkdetail", res.data);
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+                setLoading(false);
+            }
+        };
+
+        fetchBookingDetails();
     }, []);
 
-    const fetchBooking = async () => {
-        setLoading(true);
-        try {
-            const res = await axios.get("http://localhost:8080/booking/getAll");
-            setBooking(res.data);
-            setLoading(false);
-        } catch (er) {
-            console.log(er);
-            setLoading(false);
-        }
+    const handleViewDetail = (bookingDetail) => {
+        setSelectedBookingDetail(bookingDetail);
+        setShowModal(true);
     };
 
-    const handleViewDetail = async (bookingId) => {
-        setLoading(true);
-        try {
-            const res = await axios.get(`http://localhost:8080/bookingDetail/getAll?bookingId=${bookingId}`);
-            setSelectedBookingDetail(res.data[0]); // Assuming only one booking detail per booking
-            setShowModal(true);
-            setLoading(false);
-        } catch (er) {
-            console.log(er);
-            setLoading(false);
-        }
+    const handleExamine = (bookingDetail) => {
+        navigate('/examineDoctor', { state: { bookingDetail } });
     };
 
-    const handleExamine = (booking) => {
-        navigate('/examineDoctor', { state: { booking } });
-    };
-
-    const filteredBookings = booking.filter(b => {
+    const filteredBookingDetails = bookingDetails.filter(b => {
         const bookingDate = new Date(b.date);
-        return bookingDate.toDateString() === selectedDate.toDateString() && b.status === 'Confirmed';
+        return bookingDate.toDateString() === selectedDate.toDateString() && b.booking.status === 'Confirmed';
     });
 
     const formatDate = (dateString) => {
@@ -96,35 +97,35 @@ function Home({ Toggle }) {
                         <table className="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>BookingId</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Status</th>
-                                    <th>Total Price</th>
+                                    <th>Owner Name</th>
+                                    <th>Pet Type</th>
+                                    <th>Pet Name</th>
+                                    <th>Service Name</th>
+                                    <th>Slot</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredBookings.length > 0 ? (
-                                    filteredBookings.map((user, index) => {
-                                        const { formattedDate, formattedTime } = formatDate(user.date);
+                                {filteredBookingDetails.length > 0 ? (
+                                    filteredBookingDetails.map((detail, index) => {
+                                        const { formattedDate, formattedTime } = formatDate(detail.date);
                                         return (
                                             <tr key={index}>
-                                                <td>{user.bookingId}</td>
-                                                <td>{formattedDate}</td>
-                                                <td>{formattedTime}</td>
-                                                <td className={user.status === 'Confirmed' ? 'status-confirmed' : ''}>{user.status}</td>
-                                                <td>{user.totalPrice}</td>
+                                                <td>{detail.pet.user.name}</td>
+                                                <td>{detail.pet.petType}</td>
+                                                <td>{detail.pet.petName}</td>
+                                                <td>{detail.services.name}</td>
+                                                <td>{`${detail.slot.startTime} - ${detail.slot.endTime}`}</td>
                                                 <td>
                                                     <button
                                                         className="bttn btn-primary"
-                                                        onClick={() => handleExamine(user)}
+                                                        onClick={() => handleExamine(detail)}
                                                     >
                                                         <FaStethoscope className='icoon' /> Examine
                                                     </button>
                                                     <button
                                                         className="bttn btn-info"
-                                                        onClick={() => handleViewDetail(user.bookingId)}
+                                                        onClick={() => handleViewDetail(detail)}
                                                     >
                                                         <FaEye className='icoon' /> View
                                                     </button>

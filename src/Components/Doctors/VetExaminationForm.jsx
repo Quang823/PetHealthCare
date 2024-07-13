@@ -1,87 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function VetExaminationForm() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const booking = location.state.booking;
-
-    const [bookingDetail, setBookingDetail] = useState(null);
-    const [veterinaryName, setVeterinaryName] = useState('');
     const [treatmentResult, setTreatmentResult] = useState('');
     const [dateMedical, setDateMedical] = useState(new Date());
+    const [veterinaryName, setVeterinaryName] = useState('');
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { bookingDetail } = location.state || {};
 
     useEffect(() => {
-        const fetchBookingDetail = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${bookingId}`);
-                setBookingDetail(response.data);
-                console.log('Booking detail:', response.data);
-            } catch (error) {
-                console.error('Error fetching booking detail:', error);
-            }
-        };
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setVeterinaryName(decodedToken.User.map.name); // Adjust based on token structure
+        }
+    }, []);
 
-        fetchBookingDetail();
-    }, [booking.id]);
+    useEffect(() => {
+        console.log("Received bookingDetail:", bookingDetail);
+    }, [bookingDetail]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = {
+        const petId = bookingDetail.pet.petId;
+        if (!petId) {
+            console.error('No pet ID found in booking detail');
+            return;
+        }
+
+        // Format date to yyyy-MM-dd
+        const formattedDateMedical = dateMedical.toISOString().split('T')[0];
+
+        const formData = {
             veterinaryName,
             treatmentResult,
-            dateMedical
+            dateMedical: formattedDateMedical,
         };
 
-        console.log('Form data to be submitted:', data);
+        console.log("Form data being submitted:", formData);
 
         try {
-            const response = await axios.post(`http://localhost:8080/medical-history/create/${bookingDetail.petId}`, data);
-            console.log('API response:', response);
-            navigate('/doctor'); // Redirect back to the doctor's home page
+            const response = await axios.post(`http://localhost:8080/medical-history/create/${petId}`, formData);
+            console.log("Medical history created successfully:", response.data);
+            navigate('/doctor');
         } catch (error) {
-            console.error('Error updating medical history:', error);
+            console.error('Error creating medical history:', error);
         }
     };
 
     return (
-        <div className='container'>
-            <h1>Examine Pet</h1>
+        <div className="container">
+            <h1>Doctor Examination</h1>
             <form onSubmit={handleSubmit}>
-                <div className='form-group'>
-                    <label htmlFor='veterinaryName'>Veterinary Name</label>
+                <div className="form-group">
+                    <label>Veterinary Name</label>
                     <input
-                        type='text'
-                        id='veterinaryName'
+                        type="text"
+                        className="form-control"
                         value={veterinaryName}
-                        onChange={(e) => setVeterinaryName(e.target.value)}
-                        className='form-control'
-                        required
+                        readOnly
                     />
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='treatmentResult'>Treatment Result</label>
-                    <textarea
-                        id='treatmentResult'
+                <div className="form-group">
+                    <label>Treatment Result</label>
+                    <input
+                        type="text"
+                        className="form-control"
                         value={treatmentResult}
                         onChange={(e) => setTreatmentResult(e.target.value)}
-                        className='form-control'
                         required
                     />
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='dateMedical'>Date of Examination</label>
-                    <input
-                        type='date'
-                        id='dateMedical'
-                        value={dateMedical.toISOString().split('T')[0]}
-                        onChange={(e) => setDateMedical(new Date(e.target.value))}
-                        className='form-control'
-                        required
+                <div className="form-group">
+                    <label>Date Medical</label>
+                    <DatePicker
+                        selected={dateMedical}
+                        onChange={(date) => setDateMedical(date)}
+                        minDate={new Date()}
+                        dateFormat="dd MMMM yyyy"
+                        className="form-control"
                     />
                 </div>
-                <button type='submit' className='btn btn-primary'>
+                <button type="submit" className="btn btn-primary">
                     Submit
                 </button>
             </form>
