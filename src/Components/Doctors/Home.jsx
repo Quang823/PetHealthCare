@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import Nav from './Nav';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './Homee.scss';
 import axios from 'axios';
-import BookingDetailModal from './BookingDetailModal';
 import { FaEye, FaStethoscope } from 'react-icons/fa';
 import { Spinner } from 'react-bootstrap';
+import Nav from './Nav';
+import BookingDetailModal from './BookingDetailModal';
+import './Homee.scss'; // Ensure this file is correctly imported and exists
 
 function Home({ Toggle }) {
     const [booking, setBooking] = useState([]);
@@ -50,9 +50,13 @@ function Home({ Toggle }) {
         }
     };
 
+    const handleExamine = (booking) => {
+        navigate('/examineDoctor', { state: { booking } });
+    };
+
     const filteredBookings = booking.filter(b => {
         const bookingDate = new Date(b.date);
-        return bookingDate.toDateString() === selectedDate.toDateString();
+        return bookingDate.toDateString() === selectedDate.toDateString() && b.status === 'Confirmed';
     });
 
     const formatDate = (dateString) => {
@@ -112,7 +116,10 @@ function Home({ Toggle }) {
                                                 <td className={user.status === 'Confirmed' ? 'status-confirmed' : ''}>{user.status}</td>
                                                 <td>{user.totalPrice}</td>
                                                 <td>
-                                                    <button className="bttn btn-primary">
+                                                    <button
+                                                        className="bttn btn-primary"
+                                                        onClick={() => handleExamine(user)}
+                                                    >
                                                         <FaStethoscope className='icoon' /> Examine
                                                     </button>
                                                     <button
@@ -128,7 +135,7 @@ function Home({ Toggle }) {
                                 ) : (
                                     <tr>
                                         <td colSpan="6" className="no-bookings-message">
-                                            No bookings for the selected date.
+                                            No confirmed bookings for the selected date.
                                         </td>
                                     </tr>
                                 )}
@@ -136,7 +143,6 @@ function Home({ Toggle }) {
                         </table>
                     )}
                 </div>
-
             </div>
             {showModal && (
                 <BookingDetailModal
@@ -144,8 +150,8 @@ function Home({ Toggle }) {
                     onClose={() => setShowModal(false)}
                 />
             )}
-
         </>
     );
 }
+
 export default Home;

@@ -51,14 +51,19 @@ function App() {
           
           </Route>
           {/* Routes for staff */}
+
+
+
           <Route path='/staff/*' element={<StaffLayout />}>
             <Route path="bookingstaff" element={<BookingStaff />} />
             <Route path="cagestaff" element={<Cage />} />
             <Route path="addslot" element={<AddSlot />} />
             <Route path="bkneedCage" element={<BKNeedCage />} />
           </Route>
+
           {/* <Route path='/testadmin/' element={<Test />} />
           <Route path='/testadminUser/' element={<UserATest />} /> */}
+
           {/* Routes for doctor */}
           <Route path='/doctor' element={<Doctor />} />
           <Route path='/scheduleDoctor' element={<Schedule />} />

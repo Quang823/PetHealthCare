@@ -9,7 +9,7 @@ $detail-background: #ffffff;
 $divider-color: #dddddd;
 
 .booking-detail-container {
-    width: 103%;
+    width: 103% !important;
     margin: 2rem auto;
     padding: 2rem;
     display: flex;
@@ -29,7 +29,7 @@ $divider-color: #dddddd;
 
     .booking-detail-card {
         display: flex;
-        width: 103%;
+        width: 103% !important;
         border: 1px solid #ccc;
         margin-bottom: 10px;
         border-radius: 5px;
