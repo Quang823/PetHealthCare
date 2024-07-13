@@ -24,6 +24,7 @@ import BKNeedCage from './Components/Staff/BKNeedCage/BKNeedCage';
 import TestAdminLayout from './Components/Test/TestAdminLayout';
 import TestAdmin from './Components/Test/TestAdmin';
 import Body from './Components/Test/Body/Body';
+import CageAdmin from './Components/Test/Cage/Cage';
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
@@ -46,6 +47,7 @@ function App() {
             <Route path="testadminUser" element={<UserATest />} />
             <Route path="servicePet" element={<ServicePet />} />
             <Route path="dashboard" element={<Body />} />
+            <Route path="addCage" element={<CageAdmin />} />
           
           </Route>
           {/* Routes for staff */}

@@ -7,7 +7,7 @@ import { IoIosNotifications } from "react-icons/io";
 import v186_557 from '../../../../Assets/v186_557.png';
 import video1 from '../../../../Assets/7515875-hd_1080_1920_30fps.mp4'
 import { TbArrowNarrowRight } from "react-icons/tb";
-import meo from '../../../../Assets/hinh-thu-cung-cute-dep-nhat_014120300.jpg';
+import meo from '../../../../Assets/khach-san-thu-cung04.webp';
 import { BsQuestionCircle } from "react-icons/bs";
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
@@ -28,6 +28,8 @@ const Top = () => {
         }
       }
     },[]);
+
+  
    
     return (
         <div className="topSection">
@@ -41,8 +43,8 @@ const Top = () => {
                     <BiSearchAlt className="icon" />
                 </div>
                 <div className="adminDiv flex">
-                    <TbMessageCircle className="icon" />
-                    <IoIosNotifications className="icon" />
+                    {/* <TbMessageCircle className="icon" />
+                    <IoIosNotifications className="icon" /> */}
                     <div className="adminImage">
                         <img src={v186_557} alt="Admin Image" />
                     </div>

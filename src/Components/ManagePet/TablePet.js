@@ -51,13 +51,43 @@ const TablePet = () => {
     };
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'petName' || name === 'petGender' || name === 'petType' || name ==='vaccination') {
+            if (/[^a-zA-Z\s]/.test(value)) {
+                setError(' Not contain numbers or special characters.');
+                toast.error("Not contain numbers or special characters.");
+                return;
+            }
+        } else if (name === 'petAge') {
+            if (/[^0-9]/.test(value)) {
+                setError('Pet age should only contain numbers.');
+                toast.error("Pet age should only contain numbers.");
+                return;
+            }
+        }
         setNewPet({
             ...newPet,
-            [e.target.name]: e.target.value
+            [name]: value
         });
+        setError('');
     };
 
+
     const handleEditChange = (e) => {
+        const {name,value} = e.target;
+        if(name === 'petName' || name === 'petGender' || name === 'petType'|| name ==='vaccination'){
+            if(/[^a-zA-Z\s]/.test(value)){
+                setError(' Not contain numbers or special characters.');
+                toast.error("Not contain numbers or special characters.");
+                return;
+            }
+        }else if (name === 'petAge') {
+            if (/[^0-9]/.test(value)) {
+                setError('Pet age should only contain numbers.');
+                toast.error("Pet age should only contain numbers.");
+                return;
+            }
+        }
         setNewPet({
             ...newPet,
             [e.target.name]: e.target.value
@@ -75,13 +105,13 @@ const TablePet = () => {
         axios.post(`http://localhost:8080/pet/create/${userID}`, petData)
             .then(res => {
                 setData([...data, res.data]);
-                setNewPet({
-                    petName: '',
-                    petAge: '',
-                    petGender: '',
-                    petType: '',
-                    vaccination: ''
-                });
+                // setNewPet({
+                //     petName: '',
+                //     petAge: '',
+                //     petGender: '',
+                //     petType: '',
+                //     vaccination: ''
+                // });
                 setShowForm(false);
                 setError('');
                 toast.success("Add new pet success");

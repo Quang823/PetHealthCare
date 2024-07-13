@@ -11,3 +11,14 @@
   
     border: none !important;
 }  
+.logoDiv {
+    padding: 1.5rem 1.5rem 0;
+    cursor: pointer;
+
+    img {
+        max-width: 100px;
+        margin-right: 0.5rem;
+       
+        padding: 0.2rem;
+    }
+}

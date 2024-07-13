@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Context/UserContext';
 import { toast } from 'react-toastify';
 import {jwtDecode} from 'jwt-decode';
-
+import v186_574 from '../../Assets/v186_574.png';
 
 function Sidebar() {
   const { logout, user } = useContext(UserContext);
@@ -34,7 +34,10 @@ function Sidebar() {
   return (
     <div className='bg-white sidebar p-2'>
       <div className='m-2'>
-        <i className='bi bi-android2 me-3 fs-4'></i>
+      <div className="logoDiv flex">
+                <img src={v186_574} alt="Image Name" />
+           
+            </div>
         <span className='brand-name fs-4'>WELCOME {userName}</span>
       </div>
       <hr className='text-dark' />

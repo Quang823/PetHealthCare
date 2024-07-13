@@ -58,7 +58,7 @@ const LoginForm = () => {
                 loginContext(email, token, role); //  loginContext là hàm để lưu trữ thông tin đăng nhập
 
                 if (role === "Admin") {
-                    navigate('/testadmin'); // Đường dẫn tới trang admin
+                    navigate('/testadmin/dashboard'); // Đường dẫn tới trang admin
                 } else if (role === "Customer") {
                     navigate('/'); // Đường dẫn tới trang customer
 

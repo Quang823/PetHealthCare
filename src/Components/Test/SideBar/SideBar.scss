@@ -25,8 +25,9 @@
     width: 18%;
     height: 100%;
     gap: 3rem;
-    overflow: auto;
+    
     text-align: center;
+    overflow: hidden; 
 
     .logoDiv {
         padding: 1.5rem 1.5rem 0;
@@ -53,10 +54,15 @@
         }
 
         .menuLists {
+            padding: 0; /* Xóa padding mặc định của ul */
+            margin: 0;
+            overflow-y: auto; /* Kích hoạt thanh kéo dọc nếu cần */
+            scrollbar-width: none;
             .listItem {
                 padding: 0.2rem 1.5rem;
                 width: 100%;
                 position: relative;
+                list-style-type: none;
 
                 &::before {
                     position: absolute;
@@ -74,6 +80,8 @@
                     color: gray;
                     font-weight: 500;
                     transition: 0;
+                    text-decoration: none; /* Bỏ gạch chân */
+                    list-style: none;
                     
                     .icon {
                         margin-right: 0.5rem;
