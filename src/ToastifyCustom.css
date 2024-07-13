@@ -7,6 +7,7 @@
     padding: 5px; /* Thay đổi khoảng cách bên trong */
     cursor: pointer; /* Thay đổi con trỏ chuột khi hover */
     width: 50px;
+    margin-bottom: 10px;
 }
 
 .Toastify__close-button:hover {

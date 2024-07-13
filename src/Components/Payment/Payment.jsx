@@ -17,7 +17,7 @@ const PaymentPage = () => {
     const [bookings, setBookings] = useState([]);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize with current date
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [billCode, setBillCode] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const navigate = useNavigate();
@@ -53,10 +53,21 @@ const PaymentPage = () => {
         if (bookedInfo) {
             setBookings(bookedInfo);
         }
-
-        // Generate a new bill code
         setBillCode(uuidv4());
     }, []);
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const responseCode = urlParams.get('vnp_ResponseCode');
+
+        if (responseCode) {
+            if (responseCode === '00') {
+                navigate('/payment-success');
+            } else {
+                navigate('/payment-failure');
+            }
+        }
+    }, [navigate]);
 
     const handlePaymentMethodChange = (e) => {
         setSelectedPaymentMethod(e.target.value);
@@ -85,7 +96,7 @@ const PaymentPage = () => {
                 date: booking.date,
                 slotId: parseInt(booking.slotTime, 10)
             })),
-            billCode: billCode // Include the generated bill code in the booking data
+            billCode: billCode
         };
         console.log("Booking Data to be sent:", bookingData);
 
@@ -100,9 +111,8 @@ const PaymentPage = () => {
 
             console.log("Response from server:", bookingResponse);
 
-            // API call to the payment endpoint with required parameters
             const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
-            const paymentResponse = await axios.get(`http://localhost:8080/payment/vn-pay?amount=${totalCost}&bankCode=NCB&bookingId=${bookingResponse.data.data.bookingId}`, {
+            const paymentResponse = await axios.get(`http://localhost:8080/payment/vn-pay?amount=${totalCost}&bookingId=${bookingResponse.data.data.bookingId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -110,10 +120,8 @@ const PaymentPage = () => {
 
             console.log("Payment Response from server:", paymentResponse);
 
-            // Redirect to the payment URL
             window.location.href = paymentResponse.data.data;
 
-            // After successful payment, clear localStorage and redirect to booking history
             localStorage.removeItem('bookedInfo');
             localStorage.removeItem('selectedDate');
         } catch (error) {
@@ -135,7 +143,6 @@ const PaymentPage = () => {
                     <div className="payment-details">
                         <img src={creCard} alt="Credit Card" />
                         <p>Enter your credit card details below.</p>
-                        {/* Add your credit card form fields here */}
                     </div>
                 );
             case 'paypal':
@@ -143,7 +150,6 @@ const PaymentPage = () => {
                     <div className="payment-details">
                         <img src={paypal} alt="PayPal" />
                         <p>You will be redirected to PayPal to complete your purchase.</p>
-                        {/* Add additional PayPal instructions or forms if needed */}
                     </div>
                 );
             case 'bank-transfer':
@@ -154,7 +160,6 @@ const PaymentPage = () => {
                         <p>Account Number: XXX-XXX-XXX</p>
                         <p>Bank Name: XXX Bank</p>
                         <p>SWIFT Code: XXX 1234</p>
-                        {/* Add additional bank transfer instructions or forms if needed */}
                     </div>
                 );
             default:
