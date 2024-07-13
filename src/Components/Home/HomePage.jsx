@@ -6,6 +6,7 @@ import image from "../../Assets/Puppy-PNG-Image.png";
 import image1 from "../../Assets/th.jpg";
 import image2 from "../../Assets/vet-1.jpg";
 import image3 from "../../Assets/tieng-anh-nganh-y-chuc-danh-bac-si.jpg";
+import img4 from "../../Assets/dat09.jpg"
 import { FaHeart, FaPhone } from "react-icons/fa";
 import { UserContext } from '../../Context/UserContext';
 import { useContext, useEffect, useState } from 'react';
@@ -21,6 +22,9 @@ const HomePage = () => {
     const handleShowAll = () => {
         navigate('/allservices'); // Route to the new page
     };
+    const handleBooked = () => {
+            navigate('/booking')
+    }
 
     useEffect(() => {
         const fetchService = async () => {
@@ -57,7 +61,7 @@ const HomePage = () => {
                     </p>
                     <div className="buttonDiv">
                         <div className="button1">
-                            <button> ABOUT US <FaHeart className="icon" /></button>
+                            <button > ABOUT US <FaHeart className="icon" /></button>
                         </div>
                         <div className="button2">
                             <button> 012-345-678 <FaPhone className="icon" /></button>
@@ -121,6 +125,7 @@ const HomePage = () => {
                                     <h4>{service.name}</h4>
                                     <p>{service.description}</p>
                                     <p>{service.price}</p>
+                                    <button onClick={handleBooked}>Book</button>
                                 </div>
                             </Col>
                         ))}
@@ -128,16 +133,16 @@ const HomePage = () => {
                 </Container>
             </div>
 
-            <div className="section veterinarians">
+            <div className=" veterinarians">
                 <Container>
                     <h3 className="section-title">Meet Our Veterinarians</h3>
                     <Row>
                         {veterinarians.map(vet => (
                             <Col md={4} key={vet.userId}>
-                                <div className="vetBox">
-                                    <img src={image2} alt={`Veterinarian ${vet.name}`} className="vetImage" />
+                                <div className="serviceBox">
+                                    <img src={img4} alt={`Veterinarian ${vet.name}`} className="vetImage" />
                                     <h4>{vet.name}</h4>
-                                    
+                                    <button  onClick={handleBooked}>Book</button>
                                 </div>
                             </Col>
                         ))}

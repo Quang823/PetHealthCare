@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Cage.scss';
-import img from '../../../Assets/dat09.jpg';
+import img from '../../../Assets/zg6gynwuhdo3b44dou8fqz12l8ss_chuong-cho-hinh-ngoi-nha-4.webp';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CageInfo from './CageInfo';
+import { toast } from "react-toastify";
 
 const Cage = ({ Toggle }) => {
   const location = useLocation();
@@ -44,6 +45,7 @@ const Cage = ({ Toggle }) => {
       });
       setAvailableCages(availableCages.filter((cage) => cage.cageId !== cageId));
       setBookedCages([...bookedCages, res.data.data]);
+      toast.success("Login successful");
     } catch (error) {
       console.error('Error booking cage:', error);
     }
@@ -58,6 +60,7 @@ const Cage = ({ Toggle }) => {
     } catch (error) {
       console.error('Error checking out cage:', error);
     }
+    
   };
 
   const handleShowInfo = (cageInfo) => {
@@ -76,7 +79,7 @@ const Cage = ({ Toggle }) => {
   });
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate("/bkneedCage");
+    navigate("/staff/bkneedCage");
 }
 
   return (

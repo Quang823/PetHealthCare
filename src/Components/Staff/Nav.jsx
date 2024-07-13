@@ -1,3 +1,4 @@
+import './Nav.scss'
 import React from 'react';
 import 'bootstrap/js/dist/dropdown';
 import 'bootstrap/js/dist/collapse';
@@ -6,6 +7,7 @@ function Nav({ Toggle }) {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-transparent">
       <i className="navbar-brand bi bi-justify-left fs-4" onClick={Toggle}></i>
+      <h1 className='hehe'>Staff Layout</h1>
       <button
         className="navbar-toggler d-lg-none"
         type="button"
@@ -42,9 +44,10 @@ function Nav({ Toggle }) {
               </a>
             </div> */}
             <div className="notification-container">
-        <a href="#" className="notification">
+        {/* <a href="#" className="notification">
           <span>Notification</span>
-        </a>
+        </a> */}
+       
       </div>  
           </li>
         </ul>

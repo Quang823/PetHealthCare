@@ -1,5 +1,4 @@
 
-
 .list-group-item.active {
     z-index: initial !important; /* Đặt lại z-index về giá trị mặc định */
     color: initial !important; /* Đặt lại màu sắc về giá trị mặc định */
@@ -12,4 +11,16 @@
     display: block;
   
     border: none !important;
+}  
+.logoDiv {
+    padding: 1.5rem 1.5rem 0;
+    cursor: pointer;
+
+    img {
+        max-width: 100px;
+        margin-right: 0.5rem;
+       
+        padding: 0.2rem;
+    }
+
 }

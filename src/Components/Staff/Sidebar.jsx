@@ -1,9 +1,10 @@
+import './SideBar.scss';
 import React, { useState, useContext, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../Context/UserContext';
 import { toast } from 'react-toastify';
 import {jwtDecode} from 'jwt-decode';
-import './SideBar.scss';
+import v186_574 from '../../Assets/v186_574.png';
 
 function Sidebar() {
   const { logout, user } = useContext(UserContext);
@@ -33,20 +34,23 @@ function Sidebar() {
   return (
     <div className='bg-white sidebar p-2'>
       <div className='m-2'>
-        <i className='bi bi-android2 me-3 fs-4'></i>
+      <div className="logoDiv flex">
+                <img src={v186_574} alt="Image Name" />
+           
+            </div>
         <span className='brand-name fs-4'>WELCOME {userName}</span>
       </div>
       <hr className='text-dark' />
       <div className='list-group list-group-flush'>
-        <NavLink className='list-group-item py-2' to="/staff" activeClassName="active">
+        <NavLink className='list-group-item py-2' to="/staff" >
           <i className='bi bi-house fs-5 me-3'></i>
           <span>Home</span>
         </NavLink>
-        <NavLink className='list-group-item py-2' to="/staff/addslot" activeClassName="active">
+        <NavLink className='list-group-item py-2' to="/staff/addslot" >
           <i className='bi bi-archive-fill me-3'></i>
           <span>Add Slot</span>
         </NavLink>
-        <NavLink className='list-group-item py-2' to="/staff/bookingstaff" activeClassName="active">
+        <NavLink className='list-group-item py-2' to="/staff/bookingstaff" >
           <i className='bi bi-bag-fill fs-5 me-3'></i>
           <span>Booking</span>
         </NavLink>
@@ -54,7 +58,7 @@ function Sidebar() {
           <i className='bi bi-cup fs-5 me-3'></i>
           <span>Cage</span>
         </NavLink> */}
-        <NavLink className='list-group-item py-2' to="/staff/bkneedCage" activeClassName="active">
+        <NavLink className='list-group-item py-2' to="/staff/bkneedCage" >
           <i className='bi bi-briefcase-fill fs-5 me-3'></i>
           <span>BK Need Cage</span>
         </NavLink>

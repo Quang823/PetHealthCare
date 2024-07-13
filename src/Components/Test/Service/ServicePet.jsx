@@ -127,7 +127,7 @@ const ServicePet = () => {
                         setShowForm(true);
                         setShowEditForm(false);
                     }}>Add new Service</button>
-                    <button className="back-button" onClick={handleBack}>Back</button>
+                    {/* <button className="back-button" onClick={handleBack}>Back</button> */}
                 </div>
 
                 <table className="table table-striped">

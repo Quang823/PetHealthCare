@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
 import {jwtDecode} from 'jwt-decode';
 import logo from '../../Assets/v186_574.png';
@@ -10,6 +10,8 @@ import banktrans from '../../Assets/10762700.png';
 import axios from 'axios';
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { v4 as uuidv4 } from 'uuid';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './Payment.scss';
 
 const PaymentPage = () => {
@@ -21,6 +23,7 @@ const PaymentPage = () => {
     const [billCode, setBillCode] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -169,6 +172,7 @@ const PaymentPage = () => {
 
     return (
         <div className='paymentPage'>
+            <ToastContainer />
             <h3>PAYMENT</h3>
             <button className="go-back-button" onClick={handleGoBack}>Go Back</button>
             <div className="payment-page-container">

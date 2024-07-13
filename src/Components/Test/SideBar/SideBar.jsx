@@ -1,5 +1,6 @@
-import React from 'react';
 import './SideBar.scss';
+import React from 'react';
+import { MdOutlinePets } from "react-icons/md";
 import { IoMdSpeedometer } from "react-icons/io";
 import v186_574 from '../../../Assets/v186_574.png';
 import { MdDeliveryDining } from "react-icons/md";
@@ -12,12 +13,15 @@ import { FaUser } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { CiLogout } from "react-icons/ci";
-
+import { GiBirdCage } from "react-icons/gi";
 const SideBar = () => {
     const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate("/");
+    }
+    const contact = () =>{
+        navigate("/contact")
     }
 
     return (
@@ -48,21 +52,28 @@ const SideBar = () => {
                         </NavLink>
                     </li>
                     <li className="listItem">
+                        <NavLink to="/testadmin/addCage" className="menuLink flex">
+                            <GiBirdCage  className="icon" />
+                            <span className="smallText">Add cage</span>
+                        </NavLink>
+                    </li>
+                    <li className="listItem">
                         <NavLink to="/" className="menuLink flex" onClick={handleLogout}>
                             <CiLogout className="icon" />
                             <span className="smallText">Logout</span>
                         </NavLink>
                     </li>
+                    
                 </ul>
             </div>
             <div className="sideBarCard">
-                <BsQuestionCircle className="icon" />
+                <MdOutlinePets  className="icon" />
                 <div className="cardContent">
                     <div className="circle1"></div>
                     <div className="circle2"></div>
-                    <h3>Help Center</h3>
-                    <p>Having trouble in Planti, please contact us for more questions.</p>
-                    <button className="btn">Go to help center</button>
+                    <h3> If you want a friend, get a dog.</h3>
+                    <p></p>
+                    {/* <button className="btn" onClick={contact}>Go to help center</button> */}
                 </div>
             </div>
         </div>
