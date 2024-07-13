@@ -5,66 +5,8 @@
 // import BookingDetailModal from './BookingDetailModal';
 
 
-  return (
-    <div className="container">
-      <h2 className="my-4">Booking List</h2>
-      <div className='header'>
-        
-        <input
-          type="text"
-          placeholder="Search by Booking ID, User ID, Date"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        <button className="sort-button" onClick={handleSort}>
-          Sort by Date ({sortOrder === 'asc' ? 'Ascending' : 'Descending'})
-        </button>
-      </div>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th>Booking ID</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Status</th>
-            <th>Total Price</th>
-            <th>User ID</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentPosts.map((booking, index) => {
-            const { date, time } = formatDateTime(booking.date);
-            console.log('bk', booking);
-            return (
-              <tr key={index}>
-                <td>{booking.bookingId}</td>
-                <td>{date}</td>
-                <td>{time}</td>
-                <td>{booking.status}</td>
-                <td>{booking.totalPrice}</td>
-                <td>{booking.userId}</td>
-                <td>
-                  <button className="edit-button" onClick={() => handleEdit(booking.bookingId)}>Edit</button>
-                  <button className="delete-button" onClick={() => handleDelete(booking.bookingId)}>Delete</button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <ReactPaginate
-        previousLabel={'Previous'}
-        nextLabel={'Next'}
-        pageCount={Math.ceil(filteredBookings.length / postPerPage)}
-        onPageChange={({ selected }) => setCurrentPage(selected + 1)}
-        containerClassName={'pagination'}
-        activeClassName={'active'}
-      />
-    </div>
-  );
-}
+  
+
 // function BookingStaff() {
 //   const [users, setUsers] = useState([]);
 

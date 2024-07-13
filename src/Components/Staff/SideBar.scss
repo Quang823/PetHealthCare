@@ -1,9 +1,15 @@
-/* SideBar.scss */
+
 
 .list-group-item.active {
-    z-index: inherit;
-    color: inherit;
-    background-color: inherit;
-    border-color: inherit;
-    /* Optional: add any other styles you want to inherit or set to default */
+    z-index: initial !important; /* Đặt lại z-index về giá trị mặc định */
+    color: initial !important; /* Đặt lại màu sắc về giá trị mặc định */
+    background-color: initial !important; /* Đặt lại màu nền về giá trị mặc định */
+    border-color: initial !important; /* Đặt lại màu viền về giá trị mặc định */
+    border: none !important;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+  
+    border: none !important;
 }

@@ -12,19 +12,19 @@ function VetExaminationForm() {
     const [treatmentResult, setTreatmentResult] = useState('');
     const [dateMedical, setDateMedical] = useState(new Date());
 
-    useEffect(() => {
-        const fetchBookingDetail = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${bookingId}`);
-                setBookingDetail(response.data);
-                console.log('Booking detail:', response.data);
-            } catch (error) {
-                console.error('Error fetching booking detail:', error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchBookingDetail = async () => {
+    //         try {
+    //             const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${bookingId}`);
+    //             setBookingDetail(response.data);
+    //             console.log('Booking detail:', response.data);
+    //         } catch (error) {
+    //             console.error('Error fetching booking detail:', error);
+    //         }
+    //     };
 
-        fetchBookingDetail();
-    }, [booking.id]);
+    //     fetchBookingDetail();
+    // }, [booking.id]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
