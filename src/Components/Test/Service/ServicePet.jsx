@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
-import './ServicePet.scss';
+import './ServicePet.scss'
 import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 const ServicePet = () => {
@@ -13,7 +13,8 @@ const ServicePet = () => {
         
         name: '',
         price: '',
-        description: ''
+        description: '',
+         imageUrl: ''
     });
     const formRef = useRef(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +72,8 @@ const ServicePet = () => {
                     
                     name: '',
                     price: '',
-                    description: ''
+                    description: '',
+                     imageUrl: ''
                 });
                 setShowForm(false);
                 toast.success("Add success");
@@ -95,7 +97,8 @@ const ServicePet = () => {
                     
                     name: '',
                     price: '',
-                    description: ''
+                    description: '',
+                     imageUrl: ''
                 });
                 toast.success("Update success");
             })
@@ -104,10 +107,10 @@ const ServicePet = () => {
             });
     };
 
-    const handleDelete = (serviceID) => {
-        axios.delete(`http://localhost:8080/Service/delete/${serviceID}`)
+    const handleDelete = (serviceId) => {
+        axios.delete(`http://localhost:8080/Service/delete/${serviceId}`)
             .then(() => {
-                setService(service.filter(s => s.serviceID !== serviceID));
+                setService(service.filter(s => s.serviceId !== serviceId));
                 toast.success("Delete success");
             })
             .catch(err => {
@@ -124,7 +127,7 @@ const ServicePet = () => {
                         setShowForm(true);
                         setShowEditForm(false);
                     }}>Add new Service</button>
-                    <button className="back-button" onClick={handleBack}>Back</button>
+                    {/* <button className="back-button" onClick={handleBack}>Back</button> */}
                 </div>
 
                 <table className="table table-striped">
@@ -144,13 +147,14 @@ const ServicePet = () => {
                                 <td>{service.name}</td>
                                 <td>{service.price}</td>
                                 <td>{service.description}</td>
+                                
                                 <td>
                                     <button className="edit-button"
                                         onClick={() => {
                                             handleEditService(service);
                                         }}
                                     >Edit</button>
-                                    <button className="delete-button" onClick={() => handleDelete(service.serviceID)}>Delete</button>
+                                    <button className="delete-button" onClick={() => handleDelete(service.serviceId)}>Delete</button>
                                 </td>
                             </tr>
                         ))}
@@ -189,6 +193,13 @@ const ServicePet = () => {
                             value={newService.description}
                             onChange={handleChange}
                         />
+                        <input
+                            type="text"
+                            name="imageUrl"
+                            placeholder="Image URL"
+                            value={newService.imageUrl}
+                            onChange={handleChange}
+                        />
                         <button className='btn btn-success' onClick={handleAddNew}>
                             Save
                         </button>
@@ -220,6 +231,13 @@ const ServicePet = () => {
                             name="description"
                             placeholder="Description"
                             value={newService.description}
+                            onChange={handleChange}
+                        />
+                        <input
+                            type="text"
+                            name="imageUrl"
+                            placeholder="Image URL"
+                            value={newService.imageUrl}
                             onChange={handleChange}
                         />
                         <button className='btn btn-success' onClick={handleEdit}>

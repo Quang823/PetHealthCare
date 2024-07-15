@@ -6,13 +6,50 @@ import image from "../../Assets/Puppy-PNG-Image.png";
 import image1 from "../../Assets/th.jpg";
 import image2 from "../../Assets/vet-1.jpg";
 import image3 from "../../Assets/tieng-anh-nganh-y-chuc-danh-bac-si.jpg";
-import { FaHeart } from "react-icons/fa";
-import { FaPhone } from "react-icons/fa6";
+import img4 from "../../Assets/dat09.jpg"
+import { FaHeart, FaPhone } from "react-icons/fa";
 import { UserContext } from '../../Context/UserContext';
 import { useContext, useEffect, useState } from 'react';
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+
 const HomePage = () => {
-    // localStorage.clear;
     const { user } = useContext(UserContext);
+    let navigate = useNavigate();
+    const [service, setService] = useState([]);
+    const [veterinarians, setVeterinarians] = useState([]);
+
+    const handleShowAll = () => {
+        navigate('/allservices'); // Route to the new page
+    };
+    const handleBooked = () => {
+            navigate('/booking')
+    }
+
+    useEffect(() => {
+        const fetchService = async () => {
+            try {
+                const rs = await axios.get("http://localhost:8080/Service/getAll");
+                setService(rs.data);
+            } catch (er) {
+                console.log(er);
+            }
+        };
+        fetchService();
+    }, []);
+
+    useEffect(() => {
+        const fetchVeterinarians = async () => {
+            try {
+                const response = await axios.get("http://localhost:8080/account/getVeterinarian");
+                setVeterinarians(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchVeterinarians();
+    }, []);
+
     return (
         <div className="HomePage">
             <div className="headerDiv">
@@ -24,7 +61,7 @@ const HomePage = () => {
                     </p>
                     <div className="buttonDiv">
                         <div className="button1">
-                            <button> ABOUT US <FaHeart className="icon" /></button>
+                            <button > ABOUT US <FaHeart className="icon" /></button>
                         </div>
                         <div className="button2">
                             <button> 012-345-678 <FaPhone className="icon" /></button>
@@ -33,7 +70,7 @@ const HomePage = () => {
                 </div>
                 <div className="headerImage">
                     <img src={image} alt="image" className="image"></img>
-                </div >
+                </div>
             </div>
 
             <div className="middleDiv">
@@ -77,57 +114,38 @@ const HomePage = () => {
             <div className="section services">
                 <Container>
                     <h3 className="section-title">Our Services</h3>
+                    <div className="showAllButtonDiv">
+                        <button onClick={handleShowAll} className="showAllButton">Show All</button>
+                    </div>
                     <Row>
-                        <Col md={4}>
-                            <div className="serviceBox">
-                                <img src={image3} alt="Veterinarian Consultation" className="serviceImage" />
-                                <h4>Veterinarian Consultation</h4>
-                                <p>Schedule appointments with our expert veterinarians.</p>
-                            </div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="serviceBox">
-                                <img src={image2} alt="Pet Shop" className="serviceImage" />
-                                <h4>Pet Shop</h4>
-                                <p>Find the best products and accessories for your pets.</p>
-                            </div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="serviceBox">
-                                <img src={image1} alt="Pet Food" className="serviceImage" />
-                                <h4>Pet Food</h4>
-                                <p>High-quality pet food to keep your pets healthy and happy.</p>
-                            </div>
-                        </Col>
+                        {service.slice(0, 3).map(service => (
+                            <Col md={4} key={service.id}>
+                                <div className="serviceBox">
+                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" />
+                                    <h4>{service.name}</h4>
+                                    <p>{service.description}</p>
+                                    <p>{service.price}</p>
+                                    <button onClick={handleBooked}>Book</button>
+                                </div>
+                            </Col>
+                        ))}
                     </Row>
                 </Container>
             </div>
 
-            <div className="section veterinarians">
+            <div className=" veterinarians">
                 <Container>
                     <h3 className="section-title">Meet Our Veterinarians</h3>
                     <Row>
-                        <Col md={4}>
-                            <div className="vetBox">
-                                <img src={image2} alt="Veterinarian 1" className="vetImage" />
-                                <h4>Dr. John Doe</h4>
-                                <p>Specializes in small animals and surgeries.</p>
-                            </div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="vetBox">
-                                <img src={image3} alt="Veterinarian 2" className="vetImage" />
-                                <h4>Dr. Jane Smith</h4>
-                                <p>Expertise in exotic pets and dermatology.</p>
-                            </div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="vetBox">
-                                <img src={image1} alt="Veterinarian 3" className="vetImage" />
-                                <h4>Dr. Michael Brown</h4>
-                                <p>Passionate about preventive care and nutrition.</p>
-                            </div>
-                        </Col>
+                        {veterinarians.map(vet => (
+                            <Col md={4} key={vet.userId}>
+                                <div className="serviceBox">
+                                    <img src={img4} alt={`Veterinarian ${vet.name}`} className="vetImage" />
+                                    <h4>{vet.name}</h4>
+                                    <button  onClick={handleBooked}>Book</button>
+                                </div>
+                            </Col>
+                        ))}
                     </Row>
                 </Container>
             </div>
@@ -191,6 +209,6 @@ const HomePage = () => {
             </div>
         </div>
     );
-}
+};
 
 export default HomePage;

@@ -1,22 +1,22 @@
-
 import React from "react";
 import './Activity.scss';
 import { BsGraphUp } from "react-icons/bs";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Activity = () => {
     const revenueData = [
-        { month: "January", revenue: "$10,000" },
-        { month: "February", revenue: "$8,500" },
-        { month: "March", revenue: "$9,200" },
-        { month: "April", revenue: "$11,000" },
-        { month: "May", revenue: "$12,300" },
-        { month: "June", revenue: "$10,700" },
-        { month: "July", revenue: "$11,500" },
-        { month: "August", revenue: "$13,200" },
-        { month: "September", revenue: "$12,800" },
-        { month: "October", revenue: "$14,000" },
-        // { month: "November", revenue: "$13,500" },
-        // { month: "December", revenue: "$15,000" }
+        { month: "January", revenue: 10000 },
+        { month: "February", revenue: 8500 },
+        { month: "March", revenue: 9200 },
+        { month: "April", revenue: 11000 },
+        { month: "May", revenue: 12300 },
+        { month: "June", revenue: 10700 },
+        { month: "July", revenue: 11500 },
+        { month: "August", revenue: 13200 },
+        { month: "September", revenue: 12800 },
+        { month: "October", revenue: 14000 },
+        // { month: "November", revenue: 13500 },
+        // { month: "December", revenue: 15000 }
     ];
 
     return (
@@ -25,14 +25,22 @@ const Activity = () => {
                 <h1>Monthly Revenue</h1>
                 <BsGraphUp className="icon" />
             </div>
-            <div className="revenueList">
-                {revenueData.map((data, index) => (
-                    <div key={index} className="revenueItem flex">
-                        <span>{data.month}</span>
-                        <span>{data.revenue}</span>
-                    </div>
-                ))}
-            </div>
+            <ResponsiveContainer width="100%" height={400}>
+                <AreaChart data={revenueData}
+                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                    <defs>
+                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                            <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                        </linearGradient>
+                    </defs>
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <Tooltip />
+                    <Area type="monotone" dataKey="revenue" stroke="#8884d8" fillOpacity={1} fill="url(#colorRevenue)" />
+                </AreaChart>
+            </ResponsiveContainer>
         </div>
     );
 };

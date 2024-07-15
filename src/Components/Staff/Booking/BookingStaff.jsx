@@ -4,11 +4,17 @@
 // import ReactPaginate from 'react-paginate';
 // import BookingDetailModal from './BookingDetailModal';
 
+
+
+// function BookingStaff() {
+//   const [users, setUsers] = useState([]);
+
 // const BookingStaff = () => {
 //   const [bookings, setBookings] = useState([]);
 //   const [filteredBookings, setFilteredBookings] = useState([]);
 //   const [searchTerm, setSearchTerm] = useState('');
 //   const [sortOrder, setSortOrder] = useState('asc');
+
 //   const navigate = useNavigate();
 //   const [currentPage, setCurrentPage] = useState(1);
 //   const [postPerPage] = useState(5); // Fixed posts per page
@@ -275,12 +281,12 @@ const BookingStaff = () => {
       bookingStatus.includes(searchTerm.toLowerCase());
   });
 
-  if (loading) return (
-    <div className="loading-indicator">
-      <span role="img" aria-label="dog running">🐕‍🦺</span>
-      <p>Loading...</p>
-    </div>
-  );
+  // if (loading) return (
+  //   <div className="loading-indicator">
+  //     <span role="img" aria-label="dog running">🐕‍🦺</span>
+  //     <p>Loading...</p>
+  //   </div>
+  // );
   if (error) return <p>Error: {error.message}</p>;
 
   return (

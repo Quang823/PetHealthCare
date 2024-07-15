@@ -25,6 +25,7 @@ function VetExaminationForm() {
         console.log("Received bookingDetail:", bookingDetail);
     }, [bookingDetail]);
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const petId = bookingDetail.pet.petId;
