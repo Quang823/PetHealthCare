@@ -3,7 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import StaffLayout from '../Components/Staff/StaffLayout';
 import BookingStaff from '../Components/Staff/Booking/BookingStaff';
 import Cage from '../Components/Staff/Cage/Cage';
-
+import EditSlot from '../Components/Staff/Slot/EditSlot';
 import AddSlot from '../Components/Staff/Slot/AddSlot';
 import BKNeedCage from '../Components/Staff/BKNeedCage/BKNeedCage';
 const Staff = () => {
@@ -16,6 +16,8 @@ const Staff = () => {
                 <Route path='/cagestaff' element={<Cage />} />
                    <Route path='/addslotStaff' element={<AddSlot/>} />
                    <Route path='/bkneedCage' element={<BKNeedCage/>} />
+                     <Route path='/editslotStaff' element={<EditSlot />} />
+
 
             </Routes>
         </>
