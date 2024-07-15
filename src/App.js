@@ -18,6 +18,7 @@ import Schedule from './Components/Doctors/Schedule/Schedule';
 import BookingStaff from './Components/Staff/Booking/BookingStaff';
 import Cage from './Components/Staff/Cage/Cage';
 import AddSlot from './Components/Staff/Slot/AddSlot';
+import EditSlot from './Components/Staff/Slot/EditSlot';
 import VetExaminationForm from './Components/Doctors/VetExaminationForm';
 import Test from './Routes/Test';
 import UserATest from './Components/Test/User/UserATest';
@@ -50,6 +51,7 @@ function App() {
           <Route path='/bookingstaff' element={<BookingStaff />} />
           <Route path='/cagestaff' element={<Cage />} />
           <Route path='/addslotStaff' element={<AddSlot />} />
+          <Route path='/editslotStaff' element={<EditSlot />} />
           <Route path='/testadmin/' element={<Test />} />
           <Route path='/testadminUser/' element={<UserATest />} />
           {/* Routes for doctor */}

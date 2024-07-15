@@ -39,7 +39,7 @@ function VetExaminationForm() {
         const formData = {
             veterinaryName,
             treatmentResult,
-            dateMedical: formattedDateMedical,
+            dateMedical: formattedDateMedical
         };
 
         console.log("Form data being submitted:", formData);
