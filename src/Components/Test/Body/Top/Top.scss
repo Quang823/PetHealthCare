@@ -171,7 +171,8 @@ gap:1rem;
             h1{
                 font-size: var(--h1FontSize);
                 padding-bottom: 1rem;
-                color: var(--blackColor);
+                color: #121e23;
+                font-weight: 600;
             }
             .flex{
                 gap:1.5rem;
@@ -183,6 +184,12 @@ gap:1rem;
                     color: var(--PrimaryColor);
                     font-weight: 500;
                     padding: .5rem 0;
+                }
+                .serviceName{
+                    font-size: 18px;
+                    font-weight: bold;
+                     color: #599776;  // Change this to the desired color
+  
                 }
             }
             .link{
@@ -201,7 +208,9 @@ gap:1rem;
             transform: translateY(-20px);
 
             img{
-                width: 200px;
+                width: 150px;
+                border-radius: 10px;
+                margin-top: 30px;
 
             }
         }
