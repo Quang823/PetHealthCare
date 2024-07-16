@@ -1,29 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './Activity.scss';
 import { BsGraphUp } from "react-icons/bs";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
 
 const Activity = () => {
-    const revenueData = [
-        { month: "January", revenue: 10000 },
-        { month: "February", revenue: 8500 },
-        { month: "March", revenue: 9200 },
-        { month: "April", revenue: 11000 },
-        { month: "May", revenue: 12300 },
-        { month: "June", revenue: 10700 },
-        { month: "July", revenue: 11500 },
-        { month: "August", revenue: 13200 },
-        { month: "September", revenue: 12800 },
-        { month: "October", revenue: 14000 },
-        // { month: "November", revenue: 13500 },
-        // { month: "December", revenue: 15000 }
-    ];
+    const [revenueData, setRevenueData] = useState([]);
+    const [year, setYear] = useState(new Date().getFullYear());
+    // const [month, setMonth] = useState(new Date().getMonth() + 1); // January is 0
+
+    useEffect(() => {
+        fetchRevenueData(year);
+    }, [year]);
+
+    const fetchRevenueData = async (year) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/booking/revenue-monthly?year=${year}`);
+            setRevenueData(response.data);
+        } catch (error) {
+            console.error("Error fetching revenue data:", error);
+        }
+    };
+
+    const handleYearChange = (event) => {
+        setYear(event.target.value);
+    };
+
+    // const handleMonthChange = (event) => {
+    //     setMonth(event.target.value);
+    // };
 
     return (
         <div className="activitySection">
             <div className="heading flex">
                 <h1>Monthly Revenue</h1>
                 <BsGraphUp className="icon" />
+            </div>
+            <div className="controls">
+                <label>
+                    Year:
+                    <select value={year} onChange={handleYearChange}>
+                        {[...Array(10)].map((_, i) => {
+                            const y = new Date().getFullYear() - i;
+                            return <option key={y} value={y}>{y}</option>
+                        })}
+                    </select>
+                </label>
+                {/* <label>
+                    Month:
+                    <select value={month} onChange={handleMonthChange}>
+                        {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((m, i) => (
+                            <option key={i} value={i + 1}>{m}</option>
+                        ))}
+                    </select>
+                </label> */}
             </div>
             <ResponsiveContainer width="100%" height={400}>
                 <AreaChart data={revenueData}
