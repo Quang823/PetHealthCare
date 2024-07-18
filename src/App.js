@@ -27,6 +27,7 @@ import TestAdmin from './Components/Test/TestAdmin';
 import Body from './Components/Test/Body/Body';
 import CageAdmin from './Components/Test/Cage/Cage';
 
+
 function App() {
   const { user, loginContext } = useContext(UserContext);
   console.log("user", user);
@@ -53,14 +54,14 @@ function App() {
           </Route>
           {/* Routes for staff */}
 
-          <Route path='/staff' element={<StaffLayout />} />
-          <Route path='/bookingstaff' element={<BookingStaff />} />
-          <Route path='/cagestaff' element={<Cage />} />
-          <Route path='/addslotStaff' element={<AddSlot />} />
-          <Route path='/editslotStaff' element={<EditSlot />} />
-          <Route path='/testadmin/' element={<Test />} />
-          <Route path='/testadminUser/' element={<UserATest />} />
-          <Route path="bkneedCage" element={<BKNeedCage />} />
+      
+          <Route path='/staff/*' element={<StaffLayout />}>
+            <Route path="bookingstaff" element={<BookingStaff />} />
+            <Route path="cagestaff" element={<Cage />} />
+            <Route path="addslotStaff" element={<AddSlot />} />
+            <Route path="bkneedCage" element={<BKNeedCage />} />
+            <Route path='editslotStaff' element={<EditSlot />} />
+          </Route>
 
           {/* <Route path='/testadmin/' element={<Test />} />
           <Route path='/testadminUser/' element={<UserATest />} /> */}
