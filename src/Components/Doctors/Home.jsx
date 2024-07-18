@@ -69,8 +69,11 @@ function Home({ Toggle }) {
         return { formattedDate, formattedTime };
     };
 
+   
     return (
+     
         <>
+           <div classname='bs-form'>
             <div className='headers'>
                 <h1>Doctor's Schedule</h1>
             </div>
@@ -151,6 +154,7 @@ function Home({ Toggle }) {
                     onClose={() => setShowModal(false)}
                 />
             )}
+            </div>
         </>
     );
 }

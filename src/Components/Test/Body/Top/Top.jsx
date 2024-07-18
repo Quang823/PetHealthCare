@@ -12,9 +12,12 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { UserContext } from "../../../../Context/UserContext";
+import axios from "axios";
 const Top = () => {
     const navigate = useNavigate();
     const [userName,setUserName] = useState('');
+    const [services,SetServices] = useState([]);
+    
     useEffect(()=>{
       const token = localStorage.getItem('token');
       if( token){
@@ -27,9 +30,26 @@ const Top = () => {
             console.error('Invalid token:', err);
         }
       }
-    },[]);
 
-  
+    },[]);
+    useEffect(() =>{
+     
+     const fectchService = async () =>{
+
+        try{
+            const rs = await axios.get("http://localhost:8080/bookingDetail/getMostUsedServiceByMonth?month=7&year=2024");
+            SetServices(rs.data.services);
+     }catch(err){
+        console.log(err);
+     }
+     }
+     fectchService();
+    
+    },[])
+
+    const handleGoToServices = () => {
+        navigate('/testadmin/servicePet');
+    };
    
     return (
         <div className="topSection">
@@ -67,24 +87,35 @@ const Top = () => {
                 <div className="leftCard flex">
                     <div className="main flex">
                         <div className="textDiv">
-                            <h1>Service</h1>
+                            <h1>Most Used Service </h1>
 
                             <div className="flex">
-                                <span>
+                                {/* <span>
                                     Current <br /> <small>4 service</small>
                                 </span>
                                 <span>
                                     Future <br /> <small>123 service</small>
-                                </span>
+                                </span> */}
+                                {services.map(service => (
+                                    <div key={service.serviceId} className="serviceItem flex">
+                                    
+                                        <span className="serviceName">{service.name}</span>
+                                    </div>
+                                ))}
                             </div>
 
-                            <span className="flex link">
+                            <span className="flex link" onClick={handleGoToServices}>
                                 Go to service <TbArrowNarrowRight className="icon" />
                             </span>
 
                         </div>
                         <div className="imgDiv">
-                            <img src={meo} alt='My dog' />
+                        {services.map(service => (
+                                    <div key={service.serviceId} className="serviceItem flex">
+                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" />
+                                       
+                                    </div>
+                                ))}
                         </div>
                         {/* <div className="sideBarCard">
                 <BsQuestionCircle className="icon" />
