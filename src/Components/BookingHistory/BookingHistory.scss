@@ -112,30 +112,48 @@
     cursor: pointer;
 }
 
-/* Modal CSS */
-.modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+.custom-modal-content {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: auto;
 }
 
-.modal-content {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    width: 80%;
-    max-width: 500px;
-    text-align: left;
-    position: relative;
+.custom-close-button {
+    cursor: pointer;
+    float: right;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
 }
+
+.table-section {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table-section th,
+.table-section td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table-section th {
+    background-color: #f2f2f2;
+}
+
+.table-field-name {
+    width: 150px; /* Adjust this value as needed */
+    font-weight: bold;
+}
+
+.divider {
+    margin: 20px 0;
+    border-top: 1px solid #ddd;
+}
+
 
 .close-button {
     position: absolute;
@@ -151,24 +169,6 @@
     color: #333;
 }
 
-.modal-content h2 {
-    font-size: 22px;
-    border-bottom: 2px solid #007bff;
-    color: #333;
-    text-align: center;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.modal-content p {
-    margin: 10px 0;
-    font-size: 16px;
-    color: #555;
-}
-
-.modal-content p strong {
-    color: #007bff;
-}
 
 @media (max-width: 600px) {
     .search-sort-container, .filters {
