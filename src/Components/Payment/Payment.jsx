@@ -74,6 +74,7 @@ const PaymentPage = () => {
             const txnRef = parseInt(urlParams.get('vnp_TxnRef'), 10);
 
             const savePayment = async () => {
+                console.log("aaaaaaaaaaaaaaaaaa",responseCode);
                 try {
                     const response = await axios.post(`http://localhost:8080/payment/save-payment?transactionNo=${transactionNo}&amount=${amount}&bankCode=${bankCode}&bankTranNo=${bankTranNo}&cardType=${cardType}&vnpPayDate=${vnpPayDate}&orderInfo=${orderInfo}&txnRef=${txnRef}`);
 

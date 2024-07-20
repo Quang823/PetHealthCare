@@ -27,12 +27,12 @@ const BookingHistory = () => {
             try {
                 const decodedToken = jwtDecode(token);
                 const userID = decodedToken.User.map.userID;  // Adjust if the structure is different
-                const response = await axios.get(`http://localhost:8080/booking/getAllById/${userID}`, {
+                const response = await axios.get(`http://localhost:8080/booking/getAllByUserId/${userID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setBookingHistory(response.data);
+                setBookingHistory(response.data);   
             } catch (error) {
                 console.error('Error fetching booking history:', error);
                 setError(error);

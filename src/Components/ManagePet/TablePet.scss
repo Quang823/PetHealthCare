@@ -298,13 +298,22 @@ h4 {
         color: #333;
     }
 
-    input[type="text"] {
+    input[type="text"],select {
         width: calc(100% - 22px);
         padding: 10px;
         margin-bottom: 10px;
         border: 1px solid #ddd;
         border-radius: 4px;
         box-sizing: border-box;
+    }
+    select {
+        background-color: white;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><path fill='none' stroke='black' stroke-width='2' d='M2 4l6 6 6-6'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
     }
 
     .btn {
