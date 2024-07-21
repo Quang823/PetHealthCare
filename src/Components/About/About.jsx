@@ -2,7 +2,7 @@ import React from 'react';
 import './About.scss';
 import video from '../../Assets/5744668-uhd_2160_3840_24fps.mp4';
 import ImageSlider from "./ImageSlider";
-import image1 from "../../Assets/6492f6a4097242c820e47b08_hayffield-l-ZVdZw2p08y4-unsplash.jpg";
+import image1 from "../../Assets/macdo.jpg";
 import image2 from "../../Assets/1674772971550.jpeg";
 import image3 from "../../Assets/download.jpg";
 import image4 from "../../Assets/certifiedpet_hero.jpeg";

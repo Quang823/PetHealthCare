@@ -26,6 +26,7 @@ import TestAdminLayout from './Components/Test/TestAdminLayout';
 import TestAdmin from './Components/Test/TestAdmin';
 import Body from './Components/Test/Body/Body';
 import CageAdmin from './Components/Test/Cage/Cage';
+import AddCageStaff from './Components/Staff/Cage/AddCageStaff';
 
 
 function App() {
@@ -49,7 +50,7 @@ function App() {
             <Route path="testadminUser" element={<UserATest />} />
             <Route path="servicePet" element={<ServicePet />} />
             <Route path="dashboard" element={<Body />} />
-            <Route path="addCage" element={<CageAdmin />} />
+            {/* <Route path="addCage" element={<CageAdmin />} /> */}
           
           </Route>
           {/* Routes for staff */}
@@ -60,7 +61,11 @@ function App() {
             <Route path="cagestaff" element={<Cage />} />
             <Route path="addslotStaff" element={<AddSlot />} />
             <Route path="bkneedCage" element={<BKNeedCage />} />
+
+            <Route path="addCageStaff" element={<AddCageStaff />} />
+
             <Route path='editslotStaff' element={<EditSlot />} />
+
           </Route>
 
           {/* <Route path='/testadmin/' element={<Test />} />

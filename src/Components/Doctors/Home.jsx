@@ -78,7 +78,7 @@ function Home({ Toggle }) {
                 <h1>Doctor's Schedule</h1>
             </div>
             <div className='px-3'>
-                <Nav Toggle={Toggle} />
+                {/* <Nav Toggle={Toggle} /> */}
                 <div className='container-fluid'>
                     <div className='d-flex justify-content-between align-items-center'>
                         <h2 className="my-4">Schedule</h2>

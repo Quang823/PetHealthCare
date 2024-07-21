@@ -3,6 +3,7 @@
 .HomePage {
   background: url('../../Assets/hand-painted-watercolor-pastel-sky-background_23-2148902771.avif')no-repeat;
   background-size: cover;
+  background-color: red;
   .headerDiv {
 
     display: flex;
@@ -93,6 +94,73 @@
         }
       }
     }
+   
+    .shop{
+      display: flex;
+      h3{
+        text-align: center;
+        font-size: 50px; /* Kích thước to */
+          font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+          font-weight: 600;
+      }
+      .shopContent {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .shopmg{
+           margin-top: 10px;
+          display: flex;
+          .shopBox{
+            .shopImage{
+              width: 145px;
+              height: 90px;
+             
+            }
+          }
+        }
+    
+        .videoBox {
+          flex: 1;
+          padding: 10px;
+    
+          .shopVideo {
+            width: 100%;
+            height: 315px; // Đảm bảo tỷ lệ 16:9
+          }
+        }
+    
+        .shopImages {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+    
+          .shopBox {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+    
+            .shopImage {
+              max-width: 100%;
+              height: auto;
+              margin-bottom: 10px;
+            }
+    
+            h4 {
+              font-size: 18px;
+              font-weight: 700;
+              color: #333;
+            }
+    
+            p {
+              font-size: 16px;
+              color: #666;
+            }
+          }
+        }
+      }
+    }
   }
   .middleDiv {
     margin-top: 30px;
@@ -117,6 +185,7 @@
           align-items: center;
           justify-content: center;
           padding: 20px;
+          height: 173px;
           box-sizing: border-box;
           background-color: #007bff;
       }
@@ -129,6 +198,7 @@
         padding: 20px;
         box-sizing: border-box;
         background-color: #00C274;
+        height: 173px;
     }
       .box3 {
       flex: 1;
@@ -138,6 +208,7 @@
       padding: 20px;
       box-sizing: border-box;
       background-color: #FE6B7F;
+      height: 173px;
   }
 
       .box-content {
@@ -373,7 +444,7 @@
     }
   }
 }
-.section.services, .veterinarians {
+.section.services, .veterinarians ,.new{
   padding: 2rem;
   background-color: #f5dadd;
   text-align: center;

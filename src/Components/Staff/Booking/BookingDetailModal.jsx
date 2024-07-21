@@ -34,6 +34,7 @@ function BookingDetailModal({ bookingDetail, onClose, onSaveCage }) {
                 <p><strong>End Time:</strong> {bookingDetail.slot.endTime}</p>
                 <button className="save-button" onClick={onSaveCage}>Save Cage</button>
                 <button className="close-button" onClick={onClose}>Close</button>
+                
             </div>
         </div>
     );

@@ -66,6 +66,10 @@ function Sidebar() {
           <i className='bi bi-briefcase-fill fs-5 me-3'></i>
           <span>BK Need Cage</span>
         </NavLink>
+        <NavLink className='list-group-item py-2' to="/staff/addCageStaff" >
+          <i className='bi bi-briefcase-fill fs-5 me-3'></i>
+          <span>Add Cage</span>
+        </NavLink>
         <button className='list-group-item py-2' onClick={handleLogout}>
           <i className='bi bi-power fs-5 me-3'></i>
           <span>Logout</span>
