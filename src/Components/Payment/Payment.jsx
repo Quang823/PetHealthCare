@@ -76,9 +76,9 @@ const PaymentPage = () => {
             const savePayment = async () => {
                 console.log("aaaaaaaaaaaaaaaaaa",responseCode);
                 try {
-                    const response = await axios.post(`http://localhost:8080/payment/save-payment?transactionNo=${transactionNo}&amount=${amount}&bankCode=${bankCode}&bankTranNo=${bankTranNo}&cardType=${cardType}&vnpPayDate=${vnpPayDate}&orderInfo=${orderInfo}&txnRef=${txnRef}`);
-
+                   
                     if (responseCode === '00') {
+                        const response = await axios.post(`http://localhost:8080/payment/save-payment?transactionNo=${transactionNo}&amount=${amount}&bankCode=${bankCode}&bankTranNo=${bankTranNo}&cardType=${cardType}&vnpPayDate=${vnpPayDate}&orderInfo=${orderInfo}&txnRef=${txnRef}`);
                         navigate('/payment-success');
                     } else {
                         navigate('/payment-failure');
