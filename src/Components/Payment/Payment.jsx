@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import logo from '../../Assets/v186_574.png';
 import qrCode from '../../Assets/QR-Code-PNG-HD-Image.png';
 import creCard from '../../Assets/credit_card_PNG39.png';
@@ -64,11 +64,32 @@ const PaymentPage = () => {
         const responseCode = urlParams.get('vnp_ResponseCode');
 
         if (responseCode) {
-            if (responseCode === '00') {
-                navigate('/payment-success');
-            } else {
-                navigate('/payment-failure');
-            }
+            const transactionNo = parseInt(urlParams.get('vnp_TransactionNo'), 10);
+            const amount = parseInt(urlParams.get('vnp_Amount'), 10);
+            const bankCode = urlParams.get('vnp_BankCode');
+            const bankTranNo = urlParams.get('vnp_BankTranNo');
+            const cardType = urlParams.get('vnp_CardType');
+            const vnpPayDate = urlParams.get('vnp_PayDate');
+            const orderInfo = urlParams.get('vnp_OrderInfo');
+            const txnRef = parseInt(urlParams.get('vnp_TxnRef'), 10);
+
+            const savePayment = async () => {
+                console.log("aaaaaaaaaaaaaaaaaa",responseCode);
+                try {
+                    const response = await axios.post(`http://localhost:8080/payment/save-payment?transactionNo=${transactionNo}&amount=${amount}&bankCode=${bankCode}&bankTranNo=${bankTranNo}&cardType=${cardType}&vnpPayDate=${vnpPayDate}&orderInfo=${orderInfo}&txnRef=${txnRef}`);
+
+                    if (responseCode === '00') {
+                        navigate('/payment-success');
+                    } else {
+                        navigate('/payment-failure');
+                    }
+                } catch (error) {
+                    console.error('Error saving payment:', error);
+                    navigate('/payment-failure');
+                }
+            };
+
+            savePayment();
         }
     }, [navigate]);
 
@@ -204,15 +225,7 @@ const PaymentPage = () => {
                         <h5>Booking details</h5>
                         <BookingDetail bookings={bookings} showDeleteButton={false} />
                     </div>
-                    <div className="payment-method">
-                        <h5>Payment Method:</h5>
-                        <select id="payment-method" onChange={handlePaymentMethodChange}>
-                            <option value="">Select a payment method</option>
-                            <option value="credit-card">Credit Card</option>
-                            <option value="paypal">PayPal</option>
-                            <option value="bank-transfer">Bank Transfer</option>
-                        </select>
-                    </div>
+
                     {renderPaymentMethodDetails()}
                     <div className="total-cost">
                         <p>Total Cost: ${totalCost.toFixed(2)}</p>

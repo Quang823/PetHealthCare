@@ -5,7 +5,7 @@ import { UserContext } from './Context/UserContext';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-
+import './ToastifyCustom.css';
 import AppRoute from './Routes/AppRoute';
 
 import CustomerList from './Components/Admin/User/UserList';
@@ -16,6 +16,7 @@ import Schedule from './Components/Doctors/Schedule/Schedule';
 import BookingStaff from './Components/Staff/Booking/BookingStaff';
 import Cage from './Components/Staff/Cage/Cage';
 import AddSlot from './Components/Staff/Slot/AddSlot';
+import EditSlot from './Components/Staff/Slot/EditSlot';
 import VetExaminationForm from './Components/Doctors/VetExaminationForm';
 import Test from './Routes/Test';
 import UserATest from './Components/Test/User/UserATest';
@@ -26,6 +27,7 @@ import TestAdmin from './Components/Test/TestAdmin';
 import Body from './Components/Test/Body/Body';
 import CageAdmin from './Components/Test/Cage/Cage';
 import AddCageStaff from './Components/Staff/Cage/AddCageStaff';
+
 
 function App() {
   const { user, loginContext } = useContext(UserContext);
@@ -53,14 +55,17 @@ function App() {
           </Route>
           {/* Routes for staff */}
 
-
-
+      
           <Route path='/staff/*' element={<StaffLayout />}>
             <Route path="bookingstaff" element={<BookingStaff />} />
             <Route path="cagestaff" element={<Cage />} />
-            <Route path="addslot" element={<AddSlot />} />
+            <Route path="addslotStaff" element={<AddSlot />} />
             <Route path="bkneedCage" element={<BKNeedCage />} />
+
             <Route path="addCageStaff" element={<AddCageStaff />} />
+
+            <Route path='editslotStaff' element={<EditSlot />} />
+
           </Route>
 
           {/* <Route path='/testadmin/' element={<Test />} />

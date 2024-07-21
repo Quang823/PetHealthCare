@@ -1,5 +1,9 @@
 @import "~bootstrap/scss/bootstrap";
 
+
+.bs-form {
+    padding: 20px;
+}
 // Container styling
 .container-fluid {
     background: linear-gradient(to right, #bde37f, #29c285);
@@ -136,3 +140,5 @@
     align-items: center;
     height: 100px;
 }
+
+

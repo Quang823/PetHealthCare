@@ -3,9 +3,8 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './BookingForm.scss';
-import { jwtDecode } from "jwt-decode";
-import { toast } from "react-toastify";
-
+import { jwtDecode } from 'jwt-decode';
+import { toast } from 'react-toastify';
 
 const BookingForm = ({ onBookingComplete, bookedSlots }) => {
     const [userID, setUserID] = useState('');
@@ -127,7 +126,6 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         localStorage.setItem('selectedDate', date.toLocaleDateString('en-CA'));
     };
 
-
     const validateDate = (date) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -138,6 +136,46 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         e.preventDefault();
         setSelectedSlot(slotId);
     };
+
+    // const filterSlots = (slots) => {
+    //     const now = new Date();
+    //     const today = new Date();
+    //     today.setHours(0, 0, 0, 0);
+    //     const currentHour = now.getHours();
+    //     console.log("curHour", currentHour);
+
+    //     return slots.filter(slot => {
+    //         const slotHour = parseInt(slot.slot.startTime.split(':')[0], 10);
+    //         console.log("slotHour", slotHour);
+    //         return  slotHour > currentHour;
+    //     });
+    // };
+    const filterSlots = (slots) => {
+        const now = new Date();
+        const currentHour = now.getHours();
+
+        console.log("currentHour", currentHour);
+        console.log("selectedDate", selectedDate);
+
+        const isSameDay = (date1, date2) => {
+            return (
+                date1.getDate() === date2.getDate() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getFullYear() === date2.getFullYear()
+            );
+        };
+
+        if (isSameDay(selectedDate, now)) {
+            return slots.filter(slot => {
+                const slotHour = parseInt(slot.slot.startTime.split(':')[0], 10);
+                console.log("slotHour", slotHour);
+                return slotHour > currentHour;
+            });
+        } else {
+            return slots;
+        }
+    };
+
 
     return (
         <div>
@@ -190,7 +228,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
                     <label>
                         Select Slot:
                         <div className="slots-grid">
-                            {slots.filter(slot => !bookedSlots[selectedDoctor]?.includes(slot.slot.slotId.toString())).map((slot) => {
+                            {filterSlots(slots).filter(slot => !bookedSlots[selectedDoctor]?.includes(slot.slot.slotId.toString())).map((slot) => {
                                 return (
                                     <button
                                         key={slot.slot.slotId}
@@ -212,7 +250,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
 };
 
 
-// const BookingForm = ({ onBookingComplete, bookedSlots }) => {
+{/* // const BookingForm = ({ onBookingComplete, bookedSlots }) => {
 //     const [userID, setUserID] = useState('');
 //     const [pets, setPets] = useState([]);
 //     const [services, setServices] = useState([]);
@@ -413,7 +451,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
 //             </div>
 //         </div>
 //     );
-// };
+// }; */}
 
 
 export default BookingForm;
