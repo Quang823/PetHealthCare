@@ -1,6 +1,7 @@
 import { MdEmail } from "react-icons/md";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import './RegisterForm.scss';
 import { FaUser, FaPhoneAlt, FaAddressBook } from "react-icons/fa";
 import logo from '../../Assets/v186_574.png';
@@ -19,56 +20,73 @@ const RegisterForm = () => {
     const [nameError, setNameError] = useState("");
     const [IsShowPassword, setIsShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState(false);
+    const [isPasswordValid, setIsPasswordValid] = useState(false);
+    const [isPhoneValid, setIsPhoneValid] = useState(false);
+    const [isNameValid, setIsNameValid] = useState(false);
     const navigate = useNavigate();
 
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(String(email).toLowerCase());
-    }
+    };
 
     const validatePassword = (password) => {
         return password.length >= 6;
-    }
+    };
 
     const validatePhone = (phone) => {
         const re = /^\d{10}$/;
         return re.test(phone);
-    }
+    };
+
+    const validateName = (name) => {
+        const re = /^[a-zA-Z\s]{6,}$/; // Regular expression to check for only letters and spaces, minimum 6 characters
+        return re.test(name);
+    };
 
     const handleEmailChange = (event) => {
         const value = event.target.value;
         setEmail(value);
-        setEmailError(validateEmail(value) ? "" : "Invalid email format");
+        const isValid = validateEmail(value);
+        setEmailError(isValid ? "" : "Invalid email format");
+        setIsEmailValid(isValid);
     };
-
+    
     const handlePasswordChange = (event) => {
         const value = event.target.value;
         setPassword(value);
-        setPasswordError(validatePassword(value) ? "" : "Password must be at least 6 characters");
+        const isValid = validatePassword(value);
+        setPasswordError(isValid ? "" : "Password must be at least 6 characters");
+        setIsPasswordValid(isValid);
     };
-
+    
     const handlePhoneChange = (event) => {
         const value = event.target.value;
         setPhone(value);
-        setPhoneError(validatePhone(value) ? "" : "Phone number must be exactly 10 digits");
+        const isValid = validatePhone(value);
+        setPhoneError(isValid ? "" : "Phone number must be exactly 10 digits");
+        setIsPhoneValid(isValid);
     };
-
+    
     const handleNameChange = (event) => {
         const value = event.target.value;
         setName(value);
-        setNameError(value ? "" : "Name is required");
+        const isValid = validateName(value);
+        setNameError(isValid ? "" : "Name must be at least 6 characters and contain only letters and spaces");
+        setIsNameValid(isValid);
     };
 
     const loginLink = (event) => {
         event.preventDefault();
         navigate('/login');
-    }
+    };
 
     async function save(event) {
         event.preventDefault();
 
         if (emailError || passwordError || phoneError || nameError) {
-            alert("Please fix the errors before submitting");
+            toast.error("Please fix the errors before submitting");
             return;
         }
 
@@ -124,9 +142,10 @@ const RegisterForm = () => {
                                 placeholder="Username"
                                 value={name}
                                 onChange={handleNameChange}
+                                className={isNameValid ? 'valid' : 'invalid'}
                             />
                             <FaUser className="icon" />
-                            {nameError && <p className="error-message">{nameError}</p>}
+                            {nameError && <p className="errors-messages">{nameError}</p>}
                         </div>
                         <div className="input-box">
                             <input
@@ -134,9 +153,10 @@ const RegisterForm = () => {
                                 placeholder="Email"
                                 value={email}
                                 onChange={handleEmailChange}
+                                className={isEmailValid ? 'valid' : 'invalid'}
                             />
                             <MdEmail className="icon" />
-                            {emailError && <p className="error-message">{emailError}</p>}
+                            {emailError && <p className="errors-messages">{emailError}</p>}
                         </div>
                         <div className="input-box">
                             <input
@@ -144,12 +164,13 @@ const RegisterForm = () => {
                                 placeholder="Password"
                                 value={password}
                                 onChange={handlePasswordChange}
+                                className={isPasswordValid ? 'valid' : 'invalid'}
                             />
                             <i
                                 className={IsShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
                                 onClick={() => setIsShowPassword(!IsShowPassword)}
                             ></i>
-                            {passwordError && <p className="error-message">{passwordError}</p>}
+                            {passwordError && <p className="errors-messages">{passwordError}</p>}
                         </div>
                         <div className="input-box">
                             <input
@@ -157,9 +178,10 @@ const RegisterForm = () => {
                                 placeholder="Phone number"
                                 value={phone}
                                 onChange={handlePhoneChange}
+                                className={isPhoneValid ? 'valid' : 'invalid'}
                             />
                             <FaPhoneAlt className="icon" />
-                            {phoneError && <p className="error-message">{phoneError}</p>}
+                            {phoneError && <p className="errors-messages">{phoneError}</p>}
                         </div>
                         <div className="input-box">
                             <input
@@ -190,6 +212,6 @@ const RegisterForm = () => {
             </div>
         </div>
     );
-}
+};
 
 export default RegisterForm;

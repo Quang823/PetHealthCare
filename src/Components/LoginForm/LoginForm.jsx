@@ -1,4 +1,3 @@
-import { set } from "lodash";
 import { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import './LoginForm.scss';
@@ -9,33 +8,49 @@ import video from '../../Assets/7515875-hd_1080_1920_30fps.mp4';
 import { loginApi } from '../../Service/UserService';
 import { toast } from "react-toastify";
 import { UserContext } from "../../Context/UserContext";
-import { jwtDecode } from "jwt-decode";
-
-
+import {jwtDecode} from "jwt-decode";
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [IsShowPassword, setIsShowPassword] = useState(false);
+    const [isShowPassword, setIsShowPassword] = useState(false);
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const { logout } = useContext(UserContext);
     const { loginContext } = useContext(UserContext);
-    const [isLoading, setIsLoading] = useState(false);
 
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
 
+    const validatePassword = (password) => {
+        return password.length >= 6;
+    };
+
+    const handleEmailChange = (event) => {
+        const value = event.target.value;
+        setEmail(value);
+        setEmailError(validateEmail(value) ? "" : "Invalid email format");
+    };
+
+    const handlePasswordChange = (event) => {
+        const value = event.target.value;
+        setPassword(value);
+        setPasswordError(validatePassword(value) ? "" : "Password must be at least 6 characters");
+    };
 
     const registerLink = (event) => {
         event.preventDefault();
         navigate('/register');
-    }
+    };
 
     const handleForgotPassword = () => {
         navigate('/forgot-password');
     };
 
-    const handleBack = () => {
-        navigate("/")
-    }
     const handleLogin = async () => {
         setIsLoading(true);
         if (!email || !password) {
@@ -45,31 +60,25 @@ const LoginForm = () => {
         }
 
         let res = await loginApi(email, password);
-        console.log("test", res.data);
 
         if (res && res.data && res.status === "ok") {
-            const token = res.data; // token được trả về trong res.data.token
-            const decodedToken = jwtDecode(token);  // giải mã token
-
+            const token = res.data; // token returned in res.data
+            const decodedToken = jwtDecode(token); // decode token
 
             if (decodedToken && decodedToken.User.map.role) {
                 const role = decodedToken.User.map.role;
-                console.log("check", role)
-                loginContext(email, token, role); //  loginContext là hàm để lưu trữ thông tin đăng nhập
+                loginContext(email, token, role); // store login info
 
                 if (role === "Admin") {
-                    navigate('/testadmin/dashboard'); // Đường dẫn tới trang admin
+                    navigate('/testadmin/dashboard'); // admin page
                 } else if (role === "Customer") {
-                    navigate('/'); // Đường dẫn tới trang customer
-
+                    navigate('/'); // customer page
                 } else if (role === "Staff") {
-                    navigate('/staff')
-
+                    navigate('/staff');
                 } else if (role === "Veterinarian") {
-                    navigate('/doctor')
+                    navigate('/doctor');
                 } else {
-
-                    navigate('/'); // Điều hướng mặc định
+                    navigate('/'); // default page
                 }
 
                 toast.success("Login successful");
@@ -81,93 +90,89 @@ const LoginForm = () => {
                 toast.error(res.data.error);
                 toast.error("Wrong email or password");
             } else {
-                toast.error("Lgoin fail. Please try again!!!");
+                toast.error("Login fail. Please try again!!!");
             }
         }
+        setIsLoading(false);
     };
 
     return (
-        <>
-            <div className="login-page flex">
-                <div className="container flex">
-                    <div className="videoDiv">
-                        <video src={video} autoPlay muted loop></video>
-
-                        <div className="textDiv">
-                            <h3 className="title">Your pet's happiness is our priority</h3>
-                            <p>Furry friends, endless joy</p>
+        <div className="login-page flex">
+            <div className="container flex">
+                <div className="videoDiv">
+                    <video src={video} autoPlay muted loop></video>
+                    <div className="textDiv">
+                        <h3 className="title">Your pet's happiness is our priority</h3>
+                        <p>Furry friends, endless joy</p>
+                    </div>
+                    <div className="footerDiv flex">
+                        <p>
+                            Don't have an account?
+                            <a className="butn" onClick={registerLink}> Register</a>
+                        </p>
+                    </div>
+                </div>
+                <div className="formDiv flex">
+                    <div className="headerDiv">
+                        <div className="logo-container">
+                            <img src={logo} alt="Logo image" className="logo" />
                         </div>
-                        <div className="footerDiv flex">
-                            <p>
-                                Don't have an account?
-                                <a className="butn" onClick={registerLink}> Register</a>
+                    </div>
+                    <h3>Welcome</h3>
+                    <div className="wrapper">
+                        <h1>Login</h1>
+                        <div className="input-box">
+                            <input
+                                type="text"
+                                placeholder="Email"
+                                value={email}
+                                onChange={handleEmailChange}
+                                className={emailError ? 'invalid' : email ? 'valid' : ''}
+                            />
+                            <MdEmail className="icon" />
+                            {emailError && <p className="errors-messagess">{emailError}</p>}
+                        </div>
+                        <div className="input-box">
+                            <input
+                                type={isShowPassword ? "text" : "password"}
+                                placeholder="Password"
+                                value={password}
+                                onChange={handlePasswordChange}
+                                className={passwordError ? 'invalid' : password ? 'valid' : ''}
+                            />
+                            <i
+                                className={isShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
+                                onClick={() => setIsShowPassword(!isShowPassword)}
+                            ></i>
+                            {passwordError && <p className="errors-messagess">{passwordError}</p>}
+                        </div>
+                        <div className="remember-forgot">
+                            <label>
+                                <input type="checkbox" /> Remember me
+                            </label>
+                            <p className="forgot-password-link" onClick={handleForgotPassword}>
+                                Forgot Password?
                             </p>
                         </div>
-
-                    </div>
-                    <div className="formDiv flex">
-                        <div className="headerDiv">
-                            <div className="logo-container">
-                                <img src={logo} alt="Logo image" className="logo" />
-                            </div>
-
-                        </div>
-                        <h3>Welcome</h3>
-                        <div className="wrapper">
-
-                            <h1>Login</h1>
-                            <div className="input-box">
-                                <input
-                                    type="text"
-                                    placeholder="Email"
-                                    value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
-                                />
-                                <MdEmail className="icon" />
-                            </div>
-
-                            <div className="input-box">
-                                <input
-                                    type={IsShowPassword ? "text" : "password"}
-                                    placeholder="Password"
-                                    value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
-                                />
-                                <i
-                                    className={IsShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
-                                    onClick={() => setIsShowPassword(!IsShowPassword)}
-                                ></i>
-                            </div>
-
-                            <div className="remember-forgot">
-                                <label>
-                                    <input type="checkbox" /> Remember me
-                                </label>
-
-
-                                <p className="forgot-password-link" onClick={handleForgotPassword}>
-                                    Forgot Password?
-                                </p>
-                            </div>
-
-                            <button type="submit" className={email && password ? "active" : ""
-
-                            } onClick={() => handleLogin()}>
-                                {isLoading ? (
-                                    <span className="spinner-container">
-                                        <i className="spinner"></i> Login...
-                                    </span>
-                                ) : (
-                                    'Login'
-                                )}
-                            </button>
-
-                        </div>
+                        <button
+                            type="submit"
+                            className={email && password ? "active" : ""}
+                            onClick={handleLogin}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <span className="spinner-container">
+                                    <i className="spinner"></i> Login...
+                                </span>
+                            ) : (
+                                'Login'
+                            )}
+                        </button>
                     </div>
                 </div>
             </div>
-        </>
-    )
+        </div>
+    );
 }
 
 export default LoginForm;
