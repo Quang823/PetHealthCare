@@ -37,7 +37,7 @@ const Top = () => {
      const fectchService = async () =>{
 
         try{
-            const rs = await axios.get("http://localhost:8080/bookingDetail/getMostUsedServiceByMonth?month=7&year=2024");
+            const rs = await axios.get("http://localhost:8080/bookingDetail/getMostUsedServiceByMonthAndYear?month=7&year=2024");
             SetServices(rs.data.services);
      }catch(err){
         console.log(err);

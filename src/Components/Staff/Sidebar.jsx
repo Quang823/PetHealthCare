@@ -48,7 +48,7 @@ function Sidebar() {
           <i className='bi bi-house fs-5 me-3'></i>
           <span>Home</span>
         </NavLink>
-        <NavLink className='list-group-item py-2' to="/staff/addslotStaff" >
+        <NavLink className='list-group-item py-2' to="/staff/addslot" >
           <i className='bi bi-archive-fill me-3'></i>
           <span>Add Slot</span>
         </NavLink>
@@ -59,6 +59,10 @@ function Sidebar() {
         <NavLink className='list-group-item py-2' to="/staff/bookingstaff" >
           <i className='bi bi-bag-fill fs-5 me-3'></i>
           <span>Booking</span>
+        </NavLink>
+        <NavLink className='list-group-item py-2' to="/staff/refundStaff" >
+          <i className='bi bi-bag-fill fs-5 me-3'></i>
+          <span>Refund</span>
         </NavLink>
         {/* <NavLink className='list-group-item py-2' to="/staff/cagestaff" activeClassName="active">
           <i className='bi bi-cup fs-5 me-3'></i>
