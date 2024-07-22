@@ -55,7 +55,9 @@ const LoginForm = () => {
             if (decodedToken && decodedToken.User.map.role) {
                 const role = decodedToken.User.map.role;
                 console.log("check", role)
-                loginContext(email, token, role); //  loginContext là hàm để lưu trữ thông tin đăng nhập
+                loginContext(email, token, role); 
+                localStorage.setItem('token', token);
+                localStorage.setItem('role', role);//  loginContext là hàm để lưu trữ thông tin đăng nhập
 
                 if (role === "Admin") {
                     navigate('/testadmin/dashboard'); // Đường dẫn tới trang admin
@@ -140,7 +142,7 @@ const LoginForm = () => {
                             </div>
 
                             <div className="remember-forgot">
-                                <label>
+                                <label className="me">
                                     <input type="checkbox" /> Remember me
                                 </label>
 

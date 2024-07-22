@@ -28,6 +28,8 @@ import Body from './Components/Test/Body/Body';
 import CageAdmin from './Components/Test/Cage/Cage';
 import AddCageStaff from './Components/Staff/Cage/AddCageStaff';
 import AddUser from './Components/Test/AddUser/AddUser';
+import ProtectedRoute from './Routes/ProtectedRoute';
+import Unauthorized from './Routes/Unauthorized';
 
 
 
@@ -43,45 +45,42 @@ function App() {
 
   return (
     <>
-      <div className='app-container'>
+       <div className='app-container'>
         <Routes>
-       
-          {/* Routes for customer */}
+          {/* Public routes */}
           <Route path="/*" element={<AppRoute />} />
-          {/* Routes for testAdmin */}
-          <Route path="/testadmin/*" element={<TestAdminLayout />}>
-            <Route path="testadminUser" element={<UserATest />} />
-            <Route path="servicePet" element={<ServicePet />} />
-            <Route path="dashboard" element={<Body />} />
-            <Route path="addUser" element={<AddUser />} />
-            {/* <Route path="addCage" element={<CageAdmin />} /> */}
-          
-          </Route>
-          {/* Routes for staff */}
 
-      
-          <Route path='/staff/*' element={<StaffLayout />}>
-            <Route path="bookingstaff" element={<BookingStaff />} />
-            <Route path="cagestaff" element={<Cage />} />
-            <Route path="addslotStaff" element={<AddSlot />} />
-            <Route path="bkneedCage" element={<BKNeedCage />} />
-
-            <Route path="addCageStaff" element={<AddCageStaff />} />
-
-            <Route path='editslotStaff' element={<EditSlot />} />
-
+          {/* Protected routes for admin */}
+          <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
+            <Route path="/testadmin/*" element={<TestAdminLayout />}>
+              <Route path="testadminUser" element={<UserATest />} />
+              <Route path="servicePet" element={<ServicePet />} />
+              <Route path="dashboard" element={<Body />} />
+              <Route path="addUser" element={<AddUser />} />
+            </Route>
           </Route>
 
-          {/* <Route path='/testadmin/' element={<Test />} />
-          <Route path='/testadminUser/' element={<UserATest />} /> */}
+          {/* Protected routes for staff */}
+          <Route element={<ProtectedRoute allowedRoles={['Staff']} />}>
+            <Route path='/staff/*' element={<StaffLayout />}>
+              <Route path="bookingstaff" element={<BookingStaff />} />
+              <Route path="cagestaff" element={<Cage />} />
+              <Route path="addslot" element={<AddSlot />} />
+              <Route path="bkneedCage" element={<BKNeedCage />} />
+              <Route path="addCageStaff" element={<AddCageStaff />} />
+            </Route>
+          </Route>
 
-          {/* Routes for doctor */}
-          <Route path='/doctor' element={<Doctor />} />
-          <Route path='/scheduleDoctor' element={<Schedule />} />
-          <Route path='/examineDoctor' element={<VetExaminationForm />} />
-          <Route path='/bkneedCage' element={<BKNeedCage/>} />
+          {/* Protected routes for doctor */}
+          <Route element={<ProtectedRoute allowedRoles={['Veterinarian']} />}>
+            <Route path='/doctor' element={<Doctor />} />
+            <Route path='/scheduleDoctor' element={<Schedule />} />
+            <Route path='/examineDoctor' element={<VetExaminationForm />} />
+            <Route path='/bkneedCage' element={<BKNeedCage/>} />
+          </Route>
 
-
+          {/* Unauthorized route */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
         </Routes>
       </div>
       <ToastContainer

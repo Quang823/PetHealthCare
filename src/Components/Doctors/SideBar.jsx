@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../../Context/UserContext';
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { CiLogout } from "react-icons/ci";
 function Sidebar() {
     const { logout, user } = useContext(UserContext);
     const navigate = useNavigate();
     const handleLogout = () =>{
         logout();
         navigate("/");
-        toast.success("Sucess")
+        toast.success("Success")
     }
   return (
     <div className='bg-white sidebar p-2'>
@@ -28,7 +29,10 @@ function Sidebar() {
         
         <a className='list-group-item py-2' href="">
           <i className='bi bi-power fs-5 me-3'></i>
-          <span onClick={() => handleLogout()}>Logout</span>
+          <NavLink to="/" className="menuLink flex" onClick={handleLogout}>
+                            <CiLogout className="icon" />
+                            <span className="smallText">Logout</span>
+                        </NavLink>
         </a>
       </div>
     </div>
