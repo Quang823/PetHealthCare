@@ -70,7 +70,7 @@ const PaymentPage = () => {
             const bankCode = urlParams.get('vnp_BankCode');
             const bankTranNo = urlParams.get('vnp_BankTranNo');
             const cardType = urlParams.get('vnp_CardType');
-            const vnpPayDate = urlParams.get('vnp_PayDate');
+const vnpPayDate = urlParams.get('vnp_PayDate');
             const orderInfo = urlParams.get('vnp_OrderInfo');
             const txnRef = parseInt(urlParams.get('vnp_TxnRef'), 10);
                 if (responseCode === '00') {
@@ -152,7 +152,7 @@ const PaymentPage = () => {
         console.log("Booking Data to be sent:", bookingData);
 
         try {
-            const token = localStorage.getItem('token');
+const token = localStorage.getItem('token');
             const bookingResponse = await axios.post('http://localhost:8080/booking/add', bookingData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -229,7 +229,7 @@ const PaymentPage = () => {
             <button className="go-back-button" onClick={handleGoBack}>Go Back</button>
             <div className="payment-page-container">
                 <div className='logo-div'>
-                    <div className="logo-container">
+<div className="logo-container">
                         <img src={logo} alt="Logo image" className="logo" />
                     </div>
                 </div>
