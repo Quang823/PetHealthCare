@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import logo from '../../Assets/v186_574.png';
 import qrCode from '../../Assets/QR-Code-PNG-HD-Image.png';
 import creCard from '../../Assets/credit_card_PNG39.png';
@@ -23,9 +23,9 @@ const PaymentPage = () => {
     const [billCode, setBillCode] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const navigate = useNavigate();
-    const paymentSavedRef = useRef(false);
     const location = useLocation();
 
+    // Fetch user information from token
     useEffect(() => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('token');
@@ -52,6 +52,7 @@ const PaymentPage = () => {
         fetchUserInfo();
     }, []);
 
+    // Set initial bookings and bill code
     useEffect(() => {
         const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
         if (bookedInfo) {
@@ -60,6 +61,7 @@ const PaymentPage = () => {
         setBillCode(uuidv4());
     }, []);
 
+    // Handle VNPAY response
     useEffect(() => {
         const savePayment = async (paymentDetails) => {
             try {
@@ -95,30 +97,14 @@ const PaymentPage = () => {
             } catch (error) {
                 console.error('Error saving payment:', error);
                 navigate('/payment-failure');
+
             }
         };
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const responseCode = urlParams.get('vnp_ResponseCode');
-
-        if (responseCode && !paymentSavedRef.current) {
-            paymentSavedRef.current = true;
-
-            const paymentDetails = {
-                responseCode,
-                transactionNo: parseInt(urlParams.get('vnp_TransactionNo'), 10),
-                amount: parseInt(urlParams.get('vnp_Amount'), 10),
-                bankCode: urlParams.get('vnp_BankCode'),
-                bankTranNo: urlParams.get('vnp_BankTranNo'),
-                cardType: urlParams.get('vnp_CardType'),
-                vnpPayDate: urlParams.get('vnp_PayDate'),
-                orderInfo: urlParams.get('vnp_OrderInfo'),
-                txnRef: parseInt(urlParams.get('vnp_TxnRef'), 10)
-            };
-
-            savePayment(paymentDetails);
-        }
+        
     }, [navigate, bookings]);
+
+
 
     const handlePaymentMethodChange = (e) => {
         setSelectedPaymentMethod(e.target.value);
@@ -137,7 +123,7 @@ const PaymentPage = () => {
         const bookingData = {
             customerId: user.userId,
             date: selectedDate,
-            status: "Paid",
+            status: "PAID",
             totalPrice: bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0),
             bookingDetails: bookings.map(booking => ({
                 petId: booking.petId,
@@ -145,10 +131,12 @@ const PaymentPage = () => {
                 serviceId: booking.serviceId,
                 needCage: false,
                 date: booking.date,
-                slotId: parseInt(booking.slotTime, 10)
+                slotId: parseInt(booking.slotTime, 10),
+                status: 'WAITING'  // Setting status of each booking detail to 'WAITING'
             })),
             billCode: billCode
         };
+
         console.log("Booking Data to be sent:", bookingData);
 
         try {
@@ -163,11 +151,7 @@ const PaymentPage = () => {
             console.log("Response from server:", bookingResponse);
 
             const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
-            const paymentResponse = await axios.get(`http://localhost:8080/payment/vn-pay`, {
-                params: {
-                    amount: totalCost,
-                    bookingId: bookingResponse.data.data.bookingId
-                },
+            const paymentResponse = await axios.get(`http://localhost:8080/payment/vn-pay?amount=${totalCost}&bookingId=${bookingResponse.data.data.bookingId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -183,7 +167,7 @@ const PaymentPage = () => {
             console.error('Payment failed:', error.response?.data || error);
             navigate('/payment-failure');
         }
-    };
+    }
 
     if (loading) {
         return <p className="loading-text">Loading...</p>;
