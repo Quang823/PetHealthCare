@@ -49,6 +49,7 @@ const BookingDetail = ({ bookings, onDelete, showDeleteButton = true }) => {
 
         updatedBookings.splice(index, 1);
         localStorage.setItem('bookedInfo', JSON.stringify(updatedBookings));
+        localStorage.setItem('bookinginfor', JSON.stringify(updatedBookings));
 
         const bookedSlots = JSON.parse(localStorage.getItem('bookedSlots')) || {};
         if (bookingToDelete) {
