@@ -78,6 +78,8 @@ const PaymentPage = () => {
                             txnRef
                         }
                     });
+              
+                    
                     navigate('/payment-success');
                 } else {
                     navigate('/payment-failure');
