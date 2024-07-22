@@ -1,28 +1,26 @@
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
-import { fetchAllpet } from '../../Service/UserService';
-import ReactPaginate from 'react-paginate';
-import ModalAddNew from './ModalAddNew';
-import ModalEdit from './ModalEdit';
-import _ from "lodash";
-import './TablePet.scss';
-import { CSVLink } from "react-csv";
-import { MdInput, MdOutput } from "react-icons/md";
-import { FaPlus, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { FaPlus } from "react-icons/fa";
+import './TablePet.scss';
 
 const TablePet = () => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
-    const [error, setError] = useState('');
     const [userID, setUserID] = useState('');
     const [newPet, setNewPet] = useState({
+        petName: '',
+        petAge: '',
+        petGender: '',
+        petType: '',
+        vaccination: ''
+    });
+    const [validationMessages, setValidationMessages] = useState({
         petName: '',
         petAge: '',
         petGender: '',
@@ -38,7 +36,6 @@ const TablePet = () => {
             setUserID(userIdFromToken);
             fetchData(userIdFromToken);
         }
-
     }, [showForm]);
 
     const fetchData = async (userId) => {
@@ -50,100 +47,136 @@ const TablePet = () => {
         }
     };
 
+    const validatePetName = (value) => {
+        const re = /^[a-zA-Z\s]+$/;
+        return re.test(value) ? '' : 'Pet name should not contain special characters.';
+    };
+
+    const validatePetAge = (value) => {
+        const re = /^\d+$/;
+        return re.test(value) ? '' : 'Pet age should only contain numbers.';
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'petName' || name === 'petGender' || name === 'petType' || name ==='vaccination') {
-            if (/[^a-zA-Z\s]/.test(value)) {
-                setError(' Not contain numbers or special characters.');
-                toast.error("Not contain numbers or special characters.");
-                return;
-            }
+        let message = '';
+
+        if (name === 'petName') {
+            message = validatePetName(value);
         } else if (name === 'petAge') {
-            if (/[^0-9]/.test(value)) {
-                setError('Pet age should only contain numbers.');
-                toast.error("Pet age should only contain numbers.");
-                return;
-            }
+            message = validatePetAge(value);
         }
+
         setNewPet({
             ...newPet,
             [name]: value
         });
-        setError('');
+
+        setValidationMessages({
+            ...validationMessages,
+            [name]: message
+        });
     };
 
-
     const handleEditChange = (e) => {
-        const {name,value} = e.target;
-        if(name === 'petName' || name === 'petGender' || name === 'petType'|| name ==='vaccination'){
-            if(/[^a-zA-Z\s]/.test(value)){
-                setError(' Not contain numbers or special characters.');
-                toast.error("Not contain numbers or special characters.");
-                return;
-            }
-        }else if (name === 'petAge') {
-            if (/[^0-9]/.test(value)) {
-                setError('Pet age should only contain numbers.');
-                toast.error("Pet age should only contain numbers.");
-                return;
-            }
+        const { name, value } = e.target;
+        let message = '';
+
+        if (name === 'petName') {
+            message = validatePetName(value);
+        } else if (name === 'petAge') {
+            message = validatePetAge(value);
         }
+
         setNewPet({
             ...newPet,
-            [e.target.name]: e.target.value
+            [name]: value
+        });
+
+        setValidationMessages({
+            ...validationMessages,
+            [name]: message
         });
     };
 
     const handleAddPet = () => {
-        if (!newPet.petName || !newPet.petAge || !newPet.petGender || !newPet.petType || !newPet.vaccination) {
-            setError('Please fill in all fields.');
-            toast.error("Please fill in all fields");
+        const { petName, petAge, petGender, petType, vaccination } = newPet;
+        let valid = true;
+        let messages = {
+            petName: validatePetName(petName),
+            petAge: validatePetAge(petAge),
+            petGender: '',
+            petType: '',
+            vaccination: ''
+        };
+
+        if (!petName || !petAge || !petGender || !petType) {
+            valid = false;
+            messages.petName = messages.petName || 'Please fill in all required fields.';
+        }
+
+        if (!valid) {
+            setValidationMessages(messages);
             return;
         }
 
-        const petData = { ...newPet };
-        axios.post(`http://localhost:8080/pet/create/${userID}`, petData)
+        axios.post(`http://localhost:8080/pet/create/${userID}`, newPet)
             .then(res => {
                 setData([...data, res.data]);
-                // setNewPet({
-                //     petName: '',
-                //     petAge: '',
-                //     petGender: '',
-                //     petType: '',
-                //     vaccination: ''
-                // });
                 setShowForm(false);
-                setError('');
+                setNewPet({
+                    petName: '',
+                    petAge: '',
+                    petGender: '',
+                    petType: '',
+                    vaccination: ''
+                });
+                setValidationMessages({
+                    petName: '',
+                    petAge: '',
+                    petGender: '',
+                    petType: '',
+                    vaccination: ''
+                });
                 toast.success("Add new pet success");
-            })
-            .catch(err => console.log(err));
-    };
-
-    const handleDeletePet = (petId) => {
-        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
-            .then(() => {
-                setData(data.filter(pet => pet.petId !== petId));
-                toast.success("Delete pet success");
             })
             .catch(err => {
                 console.log(err);
-                toast.error("Failed to delete pet");
+                toast.error("Failed to add new pet (Pet name is duplicated) ");
             });
-    };
-
-    const handleEditPet = (pet) => {
-        setNewPet(pet);
-        setShowEditForm(true);
     };
 
     const handleUpdatePet = () => {
         const { petId, ...petData } = newPet;
+        let messages = {
+            petName: validatePetName(petData.petName),
+            petAge: validatePetAge(petData.petAge),
+            petGender: '',
+            petType: '',
+            vaccination: ''
+        };
+
+        if (!petData.petName || !petData.petAge || !petData.petGender || !petData.petType) {
+            messages.petName = messages.petName || 'Please fill in all required fields.';
+        }
+
+        if (messages.petName || messages.petAge) {
+            setValidationMessages(messages);
+            return;
+        }
 
         axios.put(`http://localhost:8080/pet/update/${userID}/${petId}`, petData)
             .then(res => {
                 setData(data.map(pet => (pet.petId === petId ? res.data : pet)));
                 setShowEditForm(false);
                 setNewPet({
+                    petName: '',
+                    petAge: '',
+                    petGender: '',
+                    petType: '',
+                    vaccination: ''
+                });
+                setValidationMessages({
                     petName: '',
                     petAge: '',
                     petGender: '',
@@ -158,11 +191,23 @@ const TablePet = () => {
             });
     };
 
+    const handleDeletePet = (petId) => {
+        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
+            .then(() => {
+                setData(data.filter(pet => pet.petId !== petId));
+                toast.success("Delete pet success");
+            })
+            .catch(err => {
+                console.log(err);
+                toast.error("Failed to delete pet");
+            });
+    };
+
     const handleViewVaccine = (petId, petName) => {
         navigate(`/vaccine/${petId}`, { state: { petName } });
     };
 
-    const handleViewMedicalHistory = (petId, petName) => {
+    const handleViewMedicalHistory = (petId) => {
         navigate(`/medical-history/${petId}`);
     };
 
@@ -190,13 +235,13 @@ const TablePet = () => {
                             <td>{pet.vaccination}</td>
                             <td>
                                 <button className='btnx btn-warning' onClick={() => {
-                                    handleEditPet(pet);
+                                    setNewPet(pet);
                                     setShowEditForm(true);
                                     setShowForm(false);
-                                }} >Edit</button>
+                                }}>Edit</button>
                                 <button className='btnx btn-danger' onClick={() => handleDeletePet(pet.petId)}>Delete</button>
                                 <button className='btnx btn-view' onClick={() => handleViewVaccine(pet.petId, pet.petName)}> Vaccine</button>
-                                <button className='btnx btn-med' onClick={() => handleViewMedicalHistory(pet.petId, pet.petName)}> MedHistory</button>
+                                <button className='btnx btn-med' onClick={() => handleViewMedicalHistory(pet.petId)}> MedHistory</button>
                             </td>
                         </tr>
                     ))}
@@ -218,6 +263,8 @@ const TablePet = () => {
                         value={newPet.petName}
                         onChange={handleChange}
                     />
+                    {validationMessages.petName && <p className="errorss-messages">{validationMessages.petName}</p>}
+                    
                     <input
                         type="text"
                         name="petAge"
@@ -225,14 +272,20 @@ const TablePet = () => {
                         value={newPet.petAge}
                         onChange={handleChange}
                     />
-                    <input
-                        type="text"
+                    {validationMessages.petAge && <p className="errorss-messages">{validationMessages.petAge}</p>}
+                    
+                    <select
                         name="petGender"
-                        placeholder="Pet Gender"
                         value={newPet.petGender}
                         onChange={handleChange}
-                    />
-                   <select
+                    >
+                        <option value="">Select Pet Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    {validationMessages.petGender && <p className="errorss-messages">{validationMessages.petGender}</p>}
+                    
+                    <select
                         name="petType"
                         value={newPet.petType}
                         onChange={handleChange}
@@ -245,6 +298,8 @@ const TablePet = () => {
                         <option value="BIRD">BIRD</option>
                         <option value="HAMSTER">HAMSTER</option>
                     </select>
+                    {validationMessages.petType && <p className="errorss-messages">{validationMessages.petType}</p>}
+                    
                     <input
                         type="text"
                         name="vaccination"
@@ -252,6 +307,8 @@ const TablePet = () => {
                         value={newPet.vaccination}
                         onChange={handleChange}
                     />
+                    {validationMessages.vaccination && <p className="errorss-messages">{validationMessages.vaccination}</p>}
+                    
                     <button className='btnx btn-success' onClick={handleAddPet}>
                         Save
                     </button>
@@ -260,31 +317,47 @@ const TablePet = () => {
                     </button>
                 </div>
             )}
-            {showEditForm && (<div className="form-container">
-                <h3>Edit pet</h3>
-
-                <input
-                    type="text"
-                    name="petName"
-                    placeholder="Pet Name"
-                    value={newPet.petName}
-                    onChange={handleEditChange}
-                />
-                <input
-                    type="text"
-                    name="petAge"
-                    placeholder="Pet Age"
-                    value={newPet.petAge}
-                    onChange={handleEditChange}
-                />
-                <input
-                    type="text"
-                    name="petGender"
-                    placeholder="Pet Gender"
-                    value={newPet.petGender}
-                    onChange={handleEditChange}
-                />
-                <select
+            {showEditForm && (
+                <div className="form-container">
+                <h3>Add a new pet</h3>
+                
+                <div className="input-group">
+                    <input
+                        type="text"
+                        name="petName"
+                        placeholder="Pet Name"
+                        value={newPet.petName}
+                        onChange={handleChange}
+                    />
+                    {validationMessages.petName && <p className="errorss-messages">{validationMessages.petName}</p>}
+                </div>
+            
+                <div className="input-group">
+                    <input
+                        type="text"
+                        name="petAge"
+                        placeholder="Pet Age"
+                        value={newPet.petAge}
+                        onChange={handleChange}
+                    />
+                    {validationMessages.petAge && <p className="errorss-messages">{validationMessages.petAge}</p>}
+                </div>
+            
+                <div className="input-group">
+                    <select
+                        name="petGender"
+                        value={newPet.petGender}
+                        onChange={handleChange}
+                    >
+                        <option value="">Select Pet Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    {validationMessages.petGender && <p className="errorss-messages">{validationMessages.petGender}</p>}
+                </div>
+            
+                <div className="input-group">
+                    <select
                         name="petType"
                         value={newPet.petType}
                         onChange={handleChange}
@@ -297,23 +370,30 @@ const TablePet = () => {
                         <option value="BIRD">BIRD</option>
                         <option value="HAMSTER">HAMSTER</option>
                     </select>
-                <input
-                    type="text"
-                    name="vaccination"
-                    placeholder="Vaccination"
-                    value={newPet.vaccination}
-                    onChange={handleEditChange}
-                />
-                <button className='btnx btn-success' onClick={handleUpdatePet}>
-                    Update
+                    {validationMessages.petType && <p className="error-message">{validationMessages.petType}</p>}
+                </div>
+            
+                <div className="input-group">
+                    <input
+                        type="text"
+                        name="vaccination"
+                        placeholder="Vaccination"
+                        value={newPet.vaccination}
+                        onChange={handleChange}
+                    />
+                    {validationMessages.vaccination && <p className="error-message">{validationMessages.vaccination}</p>}
+                </div>
+            
+                <button className='btnx btn-success' onClick={handleAddPet}>
+                    Save
                 </button>
-                <button className='btnx btn-danger' onClick={() => setShowEditForm(false)}>
+                <button className='btnx btn-danger' onClick={() => setShowForm(false)}>
                     Cancel
                 </button>
             </div>
+            
             )}
         </div>
-
     );
 };
 

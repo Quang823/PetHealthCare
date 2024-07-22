@@ -306,6 +306,37 @@ h4 {
         border-radius: 4px;
         box-sizing: border-box;
     }
+   
+
+        
+
+        input::placeholder {
+            color: #000000;
+            font-weight: 200;
+        }
+
+        input:focus {
+            border-color: rgb(0, 0, 0);
+            text-indent: 5px;
+        }
+
+        input.valid {
+            border-color: green;
+        }
+        
+        input.invalid {
+            border-color: red;
+        }
+
+
+    
+    .errorss-messages {
+        color: red;
+        font-size: 0.875rem;
+        margin-top: 1px !important;
+        text-align: left !important;
+    }
+
     select {
         background-color: white;
         appearance: none;

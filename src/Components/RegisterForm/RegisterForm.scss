@@ -187,10 +187,18 @@
                         text-indent: 5px;
                     }
 
+                    input.valid {
+                        border-color: green;
+                    }
+                    
+                    input.invalid {
+                        border-color: red;
+                    }
+
                     .icon {
                         position: absolute;
                         right: 20px;
-                        top: 50%;
+                        top: 30%;
                         transform: translateY(-50%);
                         font-size: 16px;
                     }
@@ -206,6 +214,11 @@
                         font-size: 0.8rem;
                         margin-top: -20px; /* Đặt giá trị âm để gần hơn với ô input */
                     }
+                }
+                .errors-messages {
+                    color: red;
+                    font-size: 0.875rem;
+                    margin-top: 1px !important;
                 }
 
                 .remember-forgot {
