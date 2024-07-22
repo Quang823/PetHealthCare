@@ -1,5 +1,5 @@
 .register-page {
-    height: 130vh;
+    height: 135vh;
     width: 100%;
     margin: 0;
     border-radius: 10px;
@@ -10,7 +10,7 @@
     background-position: center;
     
     .container {
-        height: 120vh;
+        height: 135vh;
         width: 70%;
         margin: auto;
         justify-content: space-between;
@@ -187,10 +187,18 @@
                         text-indent: 5px;
                     }
 
+                    input.valid {
+                        border-color: green;
+                    }
+                    
+                    input.invalid {
+                        border-color: red;
+                    }
+
                     .icon {
                         position: absolute;
                         right: 20px;
-                        top: 50%;
+                        top: 30%;
                         transform: translateY(-50%);
                         font-size: 16px;
                     }
@@ -207,6 +215,11 @@
                         margin-top: -20px; /* Đặt giá trị âm để gần hơn với ô input */
                     }
                 }
+                .errors-messages {
+                    color: red;
+                    font-size: 0.875rem;
+                    margin-top: 1px !important;
+                }
 
                 .remember-forgot {
                     display: flex;
@@ -217,10 +230,11 @@
                     label input {
                         accent-color: #000000;
                         margin-right: 4px;
+                        width: 15px;
                     }
 
                     label input:hover {
-                        accent-color: #5f73e7;
+                        accent-color: #8697f8;
                         margin-right: 4px;
                     }
 
@@ -246,7 +260,7 @@
                 button {
                     width: 100%;
                     padding: 0.5rem;
-                    background-color: #00f;
+                    background-color: rgb(35, 112, 255);
                     color: #fff;
                     border: none;
                     border-radius: 4px;

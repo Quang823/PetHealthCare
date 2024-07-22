@@ -43,6 +43,8 @@ const HomePage = () => {
     useEffect(() => {
         const fetchService = async () => {
             try {
+                const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
+                console.log("00000",bookedInfo)
                 const rs = await axios.get("http://localhost:8080/Service/getAll");
                 setService(rs.data);
             } catch (er) {
