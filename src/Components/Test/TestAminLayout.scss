@@ -48,4 +48,14 @@ body {
     padding: 1rem;
     overflow: auto;
     background-color: #bdf994;
+    select {
+        appearance: none;
+        background-color: #fff;
+        padding: 0.7em;
+        border: 1px solid #ccc;
+        border-radius: .3em;
+        width: 100%;
+        font-size: 1em;
+        cursor: pointer;
+    }
 }
