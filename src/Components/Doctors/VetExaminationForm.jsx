@@ -9,6 +9,7 @@ function VetExaminationForm() {
     const [treatmentResult, setTreatmentResult] = useState('');
     const [dateMedical, setDateMedical] = useState(new Date());
     const [veterinaryName, setVeterinaryName] = useState('');
+    const [needCage, setNeedCage] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { bookingDetail } = location.state || {};
@@ -25,12 +26,17 @@ function VetExaminationForm() {
         console.log("Received bookingDetail:", bookingDetail);
     }, [bookingDetail]);
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const petId = bookingDetail.pet.petId;
+        const petId = bookingDetail?.pet?.petId;
+        const bookingDetailId = bookingDetail?.bookingDetailId;
         if (!petId) {
             console.error('No pet ID found in booking detail');
+            return;
+        }
+
+        if (bookingDetail?.booking?.status === 'Completed') {
+            console.error('This booking has already been completed.');
             return;
         }
 
@@ -46,8 +52,28 @@ function VetExaminationForm() {
         console.log("Form data being submitted:", formData);
 
         try {
+            // First, create the medical history
             const response = await axios.post(`http://localhost:8080/medical-history/create/${petId}`, formData);
             console.log("Medical history created successfully:", response.data);
+
+            // Update the needCage status if applicable
+            if (needCage && bookingDetailId) {
+                console.log("Updating Need Cage status to true for bookingDetailId:", bookingDetailId);
+                try {
+                    await axios.put(`http://localhost:8080/bookingDetail/needCage/${bookingDetailId}`);
+                } catch (error) {
+                    console.error('Error updating Need Cage status:', error);
+                }
+            }
+
+            // Update the booking detail status to "Examination has been completed"
+            try {
+                await axios.put(`http://localhost:8080/bookingDetail/update/status/${bookingDetailId}`, { status: 'Completed' });
+                console.log('Booking detail status updated to "Completed"');
+            } catch (error) {
+                console.error('Error updating booking detail status:', error);
+            }
+
             navigate('/doctor');
         } catch (error) {
             console.error('Error creating medical history:', error);
@@ -86,6 +112,16 @@ function VetExaminationForm() {
                         dateFormat="dd MMMM yyyy"
                         className="form-control"
                     />
+                </div>
+                <div className="form-group form-check">
+                    <input
+                        type="checkbox"
+                        className="form-check-input"
+                        id="needCage"
+                        checked={needCage}
+                        onChange={(e) => setNeedCage(e.target.checked)}
+                    />
+                    <label className="form-check-label" htmlFor="needCage">Need Cage</label>
                 </div>
                 <button type="submit" className="btn btn-primary">
                     Submit
