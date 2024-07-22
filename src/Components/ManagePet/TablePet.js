@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa";
 import './TablePet.scss';
@@ -36,7 +36,7 @@ const TablePet = () => {
             setUserID(userIdFromToken);
             fetchData(userIdFromToken);
         }
-    }, [showForm]);
+    }, [showEditForm,showForm]);
 
     const fetchData = async (userId) => {
         try {
@@ -78,26 +78,7 @@ const TablePet = () => {
         });
     };
 
-    const handleEditChange = (e) => {
-        const { name, value } = e.target;
-        let message = '';
-
-        if (name === 'petName') {
-            message = validatePetName(value);
-        } else if (name === 'petAge') {
-            message = validatePetAge(value);
-        }
-
-        setNewPet({
-            ...newPet,
-            [name]: value
-        });
-
-        setValidationMessages({
-            ...validationMessages,
-            [name]: message
-        });
-    };
+    const handleEditChange = (e) => handleChange(e);
 
     const handleAddPet = () => {
         const { petName, petAge, petGender, petType, vaccination } = newPet;
@@ -142,12 +123,13 @@ const TablePet = () => {
             })
             .catch(err => {
                 console.log(err);
-                toast.error("Failed to add new pet (Pet name is duplicated) ");
+                toast.error("Failed to add new pet (Pet name is duplicated)");
             });
     };
 
     const handleUpdatePet = () => {
         const { petId, ...petData } = newPet;
+        let valid = true;
         let messages = {
             petName: validatePetName(petData.petName),
             petAge: validatePetAge(petData.petAge),
@@ -157,10 +139,11 @@ const TablePet = () => {
         };
 
         if (!petData.petName || !petData.petAge || !petData.petGender || !petData.petType) {
+            valid = false;
             messages.petName = messages.petName || 'Please fill in all required fields.';
         }
 
-        if (messages.petName || messages.petAge) {
+        if (!valid) {
             setValidationMessages(messages);
             return;
         }
@@ -240,8 +223,8 @@ const TablePet = () => {
                                     setShowForm(false);
                                 }}>Edit</button>
                                 <button className='btnx btn-danger' onClick={() => handleDeletePet(pet.petId)}>Delete</button>
-                                <button className='btnx btn-view' onClick={() => handleViewVaccine(pet.petId, pet.petName)}> Vaccine</button>
-                                <button className='btnx btn-med' onClick={() => handleViewMedicalHistory(pet.petId)}> MedHistory</button>
+                                <button className='btnx btn-view' onClick={() => handleViewVaccine(pet.petId, pet.petName)}>Vaccine</button>
+                                <button className='btnx btn-med' onClick={() => handleViewMedicalHistory(pet.petId)}>MedHistory</button>
                             </td>
                         </tr>
                     ))}
@@ -264,7 +247,6 @@ const TablePet = () => {
                         onChange={handleChange}
                     />
                     {validationMessages.petName && <p className="errorss-messages">{validationMessages.petName}</p>}
-                    
                     <input
                         type="text"
                         name="petAge"
@@ -273,7 +255,6 @@ const TablePet = () => {
                         onChange={handleChange}
                     />
                     {validationMessages.petAge && <p className="errorss-messages">{validationMessages.petAge}</p>}
-                    
                     <select
                         name="petGender"
                         value={newPet.petGender}
@@ -284,9 +265,6 @@ const TablePet = () => {
                         <option value="Female">Female</option>
                     </select>
                     {validationMessages.petGender && <p className="errorss-messages">{validationMessages.petGender}</p>}
-                    
-             
-
                     <select
                         name="petType"
                         value={newPet.petType}
@@ -301,7 +279,6 @@ const TablePet = () => {
                         <option value="HAMSTER">HAMSTER</option>
                     </select>
                     {validationMessages.petType && <p className="errorss-messages">{validationMessages.petType}</p>}
-                    
                     <input
                         type="text"
                         name="vaccination"
@@ -310,7 +287,6 @@ const TablePet = () => {
                         onChange={handleChange}
                     />
                     {validationMessages.vaccination && <p className="errorss-messages">{validationMessages.vaccination}</p>}
-                    
                     <button className='btnx btn-success' onClick={handleAddPet}>
                         Save
                     </button>
@@ -321,48 +297,37 @@ const TablePet = () => {
             )}
             {showEditForm && (
                 <div className="form-container">
-                <h3>Add a new pet</h3>
-                
-                <div className="input-group">
+                    <h3>Edit pet</h3>
                     <input
                         type="text"
                         name="petName"
                         placeholder="Pet Name"
                         value={newPet.petName}
-                        onChange={handleChange}
+                        onChange={handleEditChange}
                     />
                     {validationMessages.petName && <p className="errorss-messages">{validationMessages.petName}</p>}
-                </div>
-            
-                <div className="input-group">
                     <input
                         type="text"
                         name="petAge"
                         placeholder="Pet Age"
                         value={newPet.petAge}
-                        onChange={handleChange}
+                        onChange={handleEditChange}
                     />
                     {validationMessages.petAge && <p className="errorss-messages">{validationMessages.petAge}</p>}
-                </div>
-            
-                <div className="input-group">
                     <select
                         name="petGender"
                         value={newPet.petGender}
-                        onChange={handleChange}
+                        onChange={handleEditChange}
                     >
                         <option value="">Select Pet Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
                     {validationMessages.petGender && <p className="errorss-messages">{validationMessages.petGender}</p>}
-                </div>
-            
-                <div className="input-group">
                     <select
                         name="petType"
                         value={newPet.petType}
-                        onChange={handleChange}
+                        onChange={handleEditChange}
                     >
                         <option value="">Select Pet Type</option>
                         <option value="DOG">DOG</option>
@@ -372,28 +337,22 @@ const TablePet = () => {
                         <option value="BIRD">BIRD</option>
                         <option value="HAMSTER">HAMSTER</option>
                     </select>
-                    {validationMessages.petType && <p className="error-message">{validationMessages.petType}</p>}
-                </div>
-            
-                <div className="input-group">
+                    {validationMessages.petType && <p className="errorss-messages">{validationMessages.petType}</p>}
                     <input
                         type="text"
                         name="vaccination"
                         placeholder="Vaccination"
                         value={newPet.vaccination}
-                        onChange={handleChange}
+                        onChange={handleEditChange}
                     />
-                    {validationMessages.vaccination && <p className="error-message">{validationMessages.vaccination}</p>}
+                    {validationMessages.vaccination && <p className="errorss-messages">{validationMessages.vaccination}</p>}
+                    <button className='btnx btn-success' onClick={handleUpdatePet}>
+                        Save
+                    </button>
+                    <button className='btnx btn-danger' onClick={() => setShowEditForm(false)}>
+                        Cancel
+                    </button>
                 </div>
-            
-                <button className='btnx btn-success' onClick={handleAddPet}>
-                    Save
-                </button>
-                <button className='btnx btn-danger' onClick={() => setShowForm(false)}>
-                    Cancel
-                </button>
-            </div>
-            
             )}
         </div>
     );

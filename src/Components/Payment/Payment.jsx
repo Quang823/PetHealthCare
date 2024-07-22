@@ -64,45 +64,52 @@ const PaymentPage = () => {
     // Handle VNPAY response
     useEffect(() => {
         const savePayment = async (paymentDetails) => {
-            try {
-                const { responseCode, transactionNo, amount, bankCode, bankTranNo, cardType, vnpPayDate, orderInfo, txnRef } = paymentDetails;
-        if (responseCode) {
-            const transactionNo = parseInt(urlParams.get('vnp_TransactionNo'), 10);
-            const amount = parseInt(urlParams.get('vnp_Amount'), 10);
-            const bankCode = urlParams.get('vnp_BankCode');
-            const bankTranNo = urlParams.get('vnp_BankTranNo');
-            const cardType = urlParams.get('vnp_CardType');
-            const vnpPayDate = urlParams.get('vnp_PayDate');
-            const orderInfo = urlParams.get('vnp_OrderInfo');
-            const txnRef = parseInt(urlParams.get('vnp_TxnRef'), 10);
-                if (responseCode === '00') {
-                    await axios.post(`http://localhost:8080/payment/save-payment`, null, {
-                        params: {
-                            transactionNo,
-                            amount,
-                            bankCode,
-                            bankTranNo,
-                            cardType,
-                            vnpPayDate,
-                            orderInfo,
-                            txnRef
-                        }
-                    });
-              
-                    
-                    navigate('/payment-success');
-                } else {
-                    navigate('/payment-failure');
-                }
-            } catch (error) {
-                console.error('Error saving payment:', error);
+          try {
+            const { responseCode } = paymentDetails;
+            
+            if (responseCode) {
+              const urlParams = new URLSearchParams(window.location.search);
+              const transactionNo = parseInt(urlParams.get('vnp_TransactionNo'), 10);
+              const amount = parseInt(urlParams.get('vnp_Amount'), 10);
+              const bankCode = urlParams.get('vnp_BankCode');
+              const bankTranNo = urlParams.get('vnp_BankTranNo');
+              const cardType = urlParams.get('vnp_CardType');
+              const vnpPayDate = urlParams.get('vnp_PayDate');
+              const orderInfo = urlParams.get('vnp_OrderInfo');
+              const txnRef = parseInt(urlParams.get('vnp_TxnRef'), 10);
+    
+              if (responseCode === '00') {
+                await axios.post(`http://localhost:8080/payment/save-payment`, null, {
+                  params: {
+                    transactionNo,
+                    amount,
+                    bankCode,
+                    bankTranNo,
+                    cardType,
+                    vnpPayDate,
+                    orderInfo,
+                    txnRef
+                  }
+                });
+    
+                navigate('/payment-success');
+              } else {
                 navigate('/payment-failure');
-
+              }
             }
+          } catch (error) {
+            console.error('Error saving payment:', error);
+            navigate('/payment-failure');
+          }
         };
-
+    
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentDetails = {
+          responseCode: urlParams.get('vnp_ResponseCode')
+        };
         
-    }, [navigate, bookings]);
+        savePayment(paymentDetails);
+      }, [navigate, bookings]);
 
 
 
