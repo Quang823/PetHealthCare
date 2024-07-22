@@ -1,150 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import { useNavigate } from "react-router-dom";
-// import './BookingStaff.scss';
-// import ReactPaginate from 'react-paginate';
-// import BookingDetailModal from './BookingDetailModal';
-
-
-
-// function BookingStaff() {
-//   const [users, setUsers] = useState([]);
-
-// const BookingStaff = () => {
-//   const [bookings, setBookings] = useState([]);
-//   const [filteredBookings, setFilteredBookings] = useState([]);
-//   const [searchTerm, setSearchTerm] = useState('');
-//   const [sortOrder, setSortOrder] = useState('asc');
-
-//   const navigate = useNavigate();
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [postPerPage] = useState(5); // Fixed posts per page
-
-//   // Calculate the indices for slicing the bookings array
-//   const indexOfLastPost = currentPage * postPerPage;
-//   const indexOfFirstPost = indexOfLastPost - postPerPage;
-//   const currentPosts = filteredBookings.slice(indexOfFirstPost, indexOfLastPost);
-
-//   // Fetch bookings data from API on component mount
-//   useEffect(() => {
-//     fetch('http://localhost:8080/booking/getAll')
-//       .then(response => response.json())
-//       .then(data => {
-//         setBookings(data);
-//         setFilteredBookings(data);
-//       })
-//       .catch(error => console.error('Error fetching bookings:', error));
-//   }, []);
-
-//   // Handler for navigating back
-//   const handleBack = () => {
-//     navigate('/staff');
-//   };
-
-//   // Placeholder handlers for actions (to be implemented)
-//   const handleAddNew = () => {
-//     // Add new booking logic
-//   };
-
-//   const handleEdit = (bookingId) => {
-//     // Edit booking logic
-//   };
-
-//   const handleDelete = (bookingId) => {
-//     // Delete booking logic
-//   };
-
-//   // Filter bookings based on search term
-//   useEffect(() => {
-//     const lowerCaseSearchTerm = searchTerm.toLowerCase();
-//     const filtered = bookings.filter(booking =>
-//       `${booking.bookingId}`.toLowerCase().includes(lowerCaseSearchTerm) ||
-//       `${booking.userId}`.toLowerCase().includes(lowerCaseSearchTerm) ||
-//       formatDateTime(booking.date).date.toLowerCase().includes(lowerCaseSearchTerm)
-//     );
-//     setFilteredBookings(filtered);
-//   }, [searchTerm, bookings]);
-
-//   // Sort bookings based on date
-//   const handleSort = () => {
-//     const sorted = [...filteredBookings].sort((a, b) => {
-//       const dateA = new Date(a.date);
-//       const dateB = new Date(b.date);
-//       return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-//     });
-//     setFilteredBookings(sorted);
-//     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-//   };
-
-//   return (
-//     <div className="container">
-//       <h2 className="my-4">Booking List</h2>
-//       <div className='header'>
-//         <button className="back-button" onClick={handleBack}>Back</button>
-//         <input
-//           type="text"
-//           placeholder="Search by Booking ID, User ID, Date"
-//           value={searchTerm}
-//           onChange={(e) => setSearchTerm(e.target.value)}
-//           className="search-input"
-//         />
-//         <button className="sort-button" onClick={handleSort}>
-//           Sort by Date ({sortOrder === 'asc' ? 'Ascending' : 'Descending'})
-//         </button>
-//       </div>
-//       <table className="table table-striped">
-//         <thead>
-//           <tr>
-//             <th>Booking ID</th>
-//             <th>Date</th>
-//             <th>Time</th>
-//             <th>Status</th>
-//             <th>Total Price</th>
-//             <th>User ID</th>
-//             <th>Actions</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {currentPosts.map((booking, index) => {
-//             const { date, time } = formatDateTime(booking.date);
-//             console.log('bk', booking);
-//             return (
-//               <tr key={index}>
-//                 <td>{booking.bookingId}</td>
-//                 <td>{date}</td>
-//                 <td>{time}</td>
-//                 <td>{booking.status}</td>
-//                 <td>{booking.totalPrice}</td>
-//                 <td>{booking.userId}</td>
-//                 <td>
-//                   <button className="edit-button" onClick={() => handleEdit(booking.bookingId)}>Edit</button>
-//                   <button className="delete-button" onClick={() => handleDelete(booking.bookingId)}>Delete</button>
-//                 </td>
-//               </tr>
-//             );
-//           })}
-//         </tbody>
-//       </table>
-//       <ReactPaginate
-//         previousLabel={'Previous'}
-//         nextLabel={'Next'}
-//         pageCount={Math.ceil(filteredBookings.length / postPerPage)}
-//         onPageChange={({ selected }) => setCurrentPage(selected + 1)}
-//         containerClassName={'pagination'}
-//         activeClassName={'active'}
-//       />
-//     </div>
-//   );
-// }
-
-
-// Utility function to format date and time
-// export const formatDateTime = (dateTime) => {
-//   const dateObj = new Date(dateTime);
-//   const date = `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
-//   const time = dateObj.toLocaleTimeString();
-//   return { date, time };
-// };
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
@@ -162,8 +15,6 @@ const BookingStaff = () => {
   const [sortOrder, setSortOrder] = useState('asc');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [bookings, setBookings] = useState([]);
-  const [filteredBookings, setFilteredBookings] = useState([]);
 
   useEffect(() => {
     const fetchBookingHistory = async () => {
@@ -182,8 +33,6 @@ const BookingStaff = () => {
           }
         });
         setBookingHistory(response.data);
-        setBookings(response.data);
-        setFilteredBookings(response.data);
       } catch (error) {
         console.error('Error fetching booking history:', error);
         setError(error);
@@ -248,16 +97,6 @@ const BookingStaff = () => {
             booking.bookingId === bookingId ? { ...booking, status: 'Confirmed' } : booking
           )
         );
-        setFilteredBookings((prevBookings) =>
-          prevBookings.map((booking) =>
-            booking.bookingId === bookingId ? { ...booking, status: 'Confirmed' } : booking
-          )
-        );
-        setBookings((prevBookings) =>
-          prevBookings.map((booking) =>
-            booking.bookingId === bookingId ? { ...booking, status: 'Confirmed' } : booking
-          )
-        );
       } else {
         console.error('Error updating booking status:', response.statusText);
       }
@@ -271,22 +110,24 @@ const BookingStaff = () => {
     setSelectedBookingDetails([]);
   };
 
-  const filteredData = bookingHistory.filter((booking) => {
-    const bookingDate = booking.date ?? '';
-    const bookingId = booking.bookingId.toString();
-    const bookingStatus = booking.status?.toLowerCase() ?? '';
+  const filteredData = bookingHistory
+    .filter((booking) => booking.status !== 'CANCELLED')
+    .filter((booking) => {
+      const bookingDate = booking.date ?? '';
+      const bookingId = booking.bookingId.toString();
+      const bookingStatus = booking.status?.toLowerCase() ?? '';
 
-    return bookingDate.includes(searchTerm) ||
-      bookingId.includes(searchTerm) ||
-      bookingStatus.includes(searchTerm.toLowerCase());
-  });
+      return bookingDate.includes(searchTerm) ||
+        bookingId.includes(searchTerm) ||
+        bookingStatus.includes(searchTerm.toLowerCase());
+    });
 
-  // if (loading) return (
-  //   <div className="loading-indicator">
-  //     <span role="img" aria-label="dog running">🐕‍🦺</span>
-  //     <p>Loading...</p>
-  //   </div>
-  // );
+  if (loading) return (
+    <div className="loading-indicator">
+      <span role="img" aria-label="dog running">🐕‍🦺</span>
+      <p>Loading...</p>
+    </div>
+  );
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -323,7 +164,6 @@ const BookingStaff = () => {
       <div className="table">
         <div className="table-header">
           <div className="header-item">Date</div>
-          <div className="header-item">Time</div>
           <div className="header-item">Booking ID</div>
           <div className="header-item">Status</div>
           <div className="header-item">Total Price</div>
@@ -332,14 +172,13 @@ const BookingStaff = () => {
         {filteredData.map((booking) => {
           const date = new Date(booking.date);
           const formattedDate = date.toLocaleDateString();
-          const formattedTime = date.toLocaleTimeString();
+
           return (
             <div
               key={booking.bookingId}
               className="table-row"
             >
               <div className="table-item">{formattedDate}</div>
-              <div className="table-item">{formattedTime}</div>
               <div className="table-item">{booking.bookingId}</div>
               <div className={`table-item status ${booking.status.toLowerCase()}`}>{booking.status}</div>
               <div className="table-item">${booking.totalPrice}</div>

@@ -74,11 +74,22 @@ const PaymentPage = () => {
             const txnRef = parseInt(urlParams.get('vnp_TxnRef'), 10);
 
             const savePayment = async () => {
-                console.log("aaaaaaaaaaaaaaaaaa",responseCode);
+                const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
                 try {
-                   
                     if (responseCode === '00') {
                         const response = await axios.post(`http://localhost:8080/payment/save-payment?transactionNo=${transactionNo}&amount=${amount}&bankCode=${bankCode}&bankTranNo=${bankTranNo}&cardType=${cardType}&vnpPayDate=${vnpPayDate}&orderInfo=${orderInfo}&txnRef=${txnRef}`);
+
+                        // Call the API to update the booking status to WAITING
+                        const updateStatusResponse = await axios.put(`http://localhost:8080/bookingDetail/status/${bookedInfo.bookingId}`, {
+                            status: 'WAITING'
+                        }, {
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            }
+                        });
+
+                        console.log("Status update response:", updateStatusResponse);
+
                         navigate('/payment-success');
                     } else {
                         navigate('/payment-failure');
@@ -91,7 +102,7 @@ const PaymentPage = () => {
 
             savePayment();
         }
-    }, [navigate]);
+    }, [navigate, bookings]);
 
     const handlePaymentMethodChange = (e) => {
         setSelectedPaymentMethod(e.target.value);
