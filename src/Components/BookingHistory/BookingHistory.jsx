@@ -27,12 +27,12 @@ const BookingHistory = () => {
             try {
                 const decodedToken = jwtDecode(token);
                 const userID = decodedToken.User.map.userID;  // Adjust if the structure is different
-                const response = await axios.get(`http://localhost:8080/booking/getAllById/${userID}`, {
+                const response = await axios.get(`http://localhost:8080/booking/getAllByUserId/${userID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setBookingHistory(response.data);
+                setBookingHistory(response.data);   
             } catch (error) {
                 console.error('Error fetching booking history:', error);
                 setError(error);
@@ -168,20 +168,145 @@ const BookingHistory = () => {
             </div>
             {selectedBooking && (
                 <div className="modal">
-                    <div className="modal-content">
-                        <span className="close-button" onClick={handleCloseModal}>&times;</span>
+                    <div className="custom-modal-content">
+                        <span className="custom-close-button" onClick={handleCloseModal}>&times;</span>
                         <h2>Booking History Details</h2>
                         {selectedBookingDetails.map((detail, index) => (
                             <React.Fragment key={detail.bookingDetailId}>
-                                <div className="booking-detail">
-                                    <p><strong>Booking Detail ID:</strong> {detail.bookingDetailId}</p>
-                                    <p><strong>Pet:</strong> {detail.pet.petName} - <strong>Pet Type:</strong> {detail.pet.petType}</p>
-                                    <p><strong>Service:</strong> {detail.services.name} - ${detail.services.price}</p>
-                                    <p><strong>Description:</strong> {detail.services.description}</p>
-                                    <p><strong>Need Cage:</strong> {detail.needCage ? 'Yes' : 'No'}</p>
-                                    <p><strong>Date:</strong> {new Date(detail.date).toLocaleDateString()}</p>
-                                    <p><strong>Slot:</strong> {detail.slot.slotId} - <strong>Start:</strong> {detail.slot.startTime}</p>
-                                </div>
+                                <table className="table-section">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="2">Booking Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table-field-name">Booking Detail ID:</td>
+                                            <td>{detail.bookingDetailId}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Need Cage:</td>
+                                            <td>{detail.needCage ? 'Yes' : 'No'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Date:</td>
+                                            <td>{new Date(detail.date).toLocaleDateString()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Booking ID:</td>
+                                            <td>{detail.booking.bookingId}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Booking Date:</td>
+                                            <td>{new Date(detail.booking.date).toLocaleDateString()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Status:</td>
+                                            <td>{detail.booking.status}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Total Price:</td>
+                                            <td>${detail.booking.totalPrice}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table className="table-section">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="2">Pet Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table-field-name">Pet Name:</td>
+                                            <td>{detail.pet.petName}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Pet Age:</td>
+                                            <td>{detail.pet.petAge}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Pet Gender:</td>
+                                            <td>{detail.pet.petGender}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Pet Type:</td>
+                                            <td>{detail.pet.petType}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Vaccination:</td>
+                                            <td>{detail.pet.vaccination}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table className="table-section">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="2">Owner Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table-field-name">Owner Name:</td>
+                                            <td>{detail.pet.user.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Email:</td>
+                                            <td>{detail.pet.user.email}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Phone:</td>
+                                            <td>{detail.pet.user.phone}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Address:</td>
+                                            <td>{detail.pet.user.address}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table className="table-section">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="2">Service Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table-field-name">Service Name:</td>
+                                            <td>{detail.services.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Price:</td>
+                                            <td>${detail.services.price}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Description:</td>
+                                            <td>{detail.services.description}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table className="table-section">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="2">Slot Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table-field-name">Start Time:</td>
+                                            <td>{detail.slot.startTime}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">End Time:</td>
+                                            <td>{detail.slot.endTime}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
                                 {index < selectedBookingDetails.length - 1 && <hr className="divider" />}
                             </React.Fragment>
                         ))}

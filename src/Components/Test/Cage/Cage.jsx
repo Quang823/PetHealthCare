@@ -4,34 +4,34 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { values } from 'lodash';
-const CageAdmin = () =>{
-  
-  const [cageType,setCageType] = useState('');
-  const handleInputChange = (event) =>{
+const CageAdmin = () => {
+
+  const [cageType, setCageType] = useState('');
+  const handleInputChange = (event) => {
     setCageType(event.target.value);
   }
-  const handleSubmit = async  (event) =>{
-    event.preventDefault(); 
-    try{
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
       const res = await axios.post("http://localhost:8080/cage/create",
         {
-          type :cageType
+          type: cageType
         }
       );
       toast.success("Add cage success")
-    }catch(err){
+    } catch (err) {
       toast.error('Failed to add cage')
     }
   }
-  return(
+  return (
     <>
-    <h1>Add Cage</h1>
+      <h1>Add Cage</h1>
       <form onSubmit={handleSubmit} className='formContainer'>
-       <lable>
-        Cage Type:
-        <input type='text' value={cageType} onChange={handleInputChange} />
-       </lable>
-       <button type="submit">Add Cage</button>
+        <lable>
+          Cage Type: "DOG/CAT"
+          <input type='text' value={cageType} onChange={handleInputChange} />
+        </lable>
+        <button type="submit">Add Cage</button>
       </form>
     </>
   )

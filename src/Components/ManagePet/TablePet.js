@@ -39,7 +39,7 @@ const TablePet = () => {
             fetchData(userIdFromToken);
         }
 
-    }, [newPet]);
+    }, [showForm]);
 
     const fetchData = async (userId) => {
         try {
@@ -232,7 +232,9 @@ const TablePet = () => {
                         value={newPet.petGender}
                         onChange={handleChange}
                     />
+
                     <select
+
                         name="petType"
                         value={newPet.petType}
                         onChange={handleChange}
@@ -284,7 +286,9 @@ const TablePet = () => {
                     value={newPet.petGender}
                     onChange={handleEditChange}
                 />
+
                <select
+
                         name="petType"
                         value={newPet.petType}
                         onChange={handleChange}

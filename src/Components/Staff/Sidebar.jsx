@@ -47,9 +47,13 @@ function Sidebar() {
           <i className='bi bi-house fs-5 me-3'></i>
           <span>Home</span>
         </NavLink>
-        <NavLink className='list-group-item py-2' to="/staff/addslot" >
+        <NavLink className='list-group-item py-2' to="/staff/addslotStaff" >
           <i className='bi bi-archive-fill me-3'></i>
           <span>Add Slot</span>
+        </NavLink>
+<NavLink className='list-group-item py-2' to="/staff/editslotStaff" >
+          <i className='bi bi-archive-fill me-3'></i>
+          <span>Edit Slot</span>
         </NavLink>
         <NavLink className='list-group-item py-2' to="/staff/bookingstaff" >
           <i className='bi bi-bag-fill fs-5 me-3'></i>

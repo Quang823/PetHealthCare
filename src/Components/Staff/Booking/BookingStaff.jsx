@@ -176,7 +176,7 @@ const BookingStaff = () => {
       try {
         const decodedToken = jwtDecode(token);
         const userID = decodedToken.User.map.userID;
-        const response = await axios.get(`http://localhost:8080/booking/getAllById/${userID}`, {
+        const response = await axios.get(`http://localhost:8080/booking/getAll`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

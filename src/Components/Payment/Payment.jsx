@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
 import {jwtDecode} from 'jwt-decode';
@@ -23,6 +23,7 @@ const PaymentPage = () => {
     const [billCode, setBillCode] = useState('');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const navigate = useNavigate();
+    const paymentSavedRef = useRef(false);
     const location = useLocation();
 
     useEffect(() => {
@@ -60,15 +61,52 @@ const PaymentPage = () => {
     }, []);
 
     useEffect(() => {
+        const savePayment = async (paymentDetails) => {
+            try {
+                const { responseCode, transactionNo, amount, bankCode, bankTranNo, cardType, vnpPayDate, orderInfo, txnRef } = paymentDetails;
+
+                if (responseCode === '00') {
+                    await axios.post(`http://localhost:8080/payment/save-payment`, null, {
+                        params: {
+                            transactionNo,
+                            amount,
+                            bankCode,
+                            bankTranNo,
+                            cardType,
+                            vnpPayDate,
+                            orderInfo,
+                            txnRef
+                        }
+                    });
+                    navigate('/payment-success');
+                } else {
+                    navigate('/payment-failure');
+                }
+            } catch (error) {
+                console.error('Error saving payment:', error);
+                navigate('/payment-failure');
+            }
+        };
+
         const urlParams = new URLSearchParams(window.location.search);
         const responseCode = urlParams.get('vnp_ResponseCode');
 
-        if (responseCode) {
-            if (responseCode === '00') {
-                navigate('/payment-success');
-            } else {
-                navigate('/payment-failure');
-            }
+        if (responseCode && !paymentSavedRef.current) {
+            paymentSavedRef.current = true;
+
+            const paymentDetails = {
+                responseCode,
+                transactionNo: parseInt(urlParams.get('vnp_TransactionNo'), 10),
+                amount: parseInt(urlParams.get('vnp_Amount'), 10),
+                bankCode: urlParams.get('vnp_BankCode'),
+                bankTranNo: urlParams.get('vnp_BankTranNo'),
+                cardType: urlParams.get('vnp_CardType'),
+                vnpPayDate: urlParams.get('vnp_PayDate'),
+                orderInfo: urlParams.get('vnp_OrderInfo'),
+                txnRef: parseInt(urlParams.get('vnp_TxnRef'), 10)
+            };
+
+            savePayment(paymentDetails);
         }
     }, [navigate]);
 
@@ -115,7 +153,11 @@ const PaymentPage = () => {
             console.log("Response from server:", bookingResponse);
 
             const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
-            const paymentResponse = await axios.get(`http://localhost:8080/payment/vn-pay?amount=${totalCost}&bookingId=${bookingResponse.data.data.bookingId}`, {
+            const paymentResponse = await axios.get(`http://localhost:8080/payment/vn-pay`, {
+                params: {
+                    amount: totalCost,
+                    bookingId: bookingResponse.data.data.bookingId
+                },
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -204,15 +246,7 @@ const PaymentPage = () => {
                         <h5>Booking details</h5>
                         <BookingDetail bookings={bookings} showDeleteButton={false} />
                     </div>
-                    <div className="payment-method">
-                        <h5>Payment Method:</h5>
-                        <select id="payment-method" onChange={handlePaymentMethodChange}>
-                            <option value="">Select a payment method</option>
-                            <option value="credit-card">Credit Card</option>
-                            <option value="paypal">PayPal</option>
-                            <option value="bank-transfer">Bank Transfer</option>
-                        </select>
-                    </div>
+
                     {renderPaymentMethodDetails()}
                     <div className="total-cost">
                         <p>Total Cost: ${totalCost.toFixed(2)}</p>
