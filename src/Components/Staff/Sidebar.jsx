@@ -34,11 +34,13 @@ function Sidebar() {
   return (
     <div className='bg-white sidebar p-2'>
       <div className='m-2'>
+
         <div className="logoDiv flex">
           <img src={v186_574} alt="Image Name" />
 
         </div>
         <span className='brand-name fs-4'>WELCOME <br />{userName}</span>
+
       </div>
       <hr className='text-dark' />
       <div className='list-group list-group-flush'>

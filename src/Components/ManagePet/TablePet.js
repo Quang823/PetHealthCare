@@ -232,7 +232,9 @@ const TablePet = () => {
                         value={newPet.petGender}
                         onChange={handleChange}
                     />
-                   <select
+
+                    <select
+
                         name="petType"
                         value={newPet.petType}
                         onChange={handleChange}
@@ -284,7 +286,9 @@ const TablePet = () => {
                     value={newPet.petGender}
                     onChange={handleEditChange}
                 />
-                <select
+
+               <select
+
                         name="petType"
                         value={newPet.petType}
                         onChange={handleChange}
