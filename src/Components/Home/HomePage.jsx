@@ -14,6 +14,7 @@ import img4 from "../../Assets/dat09.jpg";
 import img7 from "../../Assets/docho.jpg";
 import img8 from "../../Assets/embethucung.jpg";
 import img9 from "../../Assets/kysinh.png";
+
 import { FaHeart, FaPhone } from "react-icons/fa";
 import { UserContext } from '../../Context/UserContext';
 import { useContext, useEffect, useState } from 'react';
@@ -37,6 +38,7 @@ const HomePage = () => {
     const handleBooked = () => {
             navigate('/booking')
     }
+   
 
     useEffect(() => {
         const fetchService = async () => {

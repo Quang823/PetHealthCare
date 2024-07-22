@@ -232,13 +232,19 @@ const TablePet = () => {
                         value={newPet.petGender}
                         onChange={handleChange}
                     />
-                    <input
-                        type="text"
+                    <select
                         name="petType"
-                        placeholder="Pet Type"
                         value={newPet.petType}
                         onChange={handleChange}
-                    />
+                    >
+                        <option value="">Select Pet Type</option>
+                        <option value="DOG">DOG</option>
+                        <option value="CAT">CAT</option>
+                        <option value="CHICKEN">CHICKEN</option>
+                        <option value="MOUSE">MOUSE</option>
+                        <option value="BIRD">BIRD</option>
+                        <option value="HAMSTER">HAMSTER</option>
+                    </select>
                     <input
                         type="text"
                         name="vaccination"
@@ -278,13 +284,19 @@ const TablePet = () => {
                     value={newPet.petGender}
                     onChange={handleEditChange}
                 />
-                <input
-                    type="text"
-                    name="petType"
-                    placeholder="Pet Type"
-                    value={newPet.petType}
-                    onChange={handleEditChange}
-                />
+               <select
+                        name="petType"
+                        value={newPet.petType}
+                        onChange={handleChange}
+                    >
+                        <option value="">Select Pet Type</option>
+                        <option value="DOG">DOG</option>
+                        <option value="CAT">CAT</option>
+                        <option value="CHICKEN">CHICKEN</option>
+                        <option value="MOUSE">MOUSE</option>
+                        <option value="BIRD">BIRD</option>
+                        <option value="HAMSTER">HAMSTER</option>
+                    </select>
                 <input
                     type="text"
                     name="vaccination"

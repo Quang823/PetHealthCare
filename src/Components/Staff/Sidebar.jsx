@@ -38,7 +38,8 @@ function Sidebar() {
                 <img src={v186_574} alt="Image Name" />
            
             </div>
-        <span className='brand-name fs-4'>WELCOME {userName}</span>
+        <span className="">WELCOME <br/>
+        {userName}</span>
       </div>
       <hr className='text-dark' />
       <div className='list-group list-group-flush'>
