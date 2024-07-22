@@ -8,7 +8,7 @@ import video from '../../Assets/7515875-hd_1080_1920_30fps.mp4';
 import { loginApi } from '../../Service/UserService';
 import { toast } from "react-toastify";
 import { UserContext } from "../../Context/UserContext";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
@@ -147,9 +147,9 @@ const LoginForm = () => {
                             {passwordError && <p className="errors-messagess">{passwordError}</p>}
                         </div>
                         <div className="remember-forgot">
-                            <label>
+                            {/* <label>
                                 <input type="checkbox" /> Remember me
-                            </label>
+                            </label> */}
                             <p className="forgot-password-link" onClick={handleForgotPassword}>
                                 Forgot Password?
                             </p>
