@@ -112,7 +112,10 @@ const Header = (props) => {
                                         </NavDropdown.Item>
                                     </>
                                 ) : (
-                                    <NavLink to="/login" className="dropdown-item">Login</NavLink>
+                                    <>
+                                        <NavLink to="/login" className="dropdown-item">Login</NavLink>
+                                        <NavLink to="/register" className="dropdown-item">Register</NavLink>
+                                    </>
                                 )}
                             </NavDropdown>
                         </Nav>
