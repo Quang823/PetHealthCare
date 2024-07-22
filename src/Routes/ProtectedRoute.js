@@ -14,6 +14,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
   if (!user || !user.auth) {
     toast.error("You must login ");
+    localStorage.removeItem('token');
     console.log("User not authenticated, redirecting to login");
     return <Navigate to="/login" replace />;
    
@@ -23,6 +24,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
   if (allowedRoles.includes(user.role)) {
     return <Outlet />;
   } else {
+    localStorage.removeItem('token');
     return <Navigate to="/unauthorized" replace />;
   }
 };
