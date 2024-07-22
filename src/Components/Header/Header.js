@@ -87,6 +87,7 @@ const Header = (props) => {
                                     <NavLink to="/pets" className="nav-link">Manage Pet</NavLink>
                                     <NavLink to="/booking" className="nav-link">Booking</NavLink>
                                     <NavLink to="/contact" className="nav-link">Contact</NavLink>
+                                    <NavLink to="/feedback" className="nav-link">Feedback</NavLink>
 
                                 </>
                             )}
@@ -111,7 +112,10 @@ const Header = (props) => {
                                         </NavDropdown.Item>
                                     </>
                                 ) : (
-                                    <NavLink to="/login" className="dropdown-item">Login</NavLink>
+                                    <>
+                                        <NavLink to="/login" className="dropdown-item">Login</NavLink>
+                                        <NavLink to="/register" className="dropdown-item">Register</NavLink>
+                                    </>
                                 )}
                             </NavDropdown>
                         </Nav>

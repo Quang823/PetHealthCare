@@ -285,6 +285,8 @@ const TablePet = () => {
                     </select>
                     {validationMessages.petGender && <p className="errorss-messages">{validationMessages.petGender}</p>}
                     
+             
+
                     <select
                         name="petType"
                         value={newPet.petType}

@@ -51,12 +51,12 @@ const SideBar = () => {
                             <span className="smallText">User</span>
                         </NavLink>
                     </li>
-                    {/* <li className="listItem">
-                        <NavLink to="/testadmin/addCage" className="menuLink flex">
+                    <li className="listItem">
+                        <NavLink to="/testadmin/addUser" className="menuLink flex">
                             <GiBirdCage  className="icon" />
-                            <span className="smallText">Add cage</span>
+                            <span className="smallText">Add User</span>
                         </NavLink>
-                    </li> */}
+                    </li>
                     <li className="listItem">
                         <NavLink to="/" className="menuLink flex" onClick={handleLogout}>
                             <CiLogout className="icon" />

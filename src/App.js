@@ -27,6 +27,8 @@ import TestAdmin from './Components/Test/TestAdmin';
 import Body from './Components/Test/Body/Body';
 import CageAdmin from './Components/Test/Cage/Cage';
 import AddCageStaff from './Components/Staff/Cage/AddCageStaff';
+import AddUser from './Components/Test/AddUser/AddUser';
+
 
 
 function App() {
@@ -43,6 +45,7 @@ function App() {
     <>
       <div className='app-container'>
         <Routes>
+       
           {/* Routes for customer */}
           <Route path="/*" element={<AppRoute />} />
           {/* Routes for testAdmin */}
@@ -50,6 +53,7 @@ function App() {
             <Route path="testadminUser" element={<UserATest />} />
             <Route path="servicePet" element={<ServicePet />} />
             <Route path="dashboard" element={<Body />} />
+            <Route path="addUser" element={<AddUser />} />
             {/* <Route path="addCage" element={<CageAdmin />} /> */}
           
           </Route>

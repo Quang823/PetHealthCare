@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';  // Ensure correct import without destructuring
+import { jwtDecode } from 'jwt-decode';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './BookingHistory.scss';
@@ -32,7 +32,7 @@ const BookingHistory = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setBookingHistory(response.data);   
+                setBookingHistory(response.data);
             } catch (error) {
                 console.error('Error fetching booking history:', error);
                 setError(error);
@@ -84,6 +84,25 @@ const BookingHistory = () => {
         setSelectedBooking(null);
         setSelectedBookingDetails([]);
     };
+
+    const handleCancelBookingDetail = async (bookingDetailId) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/bookingDetail/cancelBookingDetail/${bookingDetailId}`);
+            if (response.data.status === "WAITING") {
+                alert('Booking detail canceled successfully!');
+                // Optionally, refresh the booking details or booking history
+                if (selectedBooking) {
+                    handleBookingClick(selectedBooking);
+                }
+            } else {
+                alert('Failed to cancel booking detail: ' + response.data.message);
+            }
+        } catch (error) {
+            console.error('Error canceling booking detail:', error);
+            alert('Failed to cancel booking detail.');
+        }
+    };
+
 
     const filteredData = bookingHistory.filter((booking) => {
         const bookingDate = booking.date ?? '';
@@ -137,7 +156,7 @@ const BookingHistory = () => {
             <div className="timetable">
                 <div className="timetable-header">
                     <div className="timetable-header-item">Date</div>
-                    <div className="timetable-header-item">Time</div>
+
                     <div className="timetable-header-item">Booking ID</div>
                     <div className="timetable-header-item">Status</div>
                     <div className="timetable-header-item">Total Price</div>
@@ -147,7 +166,6 @@ const BookingHistory = () => {
                     const formattedDate = date.toLocaleDateString();
                     const formattedTime = date.toLocaleTimeString();
 
-                    // Định nghĩa class cho status tương ứng
                     const statusClass = `timetable-item status ${booking.status.toLowerCase()}`;
                     const statusColor = booking.status.toLowerCase() === 'confirmed' ? 'green' : booking.status.toLowerCase() === 'paid' ? 'red' : '';
 
@@ -158,7 +176,7 @@ const BookingHistory = () => {
                             onClick={() => handleBookingClick(booking)}
                         >
                             <div className="timetable-item">{formattedDate}</div>
-                            <div className="timetable-item">{formattedTime}</div>
+
                             <div className="timetable-item">{booking.bookingId}</div>
                             <div className={`${statusClass} ${statusColor}`}>{booking.status}</div>
                             <div className="timetable-item">${booking.totalPrice}</div>
@@ -306,6 +324,10 @@ const BookingHistory = () => {
                                         </tr>
                                     </tbody>
                                 </table>
+
+                                <button className="cancel-button" onClick={() => handleCancelBookingDetail(detail.bookingDetailId)}>
+                                    Cancel Booking Detail
+                                </button>
 
                                 {index < selectedBookingDetails.length - 1 && <hr className="divider" />}
                             </React.Fragment>
