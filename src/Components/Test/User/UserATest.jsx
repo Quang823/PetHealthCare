@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import './UserATest.scss';
@@ -65,8 +64,21 @@ function UserATest() {
             });
     };
 
-    const handleDelete = (userID) => {
-        // Add functionality for deleting a user
+    const handleDelete = (userId) => {
+        const userToDelete = users.find(user => user.userId === userId);
+        if (userToDelete.role === 'Admin') {
+            toast.error('Cannot delete admin user');
+            return;
+        }
+        axios.delete(`http://localhost:8080/account/delete/${userId}`)
+            .then(() => {
+                setUsers(users.filter(user => user.userId !== userId));
+                toast.success("Delete success");
+            })
+            .catch(err => {
+                console.log(err);
+                toast.error("Failed to delete");
+            });
     };
 
     const handleChange = (e) => {
@@ -78,11 +90,10 @@ function UserATest() {
 
     return (
         <>
-
             <div className="container">
                 <div className='hehe'>
                     <h2 className="my-4">Customer List</h2>
-                    {/* <button className="back-button" onClick={handleBack}>Back</button> */}
+                    <button className="back-button" onClick={handleBack}>Back</button>
                 </div>
                 <table className="table table-striped">
                     <thead>
@@ -103,8 +114,8 @@ function UserATest() {
                                 <td>{user.address}</td>
                                 <td>{user.role}</td>
                                 <td>
-                                    <button className="edit-button" onClick={() => handleEdit(user)}>Edit</button>
-                                    <button className="delete-button" onClick={() => handleDelete(user.id)}>Delete</button>
+                                    {/* <button className="edit-button" onClick={() => handleEdit(user)}>Edit</button> */}
+                                    <button className="delete-button" onClick={() => handleDelete(user.userId)}>Delete</button>
                                 </td>
                             </tr>
                         ))}

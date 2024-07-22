@@ -1,5 +1,5 @@
 import './SideBar.scss';
-import React from 'react';
+import React, { useContext } from 'react';
 import { MdOutlinePets } from "react-icons/md";
 import { IoMdSpeedometer } from "react-icons/io";
 import v186_574 from '../../../Assets/v186_574.png';
@@ -14,11 +14,15 @@ import { MdDashboard } from "react-icons/md";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { CiLogout } from "react-icons/ci";
 import { GiBirdCage } from "react-icons/gi";
+import { UserContext } from '../../../Context/UserContext';
+import { toast } from 'react-toastify';
 const SideBar = () => {
+    const { logout, user } = useContext(UserContext);
     const navigate = useNavigate();
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        logout();
         navigate("/");
+        toast.success("Sucess")
     }
     const contact = () =>{
         navigate("/contact")

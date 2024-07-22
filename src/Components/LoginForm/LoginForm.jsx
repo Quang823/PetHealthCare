@@ -69,6 +69,7 @@ const LoginForm = () => {
                 const role = decodedToken.User.map.role;
                 loginContext(email, token, role); // store login info
 
+
                 if (role === "Admin") {
                     navigate('/testadmin/dashboard'); // admin page
                 } else if (role === "Customer") {

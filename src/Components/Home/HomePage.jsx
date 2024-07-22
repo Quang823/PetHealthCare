@@ -188,7 +188,7 @@ const HomePage = () => {
                         {veterinarians.map(vet => (
                             <Col md={4} key={vet.userId}>
                                 <div className="serviceBox">
-                                    <img src={img4} alt={`Veterinarian: ${vet.name}`} className="vetImage" />
+                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" />
                                     <h4> Veterinarian:  {vet.name}</h4>
                                     <button  onClick={handleBooked}>Book</button>
                                 </div>

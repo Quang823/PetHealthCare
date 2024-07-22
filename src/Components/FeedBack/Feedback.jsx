@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Rating from 'react-rating-stars-component';
 import './Feedback.scss';
+import { toast } from 'react-toastify';
 
 const Feedback = () => {
   const [bookings, setBookings] = useState([]);
@@ -14,7 +15,7 @@ const Feedback = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/bookingDetail/getAllById/${userID}`);
+        const response = await axios.get(`http://localhost:8080/bookingDetail/getBookingDetailByCusIdStatus/${userID}`);
         setBookings(response.data);
       } catch (error) {
         console.error('Error fetching bookings:', error);
@@ -27,7 +28,7 @@ const Feedback = () => {
   const handleFeedback = async () => {
     const feedback = {
       rating: rating.toString(),
-      feedbackContent
+      feedbackContent,
     };
 
     try {
@@ -36,14 +37,20 @@ const Feedback = () => {
       setShowModal(false);
       setRating(0);
       setFeedbackContent('');
-     
-      setBookings((prevBookings) => 
-        prevBookings.map((booking) => 
-          booking.bookingDetailId === selectedBookingId ? { ...booking, feedback } : booking
+      
+      setBookings((prevBookings) =>
+        prevBookings.map((booking) =>
+          booking.bookingDetailId === selectedBookingId
+            ? { ...booking, feedback: { rating: feedback.rating, feedbackContent: feedback.feedbackContent } }
+            : booking,
+            toast.success("Feedback success")
         )
+        
       );
     } catch (error) {
+      toast.error("Cannot feedback")
       console.error('Error submitting feedback:', error);
+     
     }
   };
 
@@ -59,31 +66,28 @@ const Feedback = () => {
   };
 
   return (
-    <div className='feedbac'>
-      <h1>Booking History</h1>
+    <div className='feedback'>
+      <h1>Booking Detail History</h1>
       <table className="booking-table">
         <thead>
           <tr>
-            <th>Need Cage</th>
+            
             <th>Date</th>
             <th>Pet Name</th>
-            <th>Pet Age</th>
-            <th>Pet Gender</th>
-            <th>Pet Type</th>
-            <th>Vaccination</th>
+            <th>Service</th>
+           
+            <th>Total Price</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {bookings.map((booking, index) => (
             <tr key={index}>
-              <td>{booking.needCage ? 'Yes' : 'No'}</td>
+              
               <td>{booking.date}</td>
               <td>{booking.pet.petName}</td>
-              <td>{booking.pet.petAge}</td>
-              <td>{booking.pet.petGender}</td>
-              <td>{booking.pet.petType}</td>
-              <td>{booking.pet.vaccination}</td>
+              <td>{booking.services.name}</td>
+              <td>{booking.booking.totalPrice}</td>
               <td>
                 {booking.feedback ? (
                   <div>

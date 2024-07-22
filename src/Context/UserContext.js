@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 // @function  UserContext
-const UserContext = React.createContext({ name: '', auth: false });
+const UserContext = React.createContext({ name: '', auth: false, role: '' });
 
 // @function  UserProvider
 // Create function to provide UserContext
@@ -18,6 +18,7 @@ const UserProvider = ({ children }) => {
             name: decodedToken.User.map.name,
             email: decodedToken.User.map.email,
             auth: true,
+            role: decodedToken.User.map.role, 
           });
         }
       } catch (error) {
@@ -25,10 +26,11 @@ const UserProvider = ({ children }) => {
       }
     }
   }, []);
-  const loginContext = (email, token) => {
+  const loginContext = (email, token,role) => {
     setUser((user) => ({
       email: email,
       auth: true,
+      role: role,
     }));
 
     localStorage.setItem("token", token);
@@ -36,17 +38,8 @@ const UserProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("data");
-    localStorage.removeItem("user");
-    localStorage.removeItem("bookedInfo");
-    localStorage.removeItem("selectedDate");
-    localStorage.removeItem("bookedSlots");
-    setUser((user) => ({
-      email: '',
-      auth: false,
-    }));
+    localStorage.clear();
+    setUser({ name: '', email: '', role: '', auth: false });
   };
 
   return (
