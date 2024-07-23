@@ -7,9 +7,9 @@ const DoctorLayout = () => {
     return (
         <>
             <Routes>
-                <Route path='/doctor' element={<Doctor />} />
-                <Route path='/scheduleDoctor' element={<Schedule />} />
-                <Route path='/examineDoctor' element={<VetExaminationForm />} />
+                <Route path='/doctor/*' element={<Doctor />} />
+                <Route path='scheduleDoctor' element={<Schedule />} />
+                <Route path='examineDoctor' element={<VetExaminationForm />} />
             </Routes>
         </>
     )

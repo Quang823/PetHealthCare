@@ -30,7 +30,10 @@ import AddCageStaff from './Components/Staff/Cage/AddCageStaff';
 import AddUser from './Components/Test/AddUser/AddUser';
 import ProtectedRoute from './Routes/ProtectedRoute';
 import Unauthorized from './Routes/Unauthorized';
-import PetBoarding from './Components/Doctors/Schedule/PetBoarding';
+
+import Home from './Components/Doctors/Home';
+import RefundStaff from './Components/Staff/Refund/RefundStaff';
+
 
 
 
@@ -66,19 +69,24 @@ function App() {
             <Route path='/staff/*' element={<StaffLayout />}>
               <Route path="bookingstaff" element={<BookingStaff />} />
               <Route path="cagestaff" element={<Cage />} />
+              <Route path="editslotStaff" element={<EditSlot />} />
               <Route path="addslot" element={<AddSlot />} />
               <Route path="bkneedCage" element={<BKNeedCage />} />
+              <Route path="refundStaff" element={<RefundStaff />} />
               <Route path="addCageStaff" element={<AddCageStaff />} />
             </Route>
           </Route>
 
           {/* Protected routes for doctor */}
-          <Route>
-            <Route path='/doctor' element={<Doctor />} />
-            <Route path='/scheduleDoctor' element={<Schedule />} />
-            <Route path='/examineDoctor' element={<VetExaminationForm />} />
-            <Route path='/bkneedCage' element={<BKNeedCage/>} />
-            <Route path='/PetBoarding' element={<PetBoarding/>} />
+
+          <Route  >
+          {/* <Route element={<ProtectedRoute allowedRoles={['Veterinarian']} />}> */}
+            <Route path='/doctor/*' element={<Doctor />} />
+            <Route path='scheduleDoctor' element={<Schedule />} />
+            <Route path='home' element={<Home />} />
+            <Route path='examineDoctor' element={<VetExaminationForm />} />
+            
+
           </Route>
 
           {/* Unauthorized route */}
