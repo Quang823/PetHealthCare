@@ -95,7 +95,7 @@ const Feedback = () => {
                     <p>Feedback: {booking.feedback.feedbackContent}</p>
                   </div>
                 ) : (
-                  <button onClick={() => openModal(booking.bookingDetailId)}>Submit Feedback</button>
+<button onClick={() => openModal(booking.bookingDetailId)}>Submit Feedback</button>
                 )}
               </td>
             </tr>

@@ -24,6 +24,11 @@ function Sidebar() {
           <i className='bi bi-house fs-5 me-3'></i>
           <span>Home</span>
         </a>
+
+        <a className='list-group-item py-2' href="PetBoarding">
+          <i className='bi bi-house fs-5 me-3'></i>
+          <span>Pet Boarding</span>
+        </a>
         
         
         

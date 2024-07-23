@@ -218,7 +218,7 @@ const PaymentPage = () => {
                     </div>
                 );
             default:
-                return <p>Please select a payment method.</p>;
+                return ;
         }
     };
 

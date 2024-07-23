@@ -296,7 +296,6 @@ const TablePet = () => {
                         <option value="DOG">DOG</option>
                         <option value="CAT">CAT</option>
                         <option value="CHICKEN">CHICKEN</option>
-                        <option value="MOUSE">MOUSE</option>
                         <option value="BIRD">BIRD</option>
                         <option value="HAMSTER">HAMSTER</option>
                     </select>
