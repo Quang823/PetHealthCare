@@ -30,8 +30,10 @@ import AddCageStaff from './Components/Staff/Cage/AddCageStaff';
 import AddUser from './Components/Test/AddUser/AddUser';
 import ProtectedRoute from './Routes/ProtectedRoute';
 import Unauthorized from './Routes/Unauthorized';
+
 import Home from './Components/Doctors/Home';
 import RefundStaff from './Components/Staff/Refund/RefundStaff';
+
 
 
 
@@ -76,6 +78,7 @@ function App() {
           </Route>
 
           {/* Protected routes for doctor */}
+
           <Route  >
           {/* <Route element={<ProtectedRoute allowedRoles={['Veterinarian']} />}> */}
             <Route path='/doctor/*' element={<Doctor />} />
@@ -83,6 +86,7 @@ function App() {
             <Route path='home' element={<Home />} />
             <Route path='examineDoctor' element={<VetExaminationForm />} />
             
+
           </Route>
 
           {/* Unauthorized route */}

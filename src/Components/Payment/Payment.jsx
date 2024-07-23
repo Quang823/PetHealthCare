@@ -218,7 +218,7 @@ const token = localStorage.getItem('token');
                     </div>
                 );
             default:
-                return <p>Please select a payment method.</p>;
+                return ;
         }
     };
 
