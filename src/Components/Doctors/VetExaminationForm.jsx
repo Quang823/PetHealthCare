@@ -4,10 +4,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate, useLocation } from 'react-router-dom';
+import './VetExaminationForm.scss'; // Import the new CSS file
 
 function VetExaminationForm() {
     const [treatmentResult, setTreatmentResult] = useState('');
-    const [dateMedical, setDateMedical] = useState(new Date());
+    const [dateMedical, setDateMedical] = useState(new Date()); // Initialize with today's date
     const [veterinaryName, setVeterinaryName] = useState('');
     const [needCage, setNeedCage] = useState(false);
     const navigate = useNavigate();
@@ -81,49 +82,50 @@ function VetExaminationForm() {
     };
 
     return (
-        <div className="container">
-            <h1>Doctor Examination</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Veterinary Name</label>
+        <div className="vet-exam-container">
+            <h1 className="vet-exam-header">Doctor Examination</h1>
+            <form onSubmit={handleSubmit} className="vet-exam-form">
+                <div className="vet-exam-form-group">
+                    <label className="vet-exam-label">Veterinary Name</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className="vet-exam-input"
                         value={veterinaryName}
                         readOnly
                     />
                 </div>
-                <div className="form-group">
-                    <label>Treatment Result</label>
+                <div className="vet-exam-form-group">
+                    <label className="vet-exam-label">Treatment Result</label>
                     <input
                         type="text"
-                        className="form-control"
+                        className="vet-exam-input"
                         value={treatmentResult}
                         onChange={(e) => setTreatmentResult(e.target.value)}
                         required
+                        placeholder="Enter the treatment result"
                     />
                 </div>
-                <div className="form-group">
-                    <label>Date Medical</label>
+                <div className="vet-exam-form-group">
+                    <label className="vet-exam-label">Date Medical</label>
                     <DatePicker
                         selected={dateMedical}
                         onChange={(date) => setDateMedical(date)}
-                        minDate={new Date()}
                         dateFormat="dd MMMM yyyy"
-                        className="form-control"
+                        className="vet-exam-datepicker"
+                        disabled // Disable the date picker
                     />
                 </div>
-                <div className="form-group form-check">
+                <div className="vet-exam-form-group vet-exam-form-check">
                     <input
                         type="checkbox"
-                        className="form-check-input"
+                        className="vet-exam-checkbox"
                         id="needCage"
                         checked={needCage}
                         onChange={(e) => setNeedCage(e.target.checked)}
                     />
-                    <label className="form-check-label" htmlFor="needCage">Need Cage</label>
+                    <label className="vet-exam-checkbox-label" htmlFor="needCage">Need Cage</label>
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="vet-exam-button">
                     Submit
                 </button>
             </form>

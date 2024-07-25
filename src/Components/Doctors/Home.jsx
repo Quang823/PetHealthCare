@@ -72,7 +72,7 @@ function Home({ Toggle }) {
 
     const filteredBookingDetails = bookingDetails.filter(b => {
         const bookingDate = new Date(b.date);
-        return bookingDate.toDateString() === selectedDate.toDateString() && (b.booking.status === 'Confirmed' || b.booking.status === 'Examining' || b.booking.status === 'Completed');
+        return bookingDate.toDateString() === selectedDate.toDateString();
     });
 
     const formatDate = (dateString) => {
@@ -84,9 +84,9 @@ function Home({ Toggle }) {
         return { formattedDate, formattedTime };
     };
 
-    const isPastDate = (date) => {
+    const isToday = (date) => {
         const today = new Date();
-        return date < today.setHours(0, 0, 0, 0);
+        return date.toDateString() === today.toDateString();
     };
 
     const getStatusClass = (status) => {
@@ -158,7 +158,7 @@ function Home({ Toggle }) {
                                                         <button
                                                             className="bttn btn-primary"
                                                             onClick={() => handleExamine(detail)}
-                                                            disabled={isPastDate(bookingDate) || detail.status === 'Completed'}
+                                                            disabled={!isToday(bookingDate) || detail.status === 'Completed'}
                                                         >
                                                             <FaStethoscope className='icoon' /> Examine
                                                         </button>
@@ -175,7 +175,7 @@ function Home({ Toggle }) {
                                     ) : (
                                         <tr>
                                             <td colSpan="8" className="no-bookings-message">
-                                                No confirmed bookings for the selected date.
+                                                No bookings for the selected date.
                                             </td>
                                         </tr>
                                     )}
