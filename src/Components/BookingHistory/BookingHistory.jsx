@@ -220,7 +220,7 @@ const BookingHistory = () => {
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Status:</td>
-                                            <td>{detail.booking.status}</td>
+                                            <td>{detail.status}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Total Price:</td>
