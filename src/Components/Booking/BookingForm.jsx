@@ -36,11 +36,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
             try {
                 if (userID) {
                     const response = await axios.get(`http://localhost:8080/pet/getAll/${userID}`);
-                    if (response.data && Array.isArray(response.data)) {
-                        setPets(response.data);
-                    } else {
-                        setPets([]);
-                    }
+                    setPets(response.data && Array.isArray(response.data) ? response.data : []);
                 }
             } catch (error) {
                 setPets([]);
@@ -48,11 +44,16 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         };
 
         const fetchData = async () => {
-            const servicesData = await axios.get(`http://localhost:8080/Service/getAll`);
-            setServices(Array.isArray(servicesData.data) ? servicesData.data : []);
+            try {
+                const servicesData = await axios.get(`http://localhost:8080/Service/getAll`);
+                setServices(Array.isArray(servicesData.data) ? servicesData.data : []);
 
-            const doctorsData = await axios.get(`http://localhost:8080/account/getVeterinarian`);
-            setDoctors(Array.isArray(doctorsData.data) ? doctorsData.data : []);
+                const doctorsData = await axios.get(`http://localhost:8080/account/getVeterinarian`);
+                setDoctors(Array.isArray(doctorsData.data) ? doctorsData.data : []);
+            } catch (error) {
+                setServices([]);
+                setDoctors([]);
+            }
         };
 
         if (userID) {
@@ -66,17 +67,21 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
             const selectedDoctorDetail = doctors.find(doctor => doctor.name === selectedDoctor);
             if (selectedDoctor && selectedDate) {
                 const formattedDate = selectedDate.toISOString().split('T')[0];
-                const slotsData = await axios.post(`http://localhost:8080/sev-slot/slot-available`, {
-                    userId: selectedDoctorDetail.userId,
-                    date: formattedDate
-                });
-                setSlots(Array.isArray(slotsData.data) ? slotsData.data : []);
+                try {
+                    const slotsData = await axios.post(`http://localhost:8080/sev-slot/slot-available`, {
+                        userId: selectedDoctorDetail.userId,
+                        date: formattedDate
+                    });
+                    setSlots(Array.isArray(slotsData.data) ? slotsData.data : []);
+                } catch (error) {
+                    setSlots([]);
+                }
             } else {
                 setSlots([]); // Clear slots if no doctor is selected
             }
         };
         fetchSlots();
-    }, [selectedDoctor, selectedDate]);
+    }, [selectedDoctor, selectedDate, doctors]);
 
     useEffect(() => {
         const service = services.find(s => s.name === selectedService);
@@ -106,19 +111,27 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
             date: selectedDate.toLocaleDateString('en-CA') // Formats date as YYYY-MM-DD
         };
 
-        // Store booking information and selected date in localStorage
-        localStorage.setItem('bookedInfo', JSON.stringify([newBooking]));
-        localStorage.setItem('selectedDate', selectedDate.toLocaleDateString('en-CA'));
+        try {
+            // Simulate booking API call
+            // const response = await axios.post('http://localhost:8080/book-appointment', newBooking);
 
-        // Call onBookingComplete and pass newBooking object
-        onBookingComplete(newBooking);
+            // Assume booking is successful
+            const response = { status: 200 };
 
-        // Reset form
-        setSelectedPet('');
-        setSelectedService('');
-        setSelectedDoctor('');
-        setSelectedSlot('');
-        setTotalCost(0);
+            if (response.status === 200) {
+                onBookingComplete(newBooking);
+
+                setSelectedPet('');
+                setSelectedService('');
+                setSelectedDoctor('');
+                setSelectedSlot('');
+                setTotalCost(0);
+            } else {
+                throw new Error('Booking failed');
+            }
+        } catch (error) {
+            toast.error('Booking failed: ' + error.message);
+        }
     };
 
     const handleDateChange = (date) => {
@@ -137,25 +150,9 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         setSelectedSlot(slotId);
     };
 
-    // const filterSlots = (slots) => {
-    //     const now = new Date();
-    //     const today = new Date();
-    //     today.setHours(0, 0, 0, 0);
-    //     const currentHour = now.getHours();
-    //     console.log("curHour", currentHour);
-
-    //     return slots.filter(slot => {
-    //         const slotHour = parseInt(slot.slot.startTime.split(':')[0], 10);
-    //         console.log("slotHour", slotHour);
-    //         return  slotHour > currentHour;
-    //     });
-    // };
     const filterSlots = (slots) => {
         const now = new Date();
         const currentHour = now.getHours();
-
-        console.log("currentHour", currentHour);
-        console.log("selectedDate", selectedDate);
 
         const isSameDay = (date1, date2) => {
             return (
@@ -168,7 +165,6 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         if (isSameDay(selectedDate, now)) {
             return slots.filter(slot => {
                 const slotHour = parseInt(slot.slot.startTime.split(':')[0], 10);
-                console.log("slotHour", slotHour);
                 return slotHour > currentHour;
             });
         } else {
@@ -176,82 +172,82 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         }
     };
 
-
     return (
-        <div>
-            <div className="booking-container">
-                <h3>Book an Appointment</h3>
-                <form>
-                    <label>
-                        Select Date:
-                        <DatePicker
-                            selected={selectedDate}
-                            onChange={handleDateChange}
-                            minDate={new Date()}
-                            filterDate={validateDate}
-                            dateFormat="yyyy-MM-dd"
-                        />
-                    </label>
-                    <label>
-                        Select Pet:
-                        <select value={selectedPet} onChange={(e) => setSelectedPet(e.target.value)}>
-                            <option value="">Select Pet</option>
-                            {pets.map((pet) => (
-                                <option key={pet.petName} value={pet.petName}>
-                                    {pet.petName}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                    <label>
-                        Select Service:
-                        <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
-                            <option value="">Select Service</option>
-                            {services.map((service) => (
-                                <option key={service.name} value={service.name}>
-                                    {service.name} - ${service.price}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                    <label>
-                        Select Doctor:
-                        <select value={selectedDoctor} onChange={(e) => setSelectedDoctor(e.target.value)}>
-                            <option value="">Select Doctor</option>
-                            {doctors.map((doctor) => (
-                                <option key={doctor.name} value={doctor.name}>
-                                    {doctor.name}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                    <label>
-                        Select Slot:
-                        <div className="slots-grid">
-                            {filterSlots(slots).filter(slot => !bookedSlots[selectedDoctor]?.includes(slot.slot.slotId.toString())).map((slot) => {
-                                return (
-                                    <button
-                                        key={slot.slot.slotId}
-                                        className={`slot-button ${selectedSlot === slot.slot.slotId ? 'selected' : ''}`}
-                                        onClick={(e) => handleSlotSelection(e, slot.slot.slotId)}
-                                    >
-                                        Slot: {slot.slot.slotId}-{slot.slot.startTime}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </label>
-                    <button type="button" onClick={handleBooking}>Book Appointment</button>
-                </form>
-                <div className="booking-total-cost">Total Cost: ${totalCost.toFixed(2)}</div>
-            </div>
+        <div className="booking-container">
+            <h3>Book an Appointment</h3>
+            <form>
+                <label>
+                    Select Date:
+                    <DatePicker
+                        selected={selectedDate}
+                        onChange={handleDateChange}
+                        minDate={new Date()}
+                        filterDate={validateDate}
+                        dateFormat="yyyy-MM-dd"
+                    />
+                </label>
+                <label>
+                    Select Pet:
+                    <select value={selectedPet} onChange={(e) => setSelectedPet(e.target.value)}>
+                        <option value="">Select Pet</option>
+                        {pets.map((pet) => (
+                            <option key={pet.petName} value={pet.petName}>
+                                {pet.petName}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    Select Service:
+                    <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
+                        <option value="">Select Service</option>
+                        {services.map((service) => (
+                            <option key={service.name} value={service.name}>
+                                {service.name} - ${service.price}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    Select Doctor:
+                    <select value={selectedDoctor} onChange={(e) => setSelectedDoctor(e.target.value)}>
+                        <option value="">Select Doctor</option>
+                        {doctors.map((doctor) => (
+                            <option key={doctor.name} value={doctor.name}>
+                                {doctor.name}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+                <label>
+                    Select Slot:
+                    <div className="slots-grid">
+                        {filterSlots(slots).map((slot) => {
+                            const doctorSlots = bookedSlots[selectedDoctor] || [];
+                            const isBooked = doctorSlots.some(
+                                bookedSlot => bookedSlot.slotId === slot.slot.slotId &&
+                                    bookedSlot.date === selectedDate.toLocaleDateString('en-CA')
+                            );
+                            return (
+                                <button
+                                    key={slot.slot.slotId}
+                                    className={`slot-button ${selectedSlot === slot.slot.slotId ? 'selected' : ''} ${isBooked ? 'disabled' : ''}`}
+                                    onClick={(e) => !isBooked && handleSlotSelection(e, slot.slot.slotId)}
+                                    disabled={isBooked}
+                                >
+                                    Slot {slot.slot.slotId}: {slot.slot.startTime}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </label>
+                <label>
+                    Total Cost: ${totalCost}
+                </label>
+                <button type="button" onClick={handleBooking}>Book Appointment</button>
+            </form>
         </div>
     );
 };
-
-
-
-
-
 
 export default BookingForm;

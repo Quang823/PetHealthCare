@@ -52,7 +52,7 @@ const RegisterForm = () => {
         setEmailError(isValid ? "" : "Invalid email format");
         setIsEmailValid(isValid);
     };
-    
+
     const handlePasswordChange = (event) => {
         const value = event.target.value;
         setPassword(value);
@@ -60,7 +60,7 @@ const RegisterForm = () => {
         setPasswordError(isValid ? "" : "Password must be at least 6 characters");
         setIsPasswordValid(isValid);
     };
-    
+
     const handlePhoneChange = (event) => {
         const value = event.target.value;
         setPhone(value);
@@ -68,7 +68,7 @@ const RegisterForm = () => {
         setPhoneError(isValid ? "" : "Phone number must be exactly 10 digits");
         setIsPhoneValid(isValid);
     };
-    
+
     const handleNameChange = (event) => {
         const value = event.target.value;
         setName(value);
@@ -84,6 +84,11 @@ const RegisterForm = () => {
 
     async function save(event) {
         event.preventDefault();
+
+        if (!name || !email || !password || !phone) {
+            toast.error("Please fill all the fields before submitting");
+            return;
+        }
 
         if (emailError || passwordError || phoneError || nameError) {
             toast.error("Please fix the errors before submitting");

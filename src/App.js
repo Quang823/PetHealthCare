@@ -45,7 +45,7 @@ function App() {
 
   return (
     <>
-       <div className='app-container'>
+      <div className='app-container'>
         <Routes>
           {/* Public routes */}
           <Route path="/*" element={<AppRoute />} />
@@ -76,7 +76,7 @@ function App() {
             <Route path='/doctor' element={<Doctor />} />
             <Route path='/scheduleDoctor' element={<Schedule />} />
             <Route path='/examineDoctor' element={<VetExaminationForm />} />
-            <Route path='/bkneedCage' element={<BKNeedCage/>} />
+
           </Route>
 
           {/* Unauthorized route */}
