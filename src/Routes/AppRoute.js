@@ -24,7 +24,7 @@ import Header from '../Components/Header/Header';
 import Footer from '../Components/Footer/Footer';
 import AllService from '../Components/Home/AllService';
 import Feedback from '../Components/FeedBack/Feedback';
-
+import RefundPage from '../Components/RefundPage/RefundPage';
 
 
 const AppRoute = () => {
@@ -46,7 +46,7 @@ const AppRoute = () => {
                 <Route path='/reset-password' element={<ResetPassword />} />
                 <Route path='/contact' element={<Contact />} />
                 <Route path='/service' element={<ServicePage />} />
-               
+
                 <Route path='/forgot-password' element={<ForgotPassword />} />
                 <Route path='/verify-otp' element={<VerifyOTP />} />
                 <Route path='/booking' element={
@@ -64,7 +64,8 @@ const AppRoute = () => {
                 <Route path="/payment-failure" element={<FailurePaymentPage />} />
                 <Route path='/allservices' element={<AllService />} />
                 <Route path='/feedback' element={<Feedback
-                 />} />
+                />} />
+                <Route path='/refundbooking' element={<RefundPage />} />
 
             </Routes>
             <Footer></Footer>

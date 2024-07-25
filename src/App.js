@@ -49,7 +49,7 @@ function App() {
 
   return (
     <>
-       <div className='app-container'>
+      <div className='app-container'>
         <Routes>
           {/* Public routes */}
           <Route path="/*" element={<AppRoute />} />
@@ -78,6 +78,7 @@ function App() {
           </Route>
 
           {/* Protected routes for doctor */}
+
 
           <Route  >
           {/* <Route element={<ProtectedRoute allowedRoles={['Veterinarian']} />}> */}

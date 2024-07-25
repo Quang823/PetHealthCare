@@ -95,7 +95,7 @@ const BookingHistory = () => {
                     handleBookingClick(selectedBooking);
                 }
             } else {
-                alert('Failed to cancel booking detail: ' + response.data.message);
+                alert('' + response.data.message);
             }
         } catch (error) {
             console.error('Error canceling booking detail:', error);
