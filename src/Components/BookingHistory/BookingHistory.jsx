@@ -33,6 +33,7 @@ const BookingHistory = () => {
                     }
                 });
                 setBookingHistory(response.data);
+                console.log('Booking history fetched:', response.data); // Add this line
             } catch (error) {
                 console.error('Error fetching booking history:', error);
                 setError(error);
@@ -70,11 +71,12 @@ const BookingHistory = () => {
     };
 
     const handleBookingClick = async (booking) => {
+        console.log('Booking clicked:', booking); // Log booking click
         try {
             const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${booking.bookingId}`);
             setSelectedBooking(booking);
             setSelectedBookingDetails(response.data);
-            console.log('bkdetail', response.data);
+            console.log('Booking details fetched:', response.data); // Log fetched details
         } catch (error) {
             console.error('Error fetching booking details:', error);
         }
@@ -103,7 +105,6 @@ const BookingHistory = () => {
         }
     };
 
-
     const filteredData = bookingHistory.filter((booking) => {
         const bookingDate = booking.date ?? '';
         const bookingId = booking.bookingId.toString();
@@ -113,6 +114,10 @@ const BookingHistory = () => {
             bookingId.includes(searchTerm) ||
             bookingStatus.includes(searchTerm.toLowerCase());
     });
+
+    useEffect(() => {
+        console.log('Selected booking details updated:', selectedBookingDetails);
+    }, [selectedBookingDetails]);
 
     if (loading) return (
         <div className="loading">
@@ -188,7 +193,7 @@ const BookingHistory = () => {
                         <span className="custom-close-button" onClick={handleCloseModal}>&times;</span>
                         <h2>Booking History Details</h2>
                         {selectedBookingDetails.map((detail, index) => (
-                            <React.Fragment key={detail.bookingDetailId}>
+                            <React.Fragment key={`detail-${detail.bookingDetailId}`}>
                                 <table className="table-section">
                                     <thead>
                                         <tr>
