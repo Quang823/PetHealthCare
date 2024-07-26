@@ -1,10 +1,8 @@
-
-
 .wallet {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 70vh;
     background: linear-gradient(90deg, rgb(13, 252, 104), rgb(0, 153, 255));
 
     .wallet-card {
@@ -12,7 +10,7 @@
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        width: 400px;
+        width: 40%;
 
         h2 {
             text-align: center;
@@ -27,7 +25,6 @@
                 margin: 10px 0;
             }
         }
-        
 
         .wallet-actions {
             .action-group {
@@ -35,15 +32,16 @@
                 margin-bottom: 10px;
 
                 input {
-                    flex-grow: 1;
-                    padding: 10px;
+                    flex-grow: 0;
+                   
                     margin-right: 10px;
                     border: 1px solid #ccc;
                     border-radius: 5px;
+                    margin-bottom: 10px;
                 }
 
                 button {
-                    padding: 10px;
+                   margin-bottom: 20px;
                     background-color: #4CAF50;
                     color: white;
                     border: none;
@@ -52,7 +50,6 @@
                     &:hover {
                         background-color: #45a049;
                     }
-
                 }
             }
 
@@ -64,7 +61,7 @@
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                margin-top: 10px;
+               
 
                 &:hover {
                     background-color: #0069d9;
@@ -89,7 +86,8 @@
     border-radius: 10px;
     padding: 20px;
     outline: none;
-    margin-left: 380px;
+    max-height: 80vh; /* Adjust this value as needed */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
 
     h2 {
         text-align: center;

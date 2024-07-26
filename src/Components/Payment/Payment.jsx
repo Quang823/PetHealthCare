@@ -189,11 +189,16 @@ const PaymentPage = () => {
                     'Content-Type': 'application/json'
                 }
             });
-    
-            console.log("Payment Response:", paymentResponse.data);
-            toast.success("Booking and payment successful!");
-            navigate('/payment-success');
             
+            console.log("Payment Response:", paymentResponse);
+            if(paymentResponse.data === "Payment success"){
+                toast.success("Booking and payment successful!");
+                navigate('/payment-success');  
+            }else{
+                toast.error("Booking or payment failed. Please try again.");
+                 navigate('/payment-failure');
+            }
+           
             // Clear local storage
             localStorage.removeItem('bookedInfo');
             localStorage.removeItem('selectedDate');
