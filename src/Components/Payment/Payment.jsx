@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import logo from '../../Assets/v186_574.png';
 import qrCode from '../../Assets/QR-Code-PNG-HD-Image.png';
 import creCard from '../../Assets/credit_card_PNG39.png';
@@ -21,10 +21,7 @@ const PaymentPage = () => {
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [billCode, setBillCode] = useState('');
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
     const navigate = useNavigate();
-    const paymentSavedRef = useRef(false);
-    const location = useLocation();
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -33,25 +30,40 @@ const PaymentPage = () => {
                 console.error('No token found in localStorage.');
                 return;
             }
-
+    
             try {
                 const decodedToken = jwtDecode(token);
                 const userID = decodedToken.User.map.userID;
-                const response = await axios.get(`http://localhost:8080/account/getaccount/${userID}`, {
+                
+                // Fetch user information
+                const userResponse = await axios.get(`http://localhost:8080/account/getaccount/${userID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setUser(response.data);
+                
+                // Fetch wallet information
+                const walletResponse = await axios.get(`http://localhost:8080/wallet/get-by-user?userId=${userID}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                // Store walletId in localStorage
+                localStorage.getItem('walletId', walletResponse.data.walletId);
+                
+                // Combine user and wallet information
+                setUser({...userResponse.data, wallet: walletResponse.data});
             } catch (error) {
                 console.error('Error fetching user info:', error);
+                toast.error("Failed to fetch user information. Please try logging in again.");
             } finally {
                 setLoading(false);
             }
         };
         fetchUserInfo();
     }, []);
-
+    
     useEffect(() => {
         const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
         if (bookedInfo) {
@@ -60,75 +72,12 @@ const PaymentPage = () => {
         setBillCode(uuidv4());
     }, []);
 
-    useEffect(() => {
-        const savePayment = async (paymentDetails) => {
-            try {
-                const { responseCode, transactionNo, amount, bankCode, bankTranNo, cardType, vnpPayDate, orderInfo, txnRef } = paymentDetails;
-        if (responseCode) {
-            const transactionNo = parseInt(urlParams.get('vnp_TransactionNo'), 10);
-            const amount = parseInt(urlParams.get('vnp_Amount'), 10);
-            const bankCode = urlParams.get('vnp_BankCode');
-            const bankTranNo = urlParams.get('vnp_BankTranNo');
-            const cardType = urlParams.get('vnp_CardType');
-const vnpPayDate = urlParams.get('vnp_PayDate');
-            const orderInfo = urlParams.get('vnp_OrderInfo');
-            const txnRef = parseInt(urlParams.get('vnp_TxnRef'), 10);
-                if (responseCode === '00') {
-                    await axios.post(`http://localhost:8080/payment/save-payment`, null, {
-                        params: {
-                            transactionNo,
-                            amount,
-                            bankCode,
-                            bankTranNo,
-                            cardType,
-                            vnpPayDate,
-                            orderInfo,
-                            txnRef
-                        }
-                    });
-              
-                    
-                    navigate('/payment-success');
-                } else {
-                    navigate('/payment-failure');
-                }
-           } } catch (error) {
-                console.error('Error saving payment:', error);
-                navigate('/payment-failure');
-            }
-        };
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const responseCode = urlParams.get('vnp_ResponseCode');
-
-        if (responseCode && !paymentSavedRef.current) {
-            paymentSavedRef.current = true;
-
-            const paymentDetails = {
-                responseCode,
-                transactionNo: parseInt(urlParams.get('vnp_TransactionNo'), 10),
-                amount: parseInt(urlParams.get('vnp_Amount'), 10),
-                bankCode: urlParams.get('vnp_BankCode'),
-                bankTranNo: urlParams.get('vnp_BankTranNo'),
-                cardType: urlParams.get('vnp_CardType'),
-                vnpPayDate: urlParams.get('vnp_PayDate'),
-                orderInfo: urlParams.get('vnp_OrderInfo'),
-                txnRef: parseInt(urlParams.get('vnp_TxnRef'), 10)
-            };
-
-            savePayment(paymentDetails);
-        }
-    }, [navigate, bookings]);
-
-    const handlePaymentMethodChange = (e) => {
-        setSelectedPaymentMethod(e.target.value);
-    };
 
     const handleGoBack = () => {
         navigate('/booking');
     };
 
-    const handlePayClick = async () => {
+    const handleBooking = async () => {
         if (!user) {
             console.error('User information is missing.');
             return;
@@ -137,7 +86,7 @@ const vnpPayDate = urlParams.get('vnp_PayDate');
         const bookingData = {
             customerId: user.userId,
             date: selectedDate,
-            status: "Paid",
+            status: "Unpaid",
             totalPrice: bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0),
             bookingDetails: bookings.map(booking => ({
                 petId: booking.petId,
@@ -149,10 +98,9 @@ const vnpPayDate = urlParams.get('vnp_PayDate');
             })),
             billCode: billCode
         };
-        console.log("Booking Data to be sent:", bookingData);
 
         try {
-const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token');
             const bookingResponse = await axios.post('http://localhost:8080/booking/add', bookingData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -160,67 +108,108 @@ const token = localStorage.getItem('token');
                 }
             });
 
-            console.log("Response from server:", bookingResponse);
-
-            const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
-            const paymentResponse = await axios.get(`http://localhost:8080/payment/vn-pay`, {
-                params: {
-                    amount: totalCost,
-                    bookingId: bookingResponse.data.data.bookingId
-                },
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            console.log("Payment Response from server:", paymentResponse);
-
-            window.location.href = paymentResponse.data.data;
-
+            console.log("Booking Response:", bookingResponse.data);
+            toast.success("Booking successful!");
+            localStorage.setItem('currentBookingId', bookingResponse.data.data.bookingId);
             localStorage.removeItem('bookedInfo');
             localStorage.removeItem('selectedDate');
         } catch (error) {
-            console.error('Payment failed:', error.response?.data || error);
+            console.error('Booking failed:', error.response?.data || error);
+            toast.error("Booking failed. Please try again.");
+        }
+    };
+   
+
+    const handlePayment = async () => {
+        if (!user) {
+            console.error('User information is missing.');
+            toast.error("User information not found. Please log in again.");
+            return;
+        }
+    
+        const walletId = localStorage.getItem('walletId');
+        if (!walletId) {
+            console.error('Wallet ID not found in localStorage.');
+            toast.error("Wallet not found. Please contact support.");
+            return;
+        }
+    
+        const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0);
+    
+        // Check wallet balance if available
+        if (user.wallet && user.wallet.balance < totalCost) {
+            toast.error("Insufficient balance. Please top up your wallet.");
+            return;
+        }
+    
+        const bookingData = {
+            customerId: user.userId,
+            date: selectedDate,
+            status: "Unpaid",
+            totalPrice: totalCost,
+            bookingDetails: bookings.map(booking => ({
+                petId: booking.petId,
+                veterinarianId: booking.doctorId,
+                serviceId: booking.serviceId,
+                needCage: false,
+                date: booking.date,
+                slotId: parseInt(booking.slotTime, 10)
+            })),
+            billCode: billCode
+        };
+    
+        try {
+            const token = localStorage.getItem('token');
+            
+            // Step 1: Create the booking
+            const bookingResponse = await axios.post('http://localhost:8080/booking/add', bookingData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            console.log("Booking Response:", bookingResponse.data);
+            
+            const bookingId = bookingResponse.data.data.bookingId;
+    
+            // Prepare the payment data
+            const paymentData = {
+                walletId: walletId,
+                bookingId: bookingId,
+                amount: totalCost
+            };
+    
+            console.log("Payment Data:", paymentData); // Log the payment data for debugging
+    
+            // Step 2: Process the payment
+            const paymentResponse = await axios.post('http://localhost:8080/payment/pay-booking', paymentData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            console.log("Payment Response:", paymentResponse.data);
+            toast.success("Booking and payment successful!");
+            navigate('/payment-success');
+            
+            // Clear local storage
+            localStorage.removeItem('bookedInfo');
+            localStorage.removeItem('selectedDate');
+        } catch (error) {
+            console.error('Booking or payment failed:', error.response?.data || error);
+            toast.error("Booking or payment failed. Please try again.");
             navigate('/payment-failure');
         }
     };
+    
 
     if (loading) {
         return <p className="loading-text">Loading...</p>;
     }
 
     const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
-
-    const renderPaymentMethodDetails = () => {
-        switch (selectedPaymentMethod) {
-            case 'credit-card':
-                return (
-                    <div className="payment-details">
-                        <img src={creCard} alt="Credit Card" />
-                        <p>Enter your credit card details below.</p>
-                    </div>
-                );
-            case 'paypal':
-                return (
-                    <div className="payment-details">
-                        <img src={paypal} alt="PayPal" />
-                        <p>You will be redirected to PayPal to complete your purchase.</p>
-                    </div>
-                );
-            case 'bank-transfer':
-                return (
-                    <div className="payment-details">
-                        <img src={banktrans} alt="Bank Transfer" />
-                        <p>Transfer the amount to the following bank account.</p>
-                        <p>Account Number: XXX-XXX-XXX</p>
-                        <p>Bank Name: XXX Bank</p>
-                        <p>SWIFT Code: XXX 1234</p>
-                    </div>
-                );
-            default:
-                return ;
-        }
-    };
 
     return (
         <div className='paymentPage'>
@@ -229,7 +218,7 @@ const token = localStorage.getItem('token');
             <button className="go-back-button" onClick={handleGoBack}>Go Back</button>
             <div className="payment-page-container">
                 <div className='logo-div'>
-<div className="logo-container">
+                    <div className="logo-container">
                         <img src={logo} alt="Logo image" className="logo" />
                     </div>
                 </div>
@@ -250,14 +239,14 @@ const token = localStorage.getItem('token');
                         <p><b>Email:</b> {user?.email}</p>
                         <p><b>Phone:</b> {user?.phone}</p>
                         <p><b>Address:</b> {user?.address}</p>
-                        <p><b>Notes:</b> </p>
+
                     </div>
                     <div className="booking-details">
                         <h5>Booking details</h5>
                         <BookingDetail bookings={bookings} showDeleteButton={false} />
                     </div>
 
-                    {renderPaymentMethodDetails()}
+                    
                     <div className="total-cost">
                         <p>Total Cost: ${totalCost.toFixed(2)}</p>
                     </div>
@@ -273,7 +262,7 @@ const token = localStorage.getItem('token');
                     </div>
                 </div>
                 <div className="pay">
-                    <button onClick={handlePayClick}>Pay</button>
+                    <button onClick={handlePayment}>Pay</button>
                 </div>
             </div>
         </div>

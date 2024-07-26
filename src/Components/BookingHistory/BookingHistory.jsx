@@ -116,7 +116,7 @@ const BookingHistory = () => {
 
     if (loading) return (
         <div className="loading">
-            <span role="imgx" aria-label="dog running">🐕‍🦺</span>
+            <span role="img" aria-label="dog running">🐕‍🦺</span>
             <p>Loading...</p>
         </div>
     );
@@ -156,7 +156,6 @@ const BookingHistory = () => {
             <div className="timetable">
                 <div className="timetable-header">
                     <div className="timetable-header-item">Date</div>
-
                     <div className="timetable-header-item">Booking ID</div>
                     <div className="timetable-header-item">Status</div>
                     <div className="timetable-header-item">Total Price</div>
@@ -176,7 +175,6 @@ const BookingHistory = () => {
                             onClick={() => handleBookingClick(booking)}
                         >
                             <div className="timetable-item">{formattedDate}</div>
-
                             <div className="timetable-item">{booking.bookingId}</div>
                             <div className={`${statusClass} ${statusColor}`}>{booking.status}</div>
                             <div className="timetable-item">${booking.totalPrice}</div>
@@ -212,11 +210,11 @@ const BookingHistory = () => {
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Booking ID:</td>
-                                            <td>{detail.booking.bookingId}</td>
+                                            <td>{detail.booking?.bookingId}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Booking Date:</td>
-                                            <td>{new Date(detail.booking.date).toLocaleDateString()}</td>
+                                            <td>{new Date(detail.booking?.date).toLocaleDateString()}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Status:</td>
@@ -224,7 +222,7 @@ const BookingHistory = () => {
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Total Price:</td>
-                                            <td>${detail.booking.totalPrice}</td>
+                                            <td>${detail.booking?.totalPrice}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -238,23 +236,23 @@ const BookingHistory = () => {
                                     <tbody>
                                         <tr>
                                             <td className="table-field-name">Pet Name:</td>
-                                            <td>{detail.pet.petName}</td>
+                                            <td>{detail.pet?.petName}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Pet Age:</td>
-                                            <td>{detail.pet.petAge}</td>
+                                            <td>{detail.pet?.petAge}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Pet Gender:</td>
-                                            <td>{detail.pet.petGender}</td>
+                                            <td>{detail.pet?.petGender}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Pet Type:</td>
-                                            <td>{detail.pet.petType}</td>
+                                            <td>{detail.pet?.petType}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Vaccination:</td>
-                                            <td>{detail.pet.vaccination}</td>
+                                            <td>{detail.pet?.vaccination}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -268,19 +266,19 @@ const BookingHistory = () => {
                                     <tbody>
                                         <tr>
                                             <td className="table-field-name">Owner Name:</td>
-                                            <td>{detail.pet.user.name}</td>
+                                            <td>{detail.pet?.user?.name}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Email:</td>
-                                            <td>{detail.pet.user.email}</td>
+                                            <td>{detail.pet?.user?.email}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Phone:</td>
-                                            <td>{detail.pet.user.phone}</td>
+                                            <td>{detail.pet?.user?.phone}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Address:</td>
-                                            <td>{detail.pet.user.address}</td>
+                                            <td>{detail.pet?.user?.address}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -294,15 +292,33 @@ const BookingHistory = () => {
                                     <tbody>
                                         <tr>
                                             <td className="table-field-name">Service Name:</td>
-                                            <td>{detail.services.name}</td>
+                                            <td>{detail.services?.name}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Price:</td>
-                                            <td>${detail.services.price}</td>
+                                            <td>${detail.services?.price}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Description:</td>
-                                            <td>{detail.services.description}</td>
+                                            <td>{detail.services?.description}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table className="table-section">
+                                    <thead>
+                                        <tr>
+                                            <th colSpan="2">Veterinarian</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table-field-name">Doctor Name:</td>
+                                            <td>{detail.doctors?.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Phone Number:</td>
+                                            <td>{detail.doctors?.phone}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -316,11 +332,11 @@ const BookingHistory = () => {
                                     <tbody>
                                         <tr>
                                             <td className="table-field-name">Start Time:</td>
-                                            <td>{detail.slot.startTime}</td>
+                                            <td>{detail.slot?.startTime}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">End Time:</td>
-                                            <td>{detail.slot.endTime}</td>
+                                            <td>{detail.slot?.endTime}</td>
                                         </tr>
                                     </tbody>
                                 </table>

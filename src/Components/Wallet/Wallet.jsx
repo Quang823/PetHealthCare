@@ -3,7 +3,9 @@ import axios from "axios";
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+
 import Modal from 'react-modal';
+
 
 const Wallet = () => {
     const [wallet, setWallet] = useState(null);

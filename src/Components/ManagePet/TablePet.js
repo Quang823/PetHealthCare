@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa";
 import './TablePet.scss';
@@ -36,7 +36,7 @@ const TablePet = () => {
             setUserID(userIdFromToken);
             fetchData(userIdFromToken);
         }
-    }, [showEditForm,showForm]);
+    }, [showEditForm, showForm]);
 
     const fetchData = async (userId) => {
         try {
@@ -49,12 +49,23 @@ const TablePet = () => {
 
     const validatePetName = (value) => {
         const re = /^[a-zA-Z\s]+$/;
-        return re.test(value) ? '' : 'Pet name should not contain special characters.';
+        if (value.length < 2 || value.length > 10) {
+            return 'Pet name must be between 2 and 10 characters.';
+        } else if (!re.test(value)) {
+            return 'Pet name should not contain special characters or numbers.';
+        }
+        return '';
     };
 
     const validatePetAge = (value) => {
         const re = /^\d+$/;
-        return re.test(value) ? '' : 'Pet age should only contain numbers.';
+        const age = parseInt(value);
+        if (!re.test(value)) {
+            return 'Pet age should only contain numbers.';
+        } else if (age < 1 || age > 50) {
+            return 'Pet age must be between 1 and 50.';
+        }
+        return '';
     };
 
     const handleChange = (e) => {
@@ -175,14 +186,44 @@ const TablePet = () => {
     };
 
     const handleDeletePet = (petId) => {
-        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
-            .then(() => {
-                setData(data.filter(pet => pet.petId !== petId));
-                toast.success("Delete pet success");
+        axios.get(`http://localhost:8080/bookingDetail/getBookingDetailByPetIsDeleted/${petId}`)
+            .then(res => {
+                if (res.data.length > 0) {
+                    if (window.confirm('This pet has booking details. Please check your booking history before delete this pet. Do you want to cancel them before deleting the pet?')) {
+                        axios.post('http://localhost:8080/bookingDetail/cancelBookingDetail', { petId })
+                            .then(() => {
+                                axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
+                                    .then(() => {
+                                        setData(data.filter(pet => pet.petId !== petId));
+                                        toast.success("Delete pet success");
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        toast.error("Failed to delete pet");
+                                    });
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                toast.error("Failed to cancel booking details");
+                            });
+                    }
+                } else {
+                    if (window.confirm('Are you sure you want to delete this pet?')) {
+                        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
+                            .then(() => {
+                                setData(data.filter(pet => pet.petId !== petId));
+                                toast.success("Delete pet success");
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                toast.error("Failed to delete pet");
+                            });
+                    }
+                }
             })
             .catch(err => {
                 console.log(err);
-                toast.error("Failed to delete pet");
+                toast.error("Failed to fetch booking details");
             });
     };
 
@@ -237,6 +278,7 @@ const TablePet = () => {
                 <FaPlus /> Add your new pet
             </button>
             {showForm && (
+
                 <div className="form-container">
                     <h3>Add a new pet</h3>
                     <input
@@ -273,9 +315,9 @@ const TablePet = () => {
                         <option value="">Select Pet Type</option>
                         <option value="DOG">DOG</option>
                         <option value="CAT">CAT</option>
-                        <option value="CHICKEN">CHICKEN</option>
                         <option value="BIRD">BIRD</option>
-                        <option value="HAMSTER">HAMSTER</option>
+                        <option value="FISH">FISH</option>
+                        <option value="RABBIT">RABBIT</option>
                     </select>
                     {validationMessages.petType && <p className="errorss-messages">{validationMessages.petType}</p>}
                     <input
@@ -286,12 +328,8 @@ const TablePet = () => {
                         onChange={handleChange}
                     />
                     {validationMessages.vaccination && <p className="errorss-messages">{validationMessages.vaccination}</p>}
-                    <button className='btnx btn-success' onClick={handleAddPet}>
-                        Save
-                    </button>
-                    <button className='btnx btn-danger' onClick={() => setShowForm(false)}>
-                        Cancel
-                    </button>
+                    <button onClick={handleAddPet}>Add Pet</button>
+                    <button onClick={() => setShowForm(false)}>Cancel</button>
                 </div>
             )}
             {showEditForm && (
@@ -329,12 +367,11 @@ const TablePet = () => {
                         onChange={handleEditChange}
                     >
                         <option value="">Select Pet Type</option>
-                        <option value="DOG">DOG</option>
-                        <option value="CAT">CAT</option>
-                        <option value="CHICKEN">CHICKEN</option>
-                        <option value="MOUSE">MOUSE</option>
-                        <option value="BIRD">BIRD</option>
-                        <option value="HAMSTER">HAMSTER</option>
+                        <option value="Dog">Dog</option>
+                        <option value="Cat">Cat</option>
+                        <option value="Bird">Bird</option>
+                        <option value="Fish">Fish</option>
+                        <option value="Rabbit">Rabbit</option>
                     </select>
                     {validationMessages.petType && <p className="errorss-messages">{validationMessages.petType}</p>}
                     <input
@@ -345,12 +382,8 @@ const TablePet = () => {
                         onChange={handleEditChange}
                     />
                     {validationMessages.vaccination && <p className="errorss-messages">{validationMessages.vaccination}</p>}
-                    <button className='btnx btn-success' onClick={handleUpdatePet}>
-                        Save
-                    </button>
-                    <button className='btnx btn-danger' onClick={() => setShowEditForm(false)}>
-                        Cancel
-                    </button>
+                    <button onClick={handleUpdatePet}>Save Changes</button>
+                    <button onClick={() => setShowEditForm(false)}>Cancel</button>
                 </div>
             )}
         </div>
