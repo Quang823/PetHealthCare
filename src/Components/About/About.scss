@@ -18,6 +18,7 @@
             text-align: center;
             font-weight: 700;
         }
+       
     }
     
     .policy-content .policy-section {
@@ -26,7 +27,9 @@
     
     .policy-content .policy-section h3 {
         color: #2980b9;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        margin-top: 20px;
     }
     
     .policy-content .policy-section ul {
@@ -37,7 +40,7 @@
     .policy-content .policy-section ul li {
         margin-bottom: 8px;
         padding: 8px;
-        border-left: 4px solid #2980b9;
+        border-left: 2px solid #2980b9;
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         color: #000;
@@ -54,6 +57,21 @@
         padding: 5px 0;
         box-shadow: none;
     }
+    .button-container button {
+    background-color: #ff6f61;
+    border-color: #ff6f61;
+    color: #fff;
+    font-size: 18px;
+    
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    }
+    &:hover {
+        background-color: #e55548;
+    }
+
     
     .about-content {
         background-color: rgba(255, 255, 255, 0.9);
