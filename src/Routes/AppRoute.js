@@ -24,6 +24,7 @@ import Header from '../Components/Header/Header';
 import Footer from '../Components/Footer/Footer';
 import AllService from '../Components/Home/AllService';
 import Feedback from '../Components/FeedBack/Feedback';
+import Wallet from '../Components/Wallet/Wallet';
 
 
 
@@ -41,6 +42,8 @@ const AppRoute = () => {
                             </TablePet>
                         </PrivateRoute>
                     } />
+                  
+                    <Route path='/wallet' element={<Wallet />} />
                 <Route path='/manageAcc' element={<ManageAccount />} />
                 <Route path='/about' element={<About />} />
                 <Route path='/reset-password' element={<ResetPassword />} />

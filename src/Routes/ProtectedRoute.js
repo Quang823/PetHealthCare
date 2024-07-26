@@ -1,32 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { UserContext } from './../Context/UserContext';
-import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { useAuth } from '../Context/UserContext';
+
 const ProtectedRoute = ({ allowedRoles }) => {
-  const navigate = useNavigate();
-  const loginLink = (event) => {
-    event.preventDefault();
-    navigate('/login');
-}
-  const { user } = useContext(UserContext);
-  console.log("User in ProtectedRoute:", user); 
+  const { user } = useAuth();
+  
+  useEffect(() => {
+    console.log('ProtectedRoute - Current user:', user);
+    console.log('ProtectedRoute - Allowed roles:', allowedRoles);
+  }, [user, allowedRoles]);
 
-  if (!user || !user.auth) {
-    toast.error("You must login ");
-    localStorage.removeItem('token');
-    console.log("User not authenticated, redirecting to login");
-    return <Navigate to="/login" replace />;
-   
-
+  if (user.auth === null) {
+    console.log('ProtectedRoute - Auth is null, showing loading');
+    return <div>Loading...</div>;
   }
 
-  if (allowedRoles.includes(user.role)) {
-    return <Outlet />;
-  } else {
-    localStorage.removeItem('token');
+  if (!user.auth) {
+    console.log('ProtectedRoute - User not authenticated, redirecting to login');
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!allowedRoles.includes(user.role)) {
+    console.log(`ProtectedRoute - User role ${user.role} not in allowed roles:`, allowedRoles);
     return <Navigate to="/unauthorized" replace />;
   }
+
+  console.log('ProtectedRoute - Access granted');
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

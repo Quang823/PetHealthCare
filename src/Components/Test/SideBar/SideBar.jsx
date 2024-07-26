@@ -14,10 +14,10 @@ import { MdDashboard } from "react-icons/md";
 import { useNavigate, NavLink } from 'react-router-dom';
 import { CiLogout } from "react-icons/ci";
 import { GiBirdCage } from "react-icons/gi";
-import { UserContext } from '../../../Context/UserContext';
+import { useAuth, UserContext } from '../../../Context/UserContext';
 import { toast } from 'react-toastify';
 const SideBar = () => {
-    const { logout, user } = useContext(UserContext);
+    const { logout, user } = useAuth();
     const navigate = useNavigate();
     const handleLogout = () => {
         logout();

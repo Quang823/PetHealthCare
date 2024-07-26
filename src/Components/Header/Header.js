@@ -5,13 +5,13 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../Context/UserContext';
+import { useAuth, UserContext } from '../../Context/UserContext';
 import logo from '../../Assets/v186_574.png';
 import { MdPets } from "react-icons/md";
 import './Header.scss';
 import { jwtDecode } from "jwt-decode";
 const Header = (props) => {
-    const { logout, user } = useContext(UserContext);
+    const { logout, user } = useAuth();
     const [userName, setUserName] = useState("");
 
     useEffect(() => {
@@ -88,6 +88,7 @@ const Header = (props) => {
                                     <NavLink to="/booking" className="nav-link">Booking</NavLink>
                                     <NavLink to="/contact" className="nav-link">Contact</NavLink>
                                     <NavLink to="/feedback" className="nav-link">Feedback</NavLink>
+                                    <NavLink to="/wallet" className="nav-link">Wallet</NavLink>
 
                                 </>
                             )}

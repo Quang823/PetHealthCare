@@ -7,7 +7,7 @@ import logo from '../../Assets/v186_574.png';
 import video from '../../Assets/7515875-hd_1080_1920_30fps.mp4';
 import { loginApi } from '../../Service/UserService';
 import { toast } from "react-toastify";
-import { UserContext } from "../../Context/UserContext";
+import { useAuth, UserContext } from "../../Context/UserContext";
 import { jwtDecode } from "jwt-decode";
 
 const LoginForm = () => {
@@ -18,8 +18,8 @@ const LoginForm = () => {
     const [passwordError, setPasswordError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { logout } = useContext(UserContext);
-    const { loginContext } = useContext(UserContext);
+    const { logout } = useAuth();
+    const { loginContext } = useAuth();
 
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

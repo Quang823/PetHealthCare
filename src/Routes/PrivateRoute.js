@@ -1,12 +1,12 @@
 import { Routes, Route, Link } from 'react-router-dom'
 import TablePet from '../Components/ManagePet/TablePet';
-import { UserContext } from '../Context/UserContext';
+import { useAuth, UserContext } from '../Context/UserContext';
 import { useContext, useEffect, useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import { useNavigate } from "react-router-dom";
 import './PrivateRoute.scss';
 const PrivateRoute = (props) => {
-    const { loginContext, user } = useContext(UserContext);
+    const { loginContext, user } = useAuth();
     const [show, setShow] = useState(true);
     const navigate = useNavigate();
     const loginLink = (event) => {
