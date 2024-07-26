@@ -16,7 +16,7 @@ import img8 from "../../Assets/embethucung.jpg";
 import img9 from "../../Assets/kysinh.png";
 
 import { FaHeart, FaPhone } from "react-icons/fa";
-import { UserContext } from '../../Context/UserContext';
+import { useAuth, UserContext } from '../../Context/UserContext';
 import { useContext, useEffect, useState } from 'react';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +25,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 const HomePage = () => {
-    const { user } = useContext(UserContext);
+    const { user } = useAuth();
     let navigate = useNavigate();
     const [service, setService] = useState([]);
     const [veterinarians, setVeterinarians] = useState([]);

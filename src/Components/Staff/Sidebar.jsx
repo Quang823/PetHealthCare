@@ -1,13 +1,13 @@
 import './SideBar.scss';
 import React, { useState, useContext, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { UserContext } from '../../Context/UserContext';
+import { useAuth, UserContext } from '../../Context/UserContext';
 import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
 import v186_574 from '../../Assets/v186_574.png';
 
 function Sidebar() {
-  const { logout, user } = useContext(UserContext);
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {

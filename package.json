@@ -28,6 +28,7 @@
     "react-scripts": "^5.0.1",
     "react-slick": "^0.30.2",
     "react-toastify": "^8.2.0",
+    "react-wallets": "^1.0.0",
     "recharts": "^2.12.7",
     "sass": "1.77.4",
     "slick-carousel": "^1.8.1",

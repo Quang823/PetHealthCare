@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../Context/UserContext';
+
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { CiLogout } from "react-icons/ci";
+import { useAuth } from '../../Context/UserContext';
 function Sidebar() {
-    const { logout, user } = useContext(UserContext);
+    const { logout, user } = useAuth;
     const navigate = useNavigate();
     const handleLogout = () =>{
         logout();
