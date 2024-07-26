@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Toast } from 'react-toastify/dist/components';
+
 
 const Wallet = () => {
     const [wallet, setWallet] = useState(null);
@@ -19,6 +19,7 @@ const Wallet = () => {
             .then(res => {
                 if (res.data.status === "ok" && res.data.data) {
                     setWallet(res.data.data);
+                    localStorage.setItem('walletId', res.data.data.walletId);
                 } else {
                     console.error('Unexpected wallet data structure:', res.data);
                 }
