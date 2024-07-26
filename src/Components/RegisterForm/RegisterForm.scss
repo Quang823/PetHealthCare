@@ -1,5 +1,5 @@
 .register-page {
-    height: 135vh;
+    height: 160vh;
     width: 100%;
     margin: 0;
     border-radius: 10px;
@@ -10,7 +10,7 @@
     background-position: center;
     
     .container {
-        height: 135vh;
+        height: 160vh;
         width: 70%;
         margin: auto;
         justify-content: space-between;
@@ -195,10 +195,10 @@
                         border-color: red;
                     }
 
-                    .icon {
+                    .iconm {
                         position: absolute;
                         right: 20px;
-                        top: 30%;
+                        top: 40%;
                         transform: translateY(-50%);
                         font-size: 16px;
                     }
@@ -209,18 +209,13 @@
                         right: 21px;
                     }
 
-                    .error-message {
+                    .errors-messages {
                         color: red;
-                        font-size: 0.8rem;
-                        margin-top: -20px; /* Đặt giá trị âm để gần hơn với ô input */
+                        font-size: 0.875rem;
+                        margin-top: 1px !important;
                     }
+              
                 }
-                .errors-messages {
-                    color: red;
-                    font-size: 0.875rem;
-                    margin-top: 1px !important;
-                }
-
                 .remember-forgot {
                     display: flex;
                     justify-content: space-between;

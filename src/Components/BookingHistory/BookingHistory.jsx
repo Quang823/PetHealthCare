@@ -310,6 +310,28 @@ const BookingHistory = () => {
                                 <table className="table-section">
                                     <thead>
                                         <tr>
+                                            <th colSpan="2">Veterinarian</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td className="table-field-name">Doctor Name:</td>
+                                            <td>{detail.doctors.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">Phone Number:</td>
+                                            <td>{detail.doctors.phone}</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="table-field-name">:</td>
+                                            <td>{detail.services.description}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table className="table-section">
+                                    <thead>
+                                        <tr>
                                             <th colSpan="2">Slot Details</th>
                                         </tr>
                                     </thead>
