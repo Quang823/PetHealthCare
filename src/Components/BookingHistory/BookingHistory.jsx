@@ -95,7 +95,7 @@ const BookingHistory = () => {
                     handleBookingClick(selectedBooking);
                 }
             } else {
-                alert('Failed to cancel booking detail: ' + response.data.message);
+                alert('' + response.data.message);
             }
         } catch (error) {
             console.error('Error canceling booking detail:', error);
@@ -220,7 +220,7 @@ const BookingHistory = () => {
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Status:</td>
-                                            <td>{detail.booking.status}</td>
+                                            <td>{detail.status}</td>
                                         </tr>
                                         <tr>
                                             <td className="table-field-name">Total Price:</td>

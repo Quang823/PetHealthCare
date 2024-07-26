@@ -1,149 +1,127 @@
-.vetexaminate-form {
-    max-width: 85%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    font-family: 'Roboto', sans-serif;
-  }
+/* VetExaminationForm.scss */
 
-    
-
-.logo-contain {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 120px; /* Đặt kích thước chiều rộng cho khung tròn */
-    height: 120px; /* Đặt kích thước chiều cao cho khung tròn */
-    background-color: #cff8ca9c; /* Màu nền trắng */
-    border: 2px solid #000; /* Viền đen */
-    border-radius: 50%; /* Tạo khung tròn */
-    padding: 10px; /* Khoảng cách giữa ảnh và viền */
-    margin-right: 20px;
-    .logovet {
-        max-width: 100%; /* Đảm bảo logo không vượt quá khung */
-        max-height: 100%; /* Đảm bảo logo không vượt quá khung */
-        border-radius: 50%; /* Đảm bảo logo có góc bo tròn nếu cần */
-    }
+.vet-exam-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-  .Headers {
-    display: flex;
-    align-items: center;
-    // justify-content: space-between;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 10px;
+.vet-exam-header {
+  text-align: center;
+  font-size: 2.5em;
+  color: #34495e;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.vet-exam-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.vet-exam-form-group {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.vet-exam-label {
+  font-size: 1.1em;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.vet-exam-input,
+.vet-exam-datepicker {
+  padding: 12px;
+  border: 2px solid #bdc3c7;
+  border-radius: 5px;
+  font-size: 1em;
+  color: #2c3e50;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.vet-exam-input::placeholder {
+  color: #bdc3c7;
+}
+
+.vet-exam-datepicker {
+  cursor: not-allowed;
+  background-color: #ecf0f1;
+}
+
+.vet-exam-input:focus,
+.vet-exam-datepicker:focus {
+  border-color: #2980b9;
+  outline: none;
+}
+
+.vet-exam-form-check {
+  display: flex;
+  align-items: center;
+  gap: 10px; // Add space between the checkbox and label
+  margin-top: 10px;
+}
+
+.vet-exam-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #7f8c8d;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+  flex-shrink: 0; // Ensure the checkbox doesn't shrink
+}
+
+.vet-exam-checkbox-label {
+  font-size: 1em;
+  color: #34495e;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.vet-exam-button {
+  padding: 15px 25px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.vet-exam-button:hover {
+  background-color: #2980b9;
+}
+
+@media screen and (max-width: 600px) {
+  .vet-exam-container {
+      padding: 15px;
   }
-  
-  .Headers img {
-    max-height: 80px;
+
+  .vet-exam-header {
+      font-size: 2em;
   }
-  
-  .clinic-info {
-    text-align: left;
+
+  .vet-exam-form {
+      gap: 15px;
   }
-  
-  .clinic-info h1 {
-   text-align: left;
-    font-size: 1.5rem;
-    color: #333;
+
+  .vet-exam-button {
+      padding: 10px 15px;
+      font-size: 1.1em;
   }
-  
-  .clinic-info p {
-    margin: 5px 0;
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  main {
-    margin-top: 20px;
-  }
-  
-  .owner-info, .medical-table, .booking-info, .doctor-notes {
-    margin-bottom: 20px;
-  }
-  
-  .forms-group, .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-  }
-  
-  .forms-group label, .form-group label {
-    margin-bottom: 5px;
-    color: #333;
-  }
-  
-  .forms-group input, .forms-group textarea, .form-group input, .form-group textarea {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  
-  .medical-table table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  .medical-table table th, .medical-table table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    font-size: 0.9rem;
-  }
-  
-  .medical-table table th {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  button {
-    padding: 10px 15px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-size: 1rem;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .booking-info {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .bookings-details, .total-amount {
-    width: 48%;
-  }
-  
-  .total-amount {
-    text-align: right;
-  }
-  
-  .signatures {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .signature-box {
-    border: 1px solid #ddd;
-    height: 50px;
-    width: 200px;
-  }
-  
-  .owner-signature p, .doctor-signature p {
-    margin: 5px 0;
-    color: #333;
-  }
-  
+}
