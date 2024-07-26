@@ -36,6 +36,9 @@ const About = () => {
     const handleShowPolicy = () => {
         setShowPolicy(true);
     };
+    const handleClosePolicy = () => {
+        setShowPolicy(false);
+    };
 
     return (
         <div className="about-container">
@@ -45,7 +48,12 @@ const About = () => {
                         {showPolicy ? (
                             // Render policy content here
                             <div className="policy-content">
-                                <h2>Customer Policy</h2>
+                                <h2> Pet Health Care Policy</h2>
+                                <div className="button-container">
+                                    <button onClick={handleClosePolicy} className="get-started-button">
+                                        About Pet Health Care
+                                    </button>
+                                </div>
                                 <section className="policy-section">
                                     <h3>Pet Management</h3>
                                     <ul>
@@ -83,7 +91,7 @@ const About = () => {
                                 </section>
                             </div>
                         ) : (
-                            // Render the original about content here
+
                             <div className="about-content">
                                 <h2>Welcome to Pet Health Care!</h2>
                                 <div className="button-container">
