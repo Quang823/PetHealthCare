@@ -4,11 +4,15 @@ import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import Modal from 'react-modal';
+
 
 const Wallet = () => {
     const [wallet, setWallet] = useState(null);
     const [depositAmount, setDepositAmount] = useState('');
     const [withdrawAmount, setWithdrawAmount] = useState('');
+    const [transactions, setTransactions] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -26,6 +30,22 @@ const Wallet = () => {
             })
             .catch(err => {
                 console.error('There was an error fetching the wallet data!', err);
+            });
+    }, []);
+
+    const fetchTransactions = useCallback(() => {
+        const walletId = localStorage.getItem('walletId');
+
+        axios.get(`http://localhost:8080/payment/getAll?walletId=${walletId}`)
+            .then(res => {
+                if (Array.isArray(res.data)) {
+                    setTransactions(res.data);
+                } else {
+                    console.error('Unexpected transactions data structure:', res.data);
+                }
+            })
+            .catch(err => {
+                console.error('There was an error fetching the transactions data!', err);
             });
     }, []);
 
@@ -73,8 +93,8 @@ const Wallet = () => {
     };
 
     const handleViewHistory = () => {
-        // Implement view history logic here
-        alert('View history functionality not implemented yet');
+        fetchTransactions();
+        setIsModalOpen(true);
     };
 
     const handleVNPayReturn = async () => {
@@ -108,6 +128,16 @@ const Wallet = () => {
             alert('Payment was not successful. Please try again.');
         }
         navigate('/wallet', { replace: true });
+    };
+
+    const formatDateTime = (dateTime) => {
+        const date = new Date(dateTime);
+        const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+        const optionsTime = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        return {
+            date: date.toLocaleDateString(undefined, optionsDate),
+            time: date.toLocaleTimeString(undefined, optionsTime)
+        };
     };
 
     if (!wallet) {
@@ -146,6 +176,35 @@ const Wallet = () => {
                     <button onClick={handleViewHistory}>Transaction History</button>
                 </div>
             </div>
+            
+            <Modal className="lichsu"
+                isOpen={isModalOpen}
+                onRequestClose={() => setIsModalOpen(false)}
+                contentLabel="Transaction History"
+            >
+                <h2>Transaction History</h2>
+                {transactions.length === 0 ? (
+                    <p>No transactions found.</p>
+                ) : (
+                    <ul>
+                        {transactions.map(transaction => {
+                            const { date, time } = formatDateTime(transaction.transactionDate);
+                            return (
+                                <li key={transaction.transactionId}>
+                                    <p><strong>Transaction ID:</strong> {transaction.transactionId}</p>
+                                    <div className="date-time">
+                                        <p className="date"><strong>Date:</strong> {date}</p>
+                                        <p className="time"><strong>Time:</strong> {time}</p>
+                                    </div>
+                                    <p><strong>Amount:</strong> {transaction.amount}</p>
+                                    <p><strong>Type:</strong> {transaction.transactionType}</p>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                )}
+                <button onClick={() => setIsModalOpen(false)}>Close</button>
+            </Modal>
         </div>
     );
 };
