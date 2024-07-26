@@ -173,6 +173,9 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         }
     };
 
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 1);
+
     return (
         <div className="booking-container">
             <h3>Book an Appointment</h3>
@@ -183,6 +186,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
                         selected={selectedDate}
                         onChange={handleDateChange}
                         minDate={new Date()}
+                        maxDate={maxDate}
                         filterDate={validateDate}
                         dateFormat="yyyy-MM-dd"
                     />

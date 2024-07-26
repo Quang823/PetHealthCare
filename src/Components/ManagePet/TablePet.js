@@ -186,14 +186,44 @@ const TablePet = () => {
     };
 
     const handleDeletePet = (petId) => {
-        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
-            .then(() => {
-                setData(data.filter(pet => pet.petId !== petId));
-                toast.success("Delete pet success");
+        axios.get(`http://localhost:8080/bookingDetail/getBookingDetailByPetIsDeleted/${petId}`)
+            .then(res => {
+                if (res.data.length > 0) {
+                    if (window.confirm('This pet has booking details. Please check your booking history before delete this pet. Do you want to cancel them before deleting the pet?')) {
+                        axios.post('http://localhost:8080/bookingDetail/cancelBookingDetail', { petId })
+                            .then(() => {
+                                axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
+                                    .then(() => {
+                                        setData(data.filter(pet => pet.petId !== petId));
+                                        toast.success("Delete pet success");
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        toast.error("Failed to delete pet");
+                                    });
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                toast.error("Failed to cancel booking details");
+                            });
+                    }
+                } else {
+                    if (window.confirm('Are you sure you want to delete this pet?')) {
+                        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
+                            .then(() => {
+                                setData(data.filter(pet => pet.petId !== petId));
+                                toast.success("Delete pet success");
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                toast.error("Failed to delete pet");
+                            });
+                    }
+                }
             })
             .catch(err => {
                 console.log(err);
-                toast.error("Failed to delete pet");
+                toast.error("Failed to fetch booking details");
             });
     };
 
@@ -248,6 +278,7 @@ const TablePet = () => {
                 <FaPlus /> Add your new pet
             </button>
             {showForm && (
+
                 <div className="form-container">
                     <h3>Add a new pet</h3>
                     <input
