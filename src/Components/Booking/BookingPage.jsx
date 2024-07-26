@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BookingForm from './BookingForm';
 import BookingDetail from './BookingDetail';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import './BookingPage.scss';
 
 const BookingPage = () => {
@@ -25,7 +26,7 @@ const BookingPage = () => {
         );
 
         if (existingBooking) {
-            alert('This pet already has a booking for this slot on this date or this slot is already booked by another pet on this date.');
+            toast.error('This pet already has a booking for this slot on this date or this slot is already booked by another pet on this date.');
             return;
         }
 

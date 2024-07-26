@@ -29,6 +29,14 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        select, input, button {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
 
         button {
             padding: 10px 20px;
@@ -46,11 +54,11 @@
 
     .filters {
         display: flex;
-        justify-content: space-between;
+        justify-content: left;
         margin-bottom: 20px;
 
         select, input, button {
-            width: 18%;
+            width: 24%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
