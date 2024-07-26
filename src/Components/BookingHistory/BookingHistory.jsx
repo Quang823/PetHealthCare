@@ -33,6 +33,7 @@ const BookingHistory = () => {
                     }
                 });
                 setBookingHistory(response.data);
+                console.log('Booking history fetched:', response.data); // Add this line
             } catch (error) {
                 console.error('Error fetching booking history:', error);
                 setError(error);
@@ -70,6 +71,7 @@ const BookingHistory = () => {
     };
 
     const handleBookingClick = async (booking) => {
+        console.log('Booking clicked:', booking); // Log booking click
         try {
             const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${booking.bookingId}`);
             setSelectedBooking(booking);
@@ -105,7 +107,6 @@ const BookingHistory = () => {
         }
     };
 
-
     const filteredData = bookingHistory.filter((booking) => {
         const bookingDate = booking.date ?? '';
         const bookingId = booking.bookingId.toString();
@@ -115,6 +116,10 @@ const BookingHistory = () => {
             bookingId.includes(searchTerm) ||
             bookingStatus.includes(searchTerm.toLowerCase());
     });
+
+    useEffect(() => {
+        console.log('Selected booking details updated:', selectedBookingDetails);
+    }, [selectedBookingDetails]);
 
     if (loading) return (
         <div className="loading">
