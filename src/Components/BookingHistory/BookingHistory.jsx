@@ -75,12 +75,14 @@ const BookingHistory = () => {
         try {
             const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${booking.bookingId}`);
             setSelectedBooking(booking);
+            console.log("selectedBooking",selectedBooking);
             setSelectedBookingDetails(response.data);
-            console.log('Booking details fetched:', response.data); // Log fetched details
+            console.log('Booking Details:', response.data); // Debugging line
         } catch (error) {
             console.error('Error fetching booking details:', error);
         }
     };
+    
 
     const handleCloseModal = () => {
         setSelectedBooking(null);
@@ -193,7 +195,7 @@ const BookingHistory = () => {
                         <span className="custom-close-button" onClick={handleCloseModal}>&times;</span>
                         <h2>Booking History Details</h2>
                         {selectedBookingDetails.map((detail, index) => (
-                            <React.Fragment key={`detail-${detail.bookingDetailId}`}>
+                            <React.Fragment key={detail.bookingId}>
                                 <table className="table-section">
                                     <thead>
                                         <tr>
