@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa";
 import './TablePet.scss';
@@ -36,7 +36,7 @@ const TablePet = () => {
             setUserID(userIdFromToken);
             fetchData(userIdFromToken);
         }
-    }, [showEditForm,showForm]);
+    }, [showEditForm, showForm]);
 
     const fetchData = async (userId) => {
         try {
@@ -49,12 +49,23 @@ const TablePet = () => {
 
     const validatePetName = (value) => {
         const re = /^[a-zA-Z\s]+$/;
-        return re.test(value) ? '' : 'Pet name should not contain special characters.';
+        if (value.length < 2 || value.length > 10) {
+            return 'Pet name must be between 2 and 10 characters.';
+        } else if (!re.test(value)) {
+            return 'Pet name should not contain special characters or numbers.';
+        }
+        return '';
     };
 
     const validatePetAge = (value) => {
         const re = /^\d+$/;
-        return re.test(value) ? '' : 'Pet age should only contain numbers.';
+        const age = parseInt(value);
+        if (!re.test(value)) {
+            return 'Pet age should only contain numbers.';
+        } else if (age < 1 || age > 50) {
+            return 'Pet age must be between 1 and 50.';
+        }
+        return '';
     };
 
     const handleChange = (e) => {
@@ -273,9 +284,9 @@ const TablePet = () => {
                         <option value="">Select Pet Type</option>
                         <option value="DOG">DOG</option>
                         <option value="CAT">CAT</option>
-                        <option value="CHICKEN">CHICKEN</option>
                         <option value="BIRD">BIRD</option>
-                        <option value="HAMSTER">HAMSTER</option>
+                        <option value="FISH">FISH</option>
+                        <option value="RABBIT">RABBIT</option>
                     </select>
                     {validationMessages.petType && <p className="errorss-messages">{validationMessages.petType}</p>}
                     <input
@@ -286,12 +297,8 @@ const TablePet = () => {
                         onChange={handleChange}
                     />
                     {validationMessages.vaccination && <p className="errorss-messages">{validationMessages.vaccination}</p>}
-                    <button className='btnx btn-success' onClick={handleAddPet}>
-                        Save
-                    </button>
-                    <button className='btnx btn-danger' onClick={() => setShowForm(false)}>
-                        Cancel
-                    </button>
+                    <button onClick={handleAddPet}>Add Pet</button>
+                    <button onClick={() => setShowForm(false)}>Cancel</button>
                 </div>
             )}
             {showEditForm && (
@@ -329,12 +336,11 @@ const TablePet = () => {
                         onChange={handleEditChange}
                     >
                         <option value="">Select Pet Type</option>
-                        <option value="DOG">DOG</option>
-                        <option value="CAT">CAT</option>
-                        <option value="CHICKEN">CHICKEN</option>
-                        <option value="MOUSE">MOUSE</option>
-                        <option value="BIRD">BIRD</option>
-                        <option value="HAMSTER">HAMSTER</option>
+                        <option value="Dog">Dog</option>
+                        <option value="Cat">Cat</option>
+                        <option value="Bird">Bird</option>
+                        <option value="Fish">Fish</option>
+                        <option value="Rabbit">Rabbit</option>
                     </select>
                     {validationMessages.petType && <p className="errorss-messages">{validationMessages.petType}</p>}
                     <input
@@ -345,12 +351,8 @@ const TablePet = () => {
                         onChange={handleEditChange}
                     />
                     {validationMessages.vaccination && <p className="errorss-messages">{validationMessages.vaccination}</p>}
-                    <button className='btnx btn-success' onClick={handleUpdatePet}>
-                        Save
-                    </button>
-                    <button className='btnx btn-danger' onClick={() => setShowEditForm(false)}>
-                        Cancel
-                    </button>
+                    <button onClick={handleUpdatePet}>Save Changes</button>
+                    <button onClick={() => setShowEditForm(false)}>Cancel</button>
                 </div>
             )}
         </div>

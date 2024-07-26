@@ -77,7 +77,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
                     setSlots([]);
                 }
             } else {
-                setSlots([]); // Clear slots if no doctor is selected
+                setSlots([]);
             }
         };
         fetchSlots();
@@ -121,16 +121,17 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
             if (response.status === 200) {
                 onBookingComplete(newBooking);
 
-                setSelectedPet('');
-                setSelectedService('');
-                setSelectedDoctor('');
+                //setSelectedPet('');
+                //setSelectedService('');
+                //setSelectedDoctor('');
                 setSelectedSlot('');
-                setTotalCost(0);
+                //setTotalCost(0);
             } else {
                 throw new Error('Booking failed');
             }
         } catch (error) {
             toast.error('Booking failed: ' + error.message);
+
         }
     };
 

@@ -6,22 +6,27 @@ import './RegisterForm.scss';
 import { FaUser, FaPhoneAlt, FaAddressBook } from "react-icons/fa";
 import logo from '../../Assets/v186_574.png';
 import video from '../../Assets/7515875-hd_1080_1920_30fps.mp4';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from "axios";
 
 const RegisterForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const [phoneError, setPhoneError] = useState("");
     const [nameError, setNameError] = useState("");
-    const [IsShowPassword, setIsShowPassword] = useState(false);
+    const [isShowPassword, setIsShowPassword] = useState(false);
+    const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isEmailValid, setIsEmailValid] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(false);
+    const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
     const [isPhoneValid, setIsPhoneValid] = useState(false);
     const [isNameValid, setIsNameValid] = useState(false);
     const navigate = useNavigate();
@@ -59,6 +64,19 @@ const RegisterForm = () => {
         const isValid = validatePassword(value);
         setPasswordError(isValid ? "" : "Password must be at least 6 characters");
         setIsPasswordValid(isValid);
+        validateConfirmPassword(confirmPassword, value);
+    };
+
+    const handleConfirmPasswordChange = (event) => {
+        const value = event.target.value;
+        setConfirmPassword(value);
+        validateConfirmPassword(value, password);
+    };
+
+    const validateConfirmPassword = (confirmPassword, password) => {
+        const isValid = confirmPassword === password && validatePassword(confirmPassword);
+        setConfirmPasswordError(isValid ? "" : "Passwords do not match or password is invalid");
+        setIsConfirmPasswordValid(isValid);
     };
 
     const handlePhoneChange = (event) => {
@@ -73,7 +91,7 @@ const RegisterForm = () => {
         const value = event.target.value;
         setName(value);
         const isValid = validateName(value);
-        setNameError(isValid ? "" : "Name must be at least 6 characters and contain only letters and spaces");
+        setNameError(isValid ? "" : "Name must be at least 6 characters and contain only letters");
         setIsNameValid(isValid);
     };
 
@@ -85,12 +103,12 @@ const RegisterForm = () => {
     async function save(event) {
         event.preventDefault();
 
-        if (!name || !email || !password || !phone) {
+        if (!name || !email || !password || !confirmPassword || !phone) {
             toast.error("Please fill all the fields before submitting");
             return;
         }
 
-        if (emailError || passwordError || phoneError || nameError) {
+        if (emailError || passwordError || confirmPasswordError || phoneError || nameError) {
             toast.error("Please fix the errors before submitting");
             return;
         }
@@ -115,7 +133,7 @@ const RegisterForm = () => {
         }
     }
 
-    const isLoginActive = email !== '' && password !== '' && name !== '';
+    const isLoginActive = email !== '' && password !== '' && confirmPassword !== '' && name !== '';
 
     return (
         <div className="register-page flex">
@@ -149,7 +167,7 @@ const RegisterForm = () => {
                                 onChange={handleNameChange}
                                 className={isNameValid ? 'valid' : 'invalid'}
                             />
-                            <FaUser className="icon" />
+                            <FaUser className="iconm" />
                             {nameError && <p className="errors-messages">{nameError}</p>}
                         </div>
                         <div className="input-box">
@@ -160,22 +178,36 @@ const RegisterForm = () => {
                                 onChange={handleEmailChange}
                                 className={isEmailValid ? 'valid' : 'invalid'}
                             />
-                            <MdEmail className="icon" />
+                            <MdEmail className="iconm" />
                             {emailError && <p className="errors-messages">{emailError}</p>}
                         </div>
                         <div className="input-box">
                             <input
-                                type={IsShowPassword ? "text" : "password"}
+                                type={isShowPassword ? "text" : "password"}
                                 placeholder="Password"
                                 value={password}
                                 onChange={handlePasswordChange}
                                 className={isPasswordValid ? 'valid' : 'invalid'}
                             />
                             <i
-                                className={IsShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
-                                onClick={() => setIsShowPassword(!IsShowPassword)}
+                                className={isShowPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
+                                onClick={() => setIsShowPassword(!isShowPassword)}
                             ></i>
                             {passwordError && <p className="errors-messages">{passwordError}</p>}
+                        </div>
+                        <div className="input-box">
+                            <input
+                                type={isShowConfirmPassword ? "text" : "password"}
+                                placeholder="Confirm Password"
+                                value={confirmPassword}
+                                onChange={handleConfirmPasswordChange}
+                                className={isConfirmPasswordValid ? 'valid' : 'invalid'}
+                            />
+                            <i
+                                className={isShowConfirmPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}
+                                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+                            ></i>
+                            {confirmPasswordError && <p className="errors-messages">{confirmPasswordError}</p>}
                         </div>
                         <div className="input-box">
                             <input
@@ -185,7 +217,7 @@ const RegisterForm = () => {
                                 onChange={handlePhoneChange}
                                 className={isPhoneValid ? 'valid' : 'invalid'}
                             />
-                            <FaPhoneAlt className="icon" />
+                            <FaPhoneAlt className="iconm" />
                             {phoneError && <p className="errors-messages">{phoneError}</p>}
                         </div>
                         <div className="input-box">
@@ -195,7 +227,7 @@ const RegisterForm = () => {
                                 value={address}
                                 onChange={(event) => setAddress(event.target.value)}
                             />
-                            <FaAddressBook className="icon" />
+                            <FaAddressBook className="iconm" />
                         </div>
                         <div className="remember-forgot">
                             <label>
