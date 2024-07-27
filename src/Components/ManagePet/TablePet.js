@@ -192,7 +192,7 @@ const TablePet = () => {
         <div className="phs-table-container">
             <h4 className="phs-header">List of pets:</h4>
             <button onClick={() => setShowForm(true)} className="phs-bbtn phs-bbtn-add">
-                <FaPlus className="add-icon" /> Add New Pet
+                <h4>Add New Pet</h4> 
             </button>
             <table className="phs-styled-table">
                 <thead>
@@ -251,7 +251,7 @@ const TablePet = () => {
                                     className="phs-bbtn phs-bbtn-med"
                                     onClick={() => handleViewMedicalHistory(pet.petId)}
                                 >
-                                    MedHistory
+                                    History
                                 </button>
                             </td>
                         </tr>
