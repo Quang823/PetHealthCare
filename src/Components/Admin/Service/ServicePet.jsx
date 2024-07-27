@@ -10,28 +10,28 @@ const ServicePet = () => {
     const navigate = useNavigate();
     const [service, setService] = useState([]);
     const [newService, setNewService] = useState({
-        
+
         name: '',
         price: '',
         description: ''
     });
     const formRef = useRef(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postPerPage,setpostPerPage] =useState(5);
-    
+    const [postPerPage, setpostPerPage] = useState(5);
 
-    
-    
+
+
+
 
     useEffect(() => {
         fetchService();
     }, [newService]);
-    
+
     const indexOfLastPost = currentPage * postPerPage;
     const indexOfFirstPost = indexOfLastPost - postPerPage;
     const currentPosts = service.slice(indexOfFirstPost, indexOfLastPost);
-  
-    
+
+
     useEffect(() => {
         if (showForm || showEditForm) {
             formRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -68,7 +68,7 @@ const ServicePet = () => {
             .then(res => {
                 setService([...service, res.data]);
                 setNewService({
-                    
+
                     name: '',
                     price: '',
                     description: ''
@@ -92,7 +92,7 @@ const ServicePet = () => {
                 setService(service.map(s => (s.serviceID === serviceID ? res.data : s)));
                 setShowEditForm(false);
                 setNewService({
-                    
+
                     name: '',
                     price: '',
                     description: ''
@@ -114,7 +114,7 @@ const ServicePet = () => {
                 toast.error("Failed to delete pet");
             });
     };
-    
+
     return (
         <>
             <div className="container">
@@ -157,16 +157,16 @@ const ServicePet = () => {
                     </tbody>
                 </table>
                 <ReactPaginate
-                previousLabel={'Previous'}
-                nextLabel={'Next'}
-               pageCount={Math.ceil(service.length / postPerPage)}
-              onPageChange={({ selected }) => setCurrentPage(selected + 1)}
-              containerClassName={'pagination'}
-               activeClassName={'active'}
-/>
+                    previousLabel={'Previous'}
+                    nextLabel={'Next'}
+                    pageCount={Math.ceil(service.length / postPerPage)}
+                    onPageChange={({ selected }) => setCurrentPage(selected + 1)}
+                    containerClassName={'pagination'}
+                    activeClassName={'active'}
+                />
 
                 {showForm && (
-                    <div className="form-container" ref={formRef}>
+                    <div className="service-form-container" ref={formRef}>
                         <h3>Add a new service</h3>
                         <input
                             type="text"
@@ -199,7 +199,7 @@ const ServicePet = () => {
                 )}
 
                 {showEditForm && (
-                    <div className="form-container" ref={formRef}>
+                    <div className="service-form-container" ref={formRef}>
                         <h3>Edit service</h3>
                         <input
                             type="text"

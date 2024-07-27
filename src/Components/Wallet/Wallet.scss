@@ -1,9 +1,8 @@
-
 .wallet {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 70vh;
     background: linear-gradient(90deg, rgb(13, 252, 104), rgb(0, 153, 255));
 
     .wallet-card {
@@ -11,7 +10,7 @@
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        width: 400px;
+        width: 40%;
 
         h2 {
             text-align: center;
@@ -33,32 +32,104 @@
                 margin-bottom: 10px;
 
                 input {
-                    flex-grow: 1;
-                    padding: 5px;
+                    flex-grow: 0;
+                   
                     margin-right: 10px;
-                    height: 50px;
-                    margin-top: 8px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    margin-bottom: 10px;
                 }
 
                 button {
-                    padding: 1px 10px;
+                   margin-bottom: 20px;
+                    background-color: #4CAF50;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: #45a049;
+                    }
                 }
             }
 
             button {
                 width: 100%;
                 padding: 10px;
-                background-color: #4CAF50;
+                background-color: #007bff;
                 color: white;
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                margin-top: 10px;
+               
 
                 &:hover {
-                    background-color: #45a049;
+                    background-color: #0069d9;
                 }
             }
+        }
+    }
+}
+
+/* Styles for the modal */
+.ReactModal__Overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.75) !important;
+}
+
+.ReactModal__Content {
+    width: 80%;
+    max-width: 600px;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    outline: none;
+    max-height: 80vh; /* Adjust this value as needed */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+
+            .date-time {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+
+                .date,
+                .time {
+                    flex: 1;
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #45a049;
         }
     }
 }

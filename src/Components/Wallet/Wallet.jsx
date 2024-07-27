@@ -4,11 +4,15 @@ import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import Modal from 'react-modal';
+
 
 const Wallet = () => {
     const [wallet, setWallet] = useState(null);
     const [depositAmount, setDepositAmount] = useState('');
     const [withdrawAmount, setWithdrawAmount] = useState('');
+    const [transactions, setTransactions] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -26,6 +30,22 @@ const Wallet = () => {
             })
             .catch(err => {
                 console.error('There was an error fetching the wallet data!', err);
+            });
+    }, []);
+
+    const fetchTransactions = useCallback(() => {
+        const walletId = localStorage.getItem('walletId');
+
+        axios.get(`http://localhost:8080/payment/getAll?walletId=${walletId}`)
+            .then(res => {
+                if (Array.isArray(res.data)) {
+                    setTransactions(res.data);
+                } else {
+                    console.error('Unexpected transactions data structure:', res.data);
+                }
+            })
+            .catch(err => {
+                console.error('There was an error fetching the transactions data!', err);
             });
     }, []);
 
@@ -73,8 +93,8 @@ const Wallet = () => {
     };
 
     const handleViewHistory = () => {
-        // Implement view history logic here
-        alert('View history functionality not implemented yet');
+        fetchTransactions();
+        setIsModalOpen(true);
     };
 
     const handleVNPayReturn = async () => {
@@ -110,6 +130,16 @@ const Wallet = () => {
         navigate('/wallet', { replace: true });
     };
 
+    const formatDateTime = (dateTime) => {
+        const date = new Date(dateTime);
+        const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+        const optionsTime = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        return {
+            date: date.toLocaleDateString(undefined, optionsDate),
+            time: date.toLocaleTimeString(undefined, optionsTime)
+        };
+    };
+
     if (!wallet) {
         return <div>Loading wallet...</div>;
     }
@@ -117,13 +147,41 @@ const Wallet = () => {
     return (
         <div className="wallet">
             <div className="wallet-card">
-                <h2>PET HEALTH CARE WALLET</h2>
-                <div className="wallet-info">
-                    <p><strong>Name:</strong> {wallet.user.name}</p>
-                    <p><strong>Phone:</strong> {wallet.user.phone}</p>
-                    <p><strong>Address:</strong> {wallet.user.address}</p>
-                    <p><strong>Balance:</strong> ${wallet.balance}</p>
+                <h2 style={{fontFamily:"Georgia", fontWeight:"bold"}}>YOUR WALLET</h2>
+                <div className="wallet-info" style={{marginLeft:"200px"}}>
+                    <div className="d-flex" >
+                        <div style={{fontStyle:"italic"}}>
+                         Name:
+                       </div>
+                        <div style={{fontWeight:"bold", marginLeft:"5px"}}>
+                        {wallet.user.name}
+                        </div> 
+                    </div>
+
+
+                    <div className="d-flex" >
+                        <div style={{fontStyle:"italic"}}>
+                         Phone:
+                       </div>
+                        <div style={{fontWeight:"bold", marginLeft:"5px"}}>
+                        {wallet.user.phone}
+                        </div> 
+                    </div>
+                    <div className="d-flex" >
+                        <div style={{fontStyle:"italic"}}>
+                         Address:
+                       </div>
+                        <div style={{fontWeight:"bold", marginLeft:"5px"}}>
+                        {wallet.user.address}
+                        </div> 
+                    </div>
+                    
+                  
                 </div>
+                <div className="d-flex" style={{ fontSize:"25px", marginLeft:"250px", marginBottom:"30px", fontFamily:"Arial", fontStyle:"italic"}}>
+                    <div>Balance:</div>
+                    <div style={{fontWeight:"bold"}}> {wallet.balance}$</div>
+                    </div>
                 <div className="wallet-actions">
                     <div className="action-group">
                         <input
@@ -131,21 +189,49 @@ const Wallet = () => {
                             value={depositAmount}
                             onChange={(e) => setDepositAmount(e.target.value)}
                             placeholder="Enter amount to deposit"
+                            style={{height:"45px", width:"250%"}}
                         />
-                        <button onClick={handleDeposit}>Deposit money into your wallet</button>
+                        <button onClick={handleDeposit}>Deposit Money </button>
                     </div>
-                    <div className="action-group">
-                        <input
-                            type="number"
-                            value={withdrawAmount}
-                            onChange={(e) => setWithdrawAmount(e.target.value)}
-                            placeholder="Enter amount to withdraw"
-                        />
-                        <button onClick={handleWithdraw}>Withdraw money</button>
-                    </div>
+                    
                     <button onClick={handleViewHistory}>Transaction History</button>
                 </div>
+
+
+
             </div>
+            
+            
+            <Modal
+    className="lichsu"
+    isOpen={isModalOpen}
+    onRequestClose={() => setIsModalOpen(false)}
+    contentLabel="Transaction History"
+>
+    <h2>Transaction History</h2>
+    {transactions.length === 0 ? (
+        <p>No transactions found.</p>
+    ) : (
+        <ul>
+            {transactions.map(transaction => {
+                const { date, time } = formatDateTime(transaction.transactionDate);
+                return (
+                    <li key={transaction.transactionId}>
+                        <p><strong>Transaction ID:</strong> {transaction.transactionId}</p>
+                        <div className="date-time">
+                            <p className="date"><strong>Date:</strong> {date}</p>
+                            <p className="time"><strong>Time:</strong> {time}</p>
+                        </div>
+                        <p><strong>Amount:</strong> {transaction.amount}</p>
+                        <p><strong>Type:</strong> {transaction.transactionType}</p>
+                    </li>
+                );
+            })}
+        </ul>
+    )}
+    <button onClick={() => setIsModalOpen(false)}>Close</button>
+</Modal>
+
         </div>
     );
 };

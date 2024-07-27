@@ -35,6 +35,7 @@ const BookingHistory = () => {
                     }
                 });
                 setBookingHistory(response.data);
+                console.log('Booking history fetched:', response.data); // Add this line
             } catch (error) {
                 console.error('Error fetching booking history:', error);
                 setError(error);
@@ -70,7 +71,6 @@ const BookingHistory = () => {
         });
         setBookingHistory(filteredData);
     };
-
     const viewBookingDetails = async (bookingId) => {
         try {
             const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${bookingId}`);
@@ -80,6 +80,7 @@ const BookingHistory = () => {
             console.error('Error fetching booking details:', error);
         }
     };
+    
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -149,6 +150,10 @@ const BookingHistory = () => {
             toast.error("Payment failed. Please try again.");
         }
     };
+
+    useEffect(() => {
+        console.log('Selected booking details updated:', selectedBookingDetails);
+    }, [selectedBookingDetails]);
 
     if (loading) return (
         <div className="loading">

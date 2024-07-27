@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import logo from '../../Assets/v186_574.png';
 import qrCode from '../../Assets/QR-Code-PNG-HD-Image.png';
 import creCard from '../../Assets/credit_card_PNG39.png';
@@ -71,6 +71,7 @@ const PaymentPage = () => {
         }
         setBillCode(uuidv4());
     }, []);
+
 
     const handleGoBack = () => {
         navigate('/booking');
@@ -188,11 +189,16 @@ const PaymentPage = () => {
                     'Content-Type': 'application/json'
                 }
             });
-    
-            console.log("Payment Response:", paymentResponse.data);
-            toast.success("Booking and payment successful!");
-            navigate('/payment-success');
             
+            console.log("Payment Response:", paymentResponse);
+            if(paymentResponse.data === "Payment success"){
+                toast.success("Booking and payment successful!");
+                navigate('/payment-success');  
+            }else{
+                toast.error("Booking or payment failed. Please try again.");
+                 navigate('/payment-failure');
+            }
+           
             // Clear local storage
             localStorage.removeItem('bookedInfo');
             localStorage.removeItem('selectedDate');
@@ -210,37 +216,6 @@ const PaymentPage = () => {
 
     const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
 
-    // const renderPaymentMethodDetails = () => {
-    //     switch (selectedPaymentMethod) {
-    //         case 'credit-card':
-    //             return (
-    //                 <div className="payment-details">
-    //                     <img src={creCard} alt="Credit Card" />
-    //                     <p>Enter your credit card details below.</p>
-    //                 </div>
-    //             );
-    //         case 'paypal':
-    //             return (
-    //                 <div className="payment-details">
-    //                     <img src={paypal} alt="PayPal" />
-    //                     <p>You will be redirected to PayPal to complete your purchase.</p>
-    //                 </div>
-    //             );
-    //         case 'bank-transfer':
-    //             return (
-    //                 <div className="payment-details">
-    //                     <img src={banktrans} alt="Bank Transfer" />
-    //                     <p>Transfer the amount to the following bank account.</p>
-    //                     <p>Account Number: XXX-XXX-XXX</p>
-    //                     <p>Bank Name: XXX Bank</p>
-    //                     <p>SWIFT Code: XXX 1234</p>
-    //                 </div>
-    //             );
-    //         default:
-    //             return ;
-    //     }
-    // };
-
     return (
         <div className='paymentPage'>
             <ToastContainer />
@@ -248,7 +223,7 @@ const PaymentPage = () => {
             <button className="go-back-button" onClick={handleGoBack}>Go Back</button>
             <div className="payment-page-container">
                 <div className='logo-div'>
-<div className="logo-container">
+                    <div className="logo-container">
                         <img src={logo} alt="Logo image" className="logo" />
                     </div>
                 </div>
@@ -269,7 +244,7 @@ const PaymentPage = () => {
                         <p><b>Email:</b> {user?.email}</p>
                         <p><b>Phone:</b> {user?.phone}</p>
                         <p><b>Address:</b> {user?.address}</p>
-                        <p><b>Notes:</b> </p>
+
                     </div>
                     <div className="booking-details">
                         <h5>Booking details</h5>

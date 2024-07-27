@@ -142,17 +142,6 @@ const MedicalHistory = () => {
                         <option key={diagnosis} value={diagnosis}>{diagnosis}</option>
                     ))}
                 </select>
-                <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                />
-                <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                />
-                <button onClick={handleDateFilter}>Filter by Date</button>
                 <CSVLink data={medicalHistoryData} filename={"medical-history.csv"}>
                     <button>Export to CSV</button>
                 </CSVLink>

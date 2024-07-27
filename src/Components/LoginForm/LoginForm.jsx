@@ -130,7 +130,7 @@ const LoginForm = () => {
                                 onChange={handleEmailChange}
                                 className={emailError ? 'invalid' : email ? 'valid' : ''}
                             />
-                            <MdEmail className="icon" />
+                            <MdEmail className="iconv" />
                             {emailError && <p className="errors-messagess">{emailError}</p>}
                         </div>
                         <div className="input-box">

@@ -77,7 +77,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
                     setSlots([]);
                 }
             } else {
-                setSlots([]); // Clear slots if no doctor is selected
+                setSlots([]);
             }
         };
         fetchSlots();
@@ -121,16 +121,17 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
             if (response.status === 200) {
                 onBookingComplete(newBooking);
 
-                setSelectedPet('');
-                setSelectedService('');
-                setSelectedDoctor('');
+                //setSelectedPet('');
+                //setSelectedService('');
+                //setSelectedDoctor('');
                 setSelectedSlot('');
-                setTotalCost(0);
+                //setTotalCost(0);
             } else {
                 throw new Error('Booking failed');
             }
         } catch (error) {
             toast.error('Booking failed: ' + error.message);
+
         }
     };
 
@@ -172,6 +173,9 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         }
     };
 
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 1);
+
     return (
         <div className="booking-container">
             <h3>Book an Appointment</h3>
@@ -182,6 +186,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
                         selected={selectedDate}
                         onChange={handleDateChange}
                         minDate={new Date()}
+                        maxDate={maxDate}
                         filterDate={validateDate}
                         dateFormat="yyyy-MM-dd"
                     />
