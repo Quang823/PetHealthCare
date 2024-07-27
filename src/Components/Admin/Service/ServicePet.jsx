@@ -4,24 +4,21 @@ import { useNavigate } from "react-router-dom";
 import './ServicePet.scss';
 import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
+
 const ServicePet = () => {
     const [showForm, setShowForm] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
     const navigate = useNavigate();
     const [service, setService] = useState([]);
     const [newService, setNewService] = useState({
-
         name: '',
         price: '',
-        description: ''
+        description: '',
+        image: null
     });
     const formRef = useRef(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postPerPage, setpostPerPage] = useState(5);
-
-
-
-
+    const [postPerPage, setPostPerPage] = useState(5);
 
     useEffect(() => {
         fetchService();
@@ -30,7 +27,6 @@ const ServicePet = () => {
     const indexOfLastPost = currentPage * postPerPage;
     const indexOfFirstPost = indexOfLastPost - postPerPage;
     const currentPosts = service.slice(indexOfFirstPost, indexOfLastPost);
-
 
     useEffect(() => {
         if (showForm || showEditForm) {
@@ -52,26 +48,46 @@ const ServicePet = () => {
     };
 
     const handleChange = (e) => {
-        setNewService({
-            ...newService,
-            [e.target.name]: e.target.value
-        });
+        const { name, value, files } = e.target;
+        if (name === 'image') {
+            setNewService({
+                ...newService,
+                image: files[0]
+            });
+        } else {
+            setNewService({
+                ...newService,
+                [name]: value
+            });
+        }
     };
 
     const handleAddNew = () => {
-        if (!newService.name || !newService.price || !newService.description) {
-            toast.error("Please fill in all fields");
+        if (!newService.name || !newService.price || !newService.description || !newService.image) {
+            toast.error("Please fill in all fields and select an image");
             return;
         }
-        const serviceData = { ...newService };
-        axios.post("http://localhost:8080/Service/create", serviceData)
-            .then(res => {
-                setService([...service, res.data]);
-                setNewService({
 
+        const formData = new FormData();
+        formData.append('request', JSON.stringify({
+            name: newService.name,
+            price: newService.price,
+            description: newService.description
+        }));
+        formData.append('file', newService.image);
+
+        axios.post("http://localhost:8080/Service/create", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then(res => {
+                setService([...service, res.data.data]);
+                setNewService({
                     name: '',
                     price: '',
-                    description: ''
+                    description: '',
+                    image: null
                 });
                 setShowForm(false);
                 toast.success("Add success");
@@ -86,16 +102,29 @@ const ServicePet = () => {
     };
 
     const handleEdit = () => {
-        const { serviceID, ...serviceData } = newService;
-        axios.put(`http://localhost:8080/Service/update/${serviceID}`, serviceData)
+        const formData = new FormData();
+        formData.append('request', JSON.stringify({
+            name: newService.name,
+            price: newService.price,
+            description: newService.description
+        }));
+        if (newService.image) {
+            formData.append('file', newService.image);
+        }
+
+        axios.put(`http://localhost:8080/Service/update/${newService.serviceID}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
             .then(res => {
-                setService(service.map(s => (s.serviceID === serviceID ? res.data : s)));
+                setService(service.map(s => (s.serviceID === newService.serviceID ? res.data.data : s)));
                 setShowEditForm(false);
                 setNewService({
-
                     name: '',
                     price: '',
-                    description: ''
+                    description: '',
+                    image: null
                 });
                 toast.success("Update success");
             })
@@ -111,7 +140,7 @@ const ServicePet = () => {
                 toast.success("Delete success");
             })
             .catch(err => {
-                toast.error("Failed to delete pet");
+                toast.error("Failed to delete service");
             });
     };
 
@@ -189,6 +218,12 @@ const ServicePet = () => {
                             value={newService.description}
                             onChange={handleChange}
                         />
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={handleChange}
+                            accept="image/*"
+                        />
                         <button className='btn btn-success' onClick={handleAddNew}>
                             Save
                         </button>
@@ -221,6 +256,12 @@ const ServicePet = () => {
                             placeholder="Description"
                             value={newService.description}
                             onChange={handleChange}
+                        />
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={handleChange}
+                            accept="image/*"
                         />
                         <button className='btn btn-success' onClick={handleEdit}>
                             Update
