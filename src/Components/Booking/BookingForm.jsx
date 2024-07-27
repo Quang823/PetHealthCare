@@ -35,7 +35,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         const fetchPets = async () => {
             try {
                 if (userID) {
-                    const response = await axios.get(`http://localhost:8080/pet/getAll/${userID}`);
+                    const response = await axios.get(`http://localhost:8080/pet/getPet/${userID}`);
                     setPets(response.data && Array.isArray(response.data) ? response.data : []);
                 }
             } catch (error) {
