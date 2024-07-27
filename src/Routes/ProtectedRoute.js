@@ -5,10 +5,10 @@ import { useAuth } from '../Context/UserContext';
 const ProtectedRoute = ({ allowedRoles }) => {
   const { user } = useAuth();
   
-  useEffect(() => {
-    console.log('ProtectedRoute - Current user:', user);
-    console.log('ProtectedRoute - Allowed roles:', allowedRoles);
-  }, [user, allowedRoles]);
+  // useEffect(() => {
+  //   console.log('ProtectedRoute - Current user:', user);
+  //   console.log('ProtectedRoute - Allowed roles:', allowedRoles);
+  // }, [user, allowedRoles]);
 
   if (user.auth === null) {
     console.log('ProtectedRoute - Auth is null, showing loading');

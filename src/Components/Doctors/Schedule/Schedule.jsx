@@ -5,7 +5,7 @@ const Schedule = () => {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate('/doctor')
+    
 
   };
   return (

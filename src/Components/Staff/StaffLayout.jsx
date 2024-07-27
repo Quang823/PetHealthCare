@@ -21,7 +21,7 @@ const StaffLayout = () => {
         )}
         {toggle && <div className='col-4 col-md-2'></div>}
         <div className='col'>
-          {/* <Nav Toggle={Toggle} /> */}
+          <Nav Toggle={Toggle} />
           <Outlet />
         </div>
       </div>

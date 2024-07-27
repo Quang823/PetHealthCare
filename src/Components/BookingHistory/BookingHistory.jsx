@@ -16,7 +16,8 @@ const BookingHistory = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const [showConfirmPayment, setShowConfirmPayment] = useState(false);
+    const [pendingPaymentBooking, setPendingPaymentBooking] = useState(null);
     useEffect(() => {
         const fetchBookingHistory = async () => {
             const token = localStorage.getItem('token');
@@ -42,7 +43,7 @@ const BookingHistory = () => {
             }
         };
         fetchBookingHistory();
-    }, [isModalOpen]);
+    }, [showConfirmPayment]);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -99,7 +100,55 @@ const BookingHistory = () => {
             toast.error("Failed to cancel booking detail");
         }
     };
+    const handlePayment = (booking) => {
+        setPendingPaymentBooking(booking);
+        setShowConfirmPayment(true);
+        
+    };
+    const confirmPayment = async () => {
+        const token = localStorage.getItem('token');
+        if (!token || !pendingPaymentBooking) {
+            console.error('No token found in localStorage or no pending payment.');
+            return;
+        }
     
+        try {
+            const decodedToken = jwtDecode(token);
+            const walletId = localStorage.getItem('walletId');
+    
+            const paymentData = {
+                walletId: walletId,
+                bookingId: pendingPaymentBooking.bookingId,
+                amount: pendingPaymentBooking.totalPrice
+            };
+    
+            console.log("Payment Data:", paymentData);
+    
+            const paymentResponse = await axios.post('http://localhost:8080/payment/pay-booking', paymentData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            console.log("Payment Response:", paymentResponse.data);
+
+           if (paymentResponse.data.data === "Account balance is not enough to make transactions") {
+            toast.error("Insufficient balance. Please add funds to your wallet.");
+        } else if (paymentResponse.data.message === "Success") {
+            toast.success("Payment successful!");
+            setShowConfirmPayment(false);
+            setPendingPaymentBooking(null);
+        } else {
+            toast.error("Payment failed. Please try again.");
+        }
+            // Refresh the booking history
+            // You might want to call your fetchBookingHistory function here
+        } catch (error) {
+            console.error('Error processing payment:', error);
+            toast.error("Payment failed. Please try again.");
+        }
+    };
 
     if (loading) return (
         <div className="loading">
@@ -162,13 +211,31 @@ const BookingHistory = () => {
                                 <td>{booking.status}</td>
                                 <td>{booking.totalPrice}</td>
                                 <td>
-                                    <button onClick={() => viewBookingDetails(booking.bookingId)}>View Booking Details</button>
+                                <button onClick={() => viewBookingDetails(booking.bookingId)}>View Booking Details</button>
+                                {booking.status.toLowerCase() === 'pending' && (
+                                   <button onClick={() => handlePayment(booking)}>Pay Again</button>
+                              )}
+                                    
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            {showConfirmPayment && pendingPaymentBooking && (
+                    <div className="modal show">
+                   <div className="modal-content">
+                     <h3>Confirm Payment</h3>
+                      <p>Are you sure you want to pay again for booking ID: {pendingPaymentBooking.bookingId}  ?</p>
+                      <p>Total amount: {pendingPaymentBooking.totalPrice}</p>
+                      <button onClick={confirmPayment}>Confirm Payment</button>
+                       <button onClick={() => {
+                         setShowConfirmPayment(false);
+                        setPendingPaymentBooking(null);
+                       }}>Cancel</button>
+                       </div>
+                       </div>
+)}
             {isModalOpen && (
                 <div className="modal show">
                     <div className="modal-content">
@@ -184,6 +251,7 @@ const BookingHistory = () => {
                                     <th>Pet Name</th>
                                     <th>Service Name</th>
                                     <th>Slot Time</th>
+                                    <th>Total Price</th>
                                     <th>Acction</th>
                                 </tr>
                             </thead>
@@ -197,8 +265,11 @@ const BookingHistory = () => {
                                         <td>{detail.pet.petName}</td>
                                         <td>{detail.services.name}</td>
                                         <td>{detail.slot.startTime} - {detail.slot.endTime}</td>
+                                        <td>{detail.services.price}</td>
                                         <td>
-                                        <button onClick={() => cancelBookingDetail(detail.bookingDetailId, detail.pet.user.userId)}>Cancle</button>
+                                        
+                                        <button onClick={() => cancelBookingDetail(detail.bookingDetailId, detail.pet.user.userId)}>Cancel</button>
+                                        
                                         </td>
                                     </tr>
                                 ))}
