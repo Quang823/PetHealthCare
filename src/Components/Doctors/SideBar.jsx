@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { CiLogout } from "react-icons/ci";
 import { useAuth } from '../../Context/UserContext';
 function Sidebar() {
-    const { logout, user } = useAuth;
+    const { logout, user } = useAuth();
     const navigate = useNavigate();
     const handleLogout = () =>{
         logout();

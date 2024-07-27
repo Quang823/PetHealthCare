@@ -28,6 +28,9 @@ import Schedule from './Components/Doctors/Schedule/Schedule';
 import Home from './Components/Doctors/Home';
 import VetExaminationForm from './Components/Doctors/VetExaminationForm';
 import { useAuth, UserProvider } from './Context/UserContext';
+import LoginForm from './Components/LoginForm/LoginForm';
+import RegisterForm from './Components/RegisterForm/RegisterForm';
+import PublicRoute from './Routes/PublicRoute';
 
 
 function App() {
@@ -43,8 +46,13 @@ function App() {
      <UserProvider>
       <Routes>
         {/* Public routes */}
-        <Route path="/*" element={<AppRoute />} />
-        
+       <Route element={<ProtectedRoute allowedRoles={['Customer']} />}>
+       <Route path="/*" element={<AppRoute />} />
+       </Route>
+       <Route element={<PublicRoute />}>
+            <Route path='/login' element={<LoginForm />} />
+            <Route path='/register' element={<RegisterForm />} />
+          </Route>
 
 
         {/* Protected routes for Admin */}

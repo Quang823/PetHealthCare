@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './BookingHistory.scss';
+import { toast } from 'react-toastify';
 
 const BookingHistory = () => {
     const [bookingHistory, setBookingHistory] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedBooking, setSelectedBooking] = useState(null);
-    const [selectedBookingDetails, setSelectedBookingDetails] = useState([]);
+    const [selectedBookingDetails, setSelectedBookingDetails] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showConfirmPayment, setShowConfirmPayment] = useState(false);
+    const [pendingPaymentBooking, setPendingPaymentBooking] = useState(null);
     useEffect(() => {
         const fetchBookingHistory = async () => {
             const token = localStorage.getItem('token');
@@ -42,7 +44,7 @@ const BookingHistory = () => {
             }
         };
         fetchBookingHistory();
-    }, []);
+    }, [showConfirmPayment]);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -69,53 +71,85 @@ const BookingHistory = () => {
         });
         setBookingHistory(filteredData);
     };
-
-    const handleBookingClick = async (booking) => {
-        console.log('Booking clicked:', booking); // Log booking click
+    const viewBookingDetails = async (bookingId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${booking.bookingId}`);
-            setSelectedBooking(booking);
-            console.log("selectedBooking",selectedBooking);
+            const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${bookingId}`);
             setSelectedBookingDetails(response.data);
-            console.log('Booking Details:', response.data); // Debugging line
+            setIsModalOpen(true);
         } catch (error) {
             console.error('Error fetching booking details:', error);
         }
     };
     
 
-    const handleCloseModal = () => {
-        setSelectedBooking(null);
-        setSelectedBookingDetails([]);
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedBookingDetails(null);
     };
-
-    const handleCancelBookingDetail = async (bookingDetailId) => {
+    const cancelBookingDetail = async (bookingDetailId, userId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/bookingDetail/cancelBookingDetail/${bookingDetailId}`);
-            if (response.data.status === "WAITING") {
-                alert('Booking detail canceled successfully!');
-                // Optionally, refresh the booking details or booking history
-                if (selectedBooking) {
-                    handleBookingClick(selectedBooking);
-                }
-            } else {
-                alert('' + response.data.message);
+            const response = await axios.get(`http://localhost:8080/bookingDetail/cancelBookingDetail/?bookingDetailID=${bookingDetailId}&userId=${userId}`);
+            if (response.data.status === "ok") {
+                // Filter out the canceled booking detail
+                setSelectedBookingDetails(prevDetails => 
+                    prevDetails.filter(detail => detail.bookingDetailId !== bookingDetailId)
+                );
+                toast.success("Cancel success")// Show success message
             }
         } catch (error) {
             console.error('Error canceling booking detail:', error);
-            alert('Failed to cancel booking detail.');
+            toast.error("Failed to cancel booking detail");
         }
     };
+    const handlePayment = (booking) => {
+        setPendingPaymentBooking(booking);
+        setShowConfirmPayment(true);
+        
+    };
+    const confirmPayment = async () => {
+        const token = localStorage.getItem('token');
+        if (!token || !pendingPaymentBooking) {
+            console.error('No token found in localStorage or no pending payment.');
+            return;
+        }
+    
+        try {
+            const decodedToken = jwtDecode(token);
+            const walletId = localStorage.getItem('walletId');
+    
+            const paymentData = {
+                walletId: walletId,
+                bookingId: pendingPaymentBooking.bookingId,
+                amount: pendingPaymentBooking.totalPrice
+            };
+    
+            console.log("Payment Data:", paymentData);
+    
+            const paymentResponse = await axios.post('http://localhost:8080/payment/pay-booking', paymentData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            console.log("Payment Response:", paymentResponse.data);
 
-    const filteredData = bookingHistory.filter((booking) => {
-        const bookingDate = booking.date ?? '';
-        const bookingId = booking.bookingId.toString();
-        const bookingStatus = booking.status?.toLowerCase() ?? '';
-
-        return bookingDate.includes(searchTerm) ||
-            bookingId.includes(searchTerm) ||
-            bookingStatus.includes(searchTerm.toLowerCase());
-    });
+           if (paymentResponse.data.data === "Account balance is not enough to make transactions") {
+            toast.error("Insufficient balance. Please add funds to your wallet.");
+        } else if (paymentResponse.data.message === "Success") {
+            toast.success("Payment successful!");
+            setShowConfirmPayment(false);
+            setPendingPaymentBooking(null);
+        } else {
+            toast.error("Payment failed. Please try again.");
+        }
+            // Refresh the booking history
+            // You might want to call your fetchBookingHistory function here
+        } catch (error) {
+            console.error('Error processing payment:', error);
+            toast.error("Payment failed. Please try again.");
+        }
+    };
 
     useEffect(() => {
         console.log('Selected booking details updated:', selectedBookingDetails);
@@ -160,201 +194,92 @@ const BookingHistory = () => {
                 />
                 <button className='FilterbyDateRange' onClick={handleDateFilter}>Filter by Date Range</button>
             </div>
-            <div className="timetable">
-                <div className="timetable-header">
-                    <div className="timetable-header-item">Date</div>
-                    <div className="timetable-header-item">Booking ID</div>
-                    <div className="timetable-header-item">Status</div>
-                    <div className="timetable-header-item">Total Price</div>
-                </div>
-                {filteredData.map((booking) => {
-                    const date = new Date(booking.date);
-                    const formattedDate = date.toLocaleDateString();
-                    const formattedTime = date.toLocaleTimeString();
-
-                    const statusClass = `timetable-item status ${booking.status.toLowerCase()}`;
-                    const statusColor = booking.status.toLowerCase() === 'confirmed' ? 'green' : booking.status.toLowerCase() === 'paid' ? 'red' : '';
-
-                    return (
-                        <div
-                            key={booking.bookingId}
-                            className="timetable-row"
-                            onClick={() => handleBookingClick(booking)}
-                        >
-                            <div className="timetable-item">{formattedDate}</div>
-                            <div className="timetable-item">{booking.bookingId}</div>
-                            <div className={`${statusClass} ${statusColor}`}>{booking.status}</div>
-                            <div className="timetable-item">${booking.totalPrice}</div>
-                        </div>
-                    );
-                })}
-            </div>
-            {selectedBooking && (
-                <div className="modal">
-                    <div className="custom-modal-content">
-                        <span className="custom-close-button" onClick={handleCloseModal}>&times;</span>
-                        <h2>Booking History Details</h2>
-                        {selectedBookingDetails.map((detail, index) => (
-                            <React.Fragment key={detail.bookingId}>
-                                <table className="table-section">
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="2">Booking Details</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table-field-name">Booking Detail ID:</td>
-                                            <td>{detail.bookingDetailId}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Need Cage:</td>
-                                            <td>{detail.needCage ? 'Yes' : 'No'}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Date:</td>
-                                            <td>{new Date(detail.date).toLocaleDateString()}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Booking ID:</td>
-                                            <td>{detail.booking?.bookingId}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Booking Date:</td>
-                                            <td>{new Date(detail.booking?.date).toLocaleDateString()}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Status:</td>
-                                            <td>{detail.status}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Total Price:</td>
-                                            <td>${detail.booking?.totalPrice}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table className="table-section">
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="2">Pet Details</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table-field-name">Pet Name:</td>
-                                            <td>{detail.pet?.petName}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Pet Age:</td>
-                                            <td>{detail.pet?.petAge}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Pet Gender:</td>
-                                            <td>{detail.pet?.petGender}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Pet Type:</td>
-                                            <td>{detail.pet?.petType}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Vaccination:</td>
-                                            <td>{detail.pet?.vaccination}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table className="table-section">
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="2">Owner Details</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table-field-name">Owner Name:</td>
-                                            <td>{detail.pet?.user?.name}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Email:</td>
-                                            <td>{detail.pet?.user?.email}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Phone:</td>
-                                            <td>{detail.pet?.user?.phone}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Address:</td>
-                                            <td>{detail.pet?.user?.address}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table className="table-section">
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="2">Service Details</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table-field-name">Service Name:</td>
-                                            <td>{detail.services?.name}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Price:</td>
-                                            <td>${detail.services?.price}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Description:</td>
-                                            <td>{detail.services?.description}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table className="table-section">
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="2">Veterinarian</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table-field-name">Doctor Name:</td>
-                                            <td>{detail.doctors?.name}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">Phone Number:</td>
-                                            <td>{detail.doctors?.phone}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table className="table-section">
-                                    <thead>
-                                        <tr>
-                                            <th colSpan="2">Slot Details</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td className="table-field-name">Start Time:</td>
-                                            <td>{detail.slot?.startTime}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="table-field-name">End Time:</td>
-                                            <td>{detail.slot?.endTime}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <button className="cancel-button" onClick={() => handleCancelBookingDetail(detail.bookingDetailId)}>
-                                    Cancel Booking Detail
-                                </button>
-
-                                {index < selectedBookingDetails.length - 1 && <hr className="divider" />}
-                            </React.Fragment>
+            <div className="booking-list">
+                <table className="booking-table">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Total Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {bookingHistory.filter(booking => 
+                            booking.bookingId.toString().includes(searchTerm) ||
+                            booking.status.toLowerCase().includes(searchTerm.toLowerCase())
+                        ).map(booking => (
+                            <tr key={booking.bookingId} className="booking-item">
+                                <td>{booking.bookingId}</td>
+                                <td>{booking.date}</td>
+                                <td>{booking.status}</td>
+                                <td>{booking.totalPrice}</td>
+                                <td>
+                                <button onClick={() => viewBookingDetails(booking.bookingId)}>View Booking Details</button>
+                                {booking.status.toLowerCase() === 'pending' && (
+                                   <button onClick={() => handlePayment(booking)}>Pay Again</button>
+                              )}
+                                    
+                                </td>
+                            </tr>
                         ))}
+                    </tbody>
+                </table>
+            </div>
+            {showConfirmPayment && pendingPaymentBooking && (
+                    <div className="modal show">
+                   <div className="modal-content">
+                     <h3>Confirm Payment</h3>
+                      <p>Are you sure you want to pay again for booking ID: {pendingPaymentBooking.bookingId}  ?</p>
+                      <p>Total amount: {pendingPaymentBooking.totalPrice}</p>
+                      <button onClick={confirmPayment}>Confirm Payment</button>
+                       <button onClick={() => {
+                         setShowConfirmPayment(false);
+                        setPendingPaymentBooking(null);
+                       }}>Cancel</button>
+                       </div>
+                       </div>
+)}
+            {isModalOpen && (
+                <div className="modal show">
+                    <div className="modal-content">
+                        <span className="close" onClick={closeModal}>&times;</span>
+                        <h3>Booking Details</h3>
+                        <table className="booking-details-table">
+                            <thead>
+                                <tr>
+                                    <th>Booking Detail ID</th>
+                                    <th>Need Cage</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Pet Name</th>
+                                    <th>Service Name</th>
+                                    <th>Slot Time</th>
+                                    <th>Total Price</th>
+                                    <th>Acction</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {selectedBookingDetails.map(detail => (
+                                    <tr key={detail.bookingDetailId}>
+                                        <td>{detail.bookingDetailId}</td>
+                                        <td>{detail.needCage ? 'Yes' : 'No'}</td>
+                                        <td>{detail.date}</td>
+                                        <td>{detail.status}</td>
+                                        <td>{detail.pet.petName}</td>
+                                        <td>{detail.services.name}</td>
+                                        <td>{detail.slot.startTime} - {detail.slot.endTime}</td>
+                                        <td>{detail.services.price}</td>
+                                        <td>
+                                        
+                                        <button onClick={() => cancelBookingDetail(detail.bookingDetailId, detail.pet.user.userId)}>Cancel</button>
+                                        
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             )}
