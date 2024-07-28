@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { Modal, Button, Table, Form, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { confirmAlert } from 'react-confirm-alert'; // Import the confirm dialog
+import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { jwtDecode } from 'jwt-decode'; // Import jwt-decode correctly
+import {jwtDecode} from 'jwt-decode'; // Fixed import statement
 import { useNavigate } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa";
-import './TablePet.scss'; // Ensure your custom styles are imported
+import './TablePet.scss';
 
 const TablePet = () => {
     const navigate = useNavigate();
@@ -85,7 +85,7 @@ const TablePet = () => {
     };
 
     const handleSubmit = (isEdit = false) => {
-        const { petName, petAge, petGender, petType, vaccination } = petForm;
+        const { petName, petAge, petGender, petType, vaccination, imageUrl } = petForm;
         let messages = {
             petName: validatePetName(petName),
             petAge: validatePetAge(petAge),
@@ -99,17 +99,22 @@ const TablePet = () => {
         }
 
         const formData = new FormData();
-        const requestJson = JSON.stringify({
+        formData.append('request', JSON.stringify({
             petName,
             petAge,
             petGender,
             petType,
-            vaccination
-        });
+            vaccination,
+            imageUrl: file ? '' : imageUrl
+        }));
 
-        formData.append('request', requestJson);
-        if (file) formData.append('file', file);
-        console.log("pform", petForm)
+        if (file) {
+            formData.append('file', file);
+        } else if (isEdit && !file && imageUrl) {
+            formData.append('file', imageUrl);
+        }
+        console.log("sdasdas",petForm.imageUrl);
+
         const request = isEdit
             ? axios.put(`http://localhost:8080/pet/update/${petForm.petId}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             : axios.post(`http://localhost:8080/pet/create/${userID}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
@@ -159,7 +164,6 @@ const TablePet = () => {
         });
     };
 
-
     const handleViewVaccine = (petId, petName) => {
         navigate(`/vaccine/${petId}`, { state: { petName } });
     };
@@ -197,7 +201,6 @@ const TablePet = () => {
                 break;
         }
 
-        // Reset the selected value back to the default
         e.target.selectedIndex = 0;
     };
 
