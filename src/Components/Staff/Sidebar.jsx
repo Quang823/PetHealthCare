@@ -58,7 +58,7 @@ function Sidebar() {
         </NavLink>
         <NavLink className='list-group-item py-2' to="/staff/bookingstaff" >
           <i className='bi bi-bag-fill fs-5 me-3'></i>
-          <span>Booking</span>
+          <span>Confirm Booking</span>
         </NavLink>
         <NavLink className='list-group-item py-2' to="/staff/refundStaff" >
           <i className='bi bi-bag-fill fs-5 me-3'></i>
@@ -75,6 +75,10 @@ function Sidebar() {
         <NavLink className='list-group-item py-2' to="/staff/addCageStaff" >
           <i className='bi bi-briefcase-fill fs-5 me-3'></i>
           <span>Add Cage</span>
+        </NavLink>
+        <NavLink className='list-group-item py-2' to="/staff/addslotcancel" >
+          <i className='bi bi-briefcase-fill fs-5 me-3'></i>
+          <span>Add slot cancel</span>
         </NavLink>
         <button className='list-group-item py-2' onClick={handleLogout}>
           <i className='bi bi-power fs-5 me-3'></i>

@@ -17,7 +17,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
   if (!user.auth) {
     console.log('ProtectedRoute - User not authenticated, redirecting to login');
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   if (!allowedRoles.includes(user.role)) {

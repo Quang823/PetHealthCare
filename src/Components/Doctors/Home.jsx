@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { FaEye, FaStethoscope } from 'react-icons/fa';
+import { FaEye, FaStethoscope, FaTimes } from 'react-icons/fa';
 import { Spinner } from 'react-bootstrap';
 import Nav from './Nav';
 import BookingDetailModal from './BookingDetailModal';
 import './Homee.scss';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
+import { toast } from 'react-toastify';
 
 function Home({ Toggle }) {
     const [bookingDetails, setBookingDetails] = useState([]);
@@ -67,6 +68,36 @@ function Home({ Toggle }) {
             navigate('/examineDoctor', { state: { bookingDetail: { ...bookingDetail, booking: { ...bookingDetail.booking, status: 'EXAMINING' } } } });
         } catch (error) {
             console.error('Error updating status to Examining:', error);
+        }
+    };
+
+    const handleCancelSlot = async (bookingDetail) => {
+        const { bookingDetailId, date, pet: { vetId }, vetCancelled } = bookingDetail;
+    
+        // Kiểm tra nếu slot đã bị hủy bởi bác sĩ thú y
+        if (vetCancelled) {
+            toast.error('This slot has already been cancelled.');
+            return;
+        }
+    
+        const formattedDate = new Date(date).toISOString().split('T')[0]; // Format date as yyyy-MM-dd
+        const token = localStorage.getItem('token');
+        try {
+            const decodedToken = jwtDecode(token);
+            const userId = decodedToken.User.map.userID;
+            await axios.get(`http://localhost:8080/bookingDetail/vetCancelBookingDetail/?dateTime=${formattedDate}&vetId=${userId}`);
+            setBookingDetails(prevDetails =>
+                prevDetails.map(detail =>
+                    detail.bookingDetailId === bookingDetailId
+                        ? { ...detail, vetCancelled: true }
+                        : detail
+                )
+            );
+            toast.success('Slot has been successfully cancelled');
+            fetchBookingDetails(); // Refresh the booking details
+        } catch (error) {
+            console.error('Error cancelling slot:', error);
+            alert('Failed to cancel the slot. Please try again.');
         }
     };
 
@@ -167,6 +198,13 @@ function Home({ Toggle }) {
                                                             onClick={() => handleViewDetail(detail)}
                                                         >
                                                             <FaEye className='icoon' /> View
+                                                        </button>
+                                                        <button
+                                                            className="bttn btn-danger"
+                                                            onClick={() => handleCancelSlot(detail)}
+                                                            disabled={detail.vetCancelled}
+                                                        >
+                                                             <FaTimes className='icoon' /> {detail.vetCancelled ? 'Cancelled' : 'Cancel Slot'}
                                                         </button>
                                                     </td>
                                                 </tr>

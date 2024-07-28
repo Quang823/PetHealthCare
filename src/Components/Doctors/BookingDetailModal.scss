@@ -19,18 +19,23 @@
 }
 
 .modal-content {
-    background-color: #fff;
-    padding: 30px 40px; /* Increased padding for better spacing */
+    background-color: #a3cdd0 !important;
+    padding: 40px px; /* Increased padding for better spacing */
     border-radius: 10px; /* Subtle rounded corners */
     width: 700px; /* Increased width for better readability */
-    max-width: 95%;
-    max-height: 90vh;
+    max-width: 100%;
+    max-height: 100vh;
     overflow-y: auto;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     position: relative;
     animation: slideIn 0.3s ease-in-out;
     font-family: 'Arial', sans-serif; /* Improved font */
     border-top: 5px solid #2c3e50; /* Professional dark color border */
+    select{
+        width: 100%;
+        display: flex;
+        padding: 10px 10px;
+    }
 }
 
 @keyframes slideIn {

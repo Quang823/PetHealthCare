@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
+
 import { Modal, Button, Table, Form, Row, Col } from 'react-bootstrap';
+
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {jwtDecode} from 'jwt-decode'; // Fixed import statement
 import { useNavigate } from 'react-router-dom';
-import { FaPlus } from "react-icons/fa";
 import './TablePet.scss';
 
 const TablePet = () => {
@@ -220,6 +221,7 @@ const TablePet = () => {
 
     return (
         <div className="phs-table-container">
+
             <h4 className="phs-header">List of Pets</h4>
             <Button
                 onClick={() => setShowForm(true)}
@@ -229,6 +231,7 @@ const TablePet = () => {
                 <FaPlus className="add-icon" /> Add New Pet
             </Button>
             <Table className="phs-styled-table" responsive="md" striped hover>
+
                 <thead>
                     <tr>
                         <th>Pet Name</th>
@@ -252,27 +255,32 @@ const TablePet = () => {
                                 {pet.imageUrl && <img src={pet.imageUrl} alt={pet.petName} className="pet-image" style={{ width: '170px', height: '120px' }} />}
                             </td>
                             <td>
+
                                 <Form.Select onChange={(e) => handleActionChange(e, pet)} className="action-select">
                                     <option value="">Select Action</option>
                                     <option value="edit">Edit</option>
                                     <option value="delete">Delete</option>
                                     <option value="viewHistory">View History</option>
                                 </Form.Select>                           
+
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
 
+
             <Modal
                 show={showForm || showEditForm}
                 onHide={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}
                 className="pet-modal"
             >
+
                 <Modal.Header closeButton>
                     <Modal.Title>{showEditForm ? 'Edit Pet' : 'Add New Pet'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+
                     <Form>
                         <Row className="mb-3">
                             <Col md={6}>
@@ -387,6 +395,7 @@ const TablePet = () => {
                         onClick={() => handleSubmit(showEditForm)}
                     >
                         {showEditForm ? 'Update Pet' : 'Add Pet'}
+
                     </Button>
                 </Modal.Footer>
             </Modal>
