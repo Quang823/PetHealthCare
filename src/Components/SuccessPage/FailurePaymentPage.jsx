@@ -8,11 +8,11 @@ const SuccessFailurePage = () => {
     const navigate = useNavigate();
 
     const handleRetryPayment = () => {
-        navigate('/payment');
+        navigate('/booking-history');
     };
 
-    const handleChooseAnotherMethod = () => {
-        navigate('/choose-payment-method');
+    const handleViewWallet = () => {
+        navigate('/wallet');
     };
 
     return (
@@ -23,7 +23,7 @@ const SuccessFailurePage = () => {
                 <p>Your payment has failed. Please try again or choose another payment method.</p>
                 <div className="button-group">
                     <button className="btnc" onClick={handleRetryPayment}>Retry Payment</button>
-                    <button className="btnc" onClick={handleChooseAnotherMethod}>Choose Another Payment Method</button>
+                    <button className="btnc" onClick={handleViewWallet}>View Wallet</button>
                 </div>
             </div>
         </div>

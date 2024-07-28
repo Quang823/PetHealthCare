@@ -58,14 +58,14 @@ function Home({ Toggle }) {
     };
 
     const handleExamine = async (bookingDetail) => {
-        if (bookingDetail.booking.status === 'Completed') {
+        if (bookingDetail.booking.status === 'COMPLETED') {
             alert('This booking has already been completed. Please select another booking for examination.');
             return;
         }
 
         try {
-            await axios.put(`http://localhost:8080/bookingDetail/update/status/${bookingDetail.bookingDetailId}`, { status: 'Examining' });
-            navigate('/examineDoctor', { state: { bookingDetail: { ...bookingDetail, booking: { ...bookingDetail.booking, status: 'Examining' } } } });
+            await axios.put(`http://localhost:8080/bookingDetail/update/status/${bookingDetail.bookingDetailId}`, { status: 'EXAMINING' });
+            navigate('/examineDoctor', { state: { bookingDetail: { ...bookingDetail, booking: { ...bookingDetail.booking, status: 'EXAMINING' } } } });
         } catch (error) {
             console.error('Error updating status to Examining:', error);
         }
@@ -122,11 +122,11 @@ function Home({ Toggle }) {
 
     const getStatusClass = (status) => {
         switch (status) {
-            case 'Confirmed':
+            case 'CONFIRMED':
                 return 'status-confirmed';
-            case 'Examining':
+            case 'EXAMINING':
                 return 'status-examining';
-            case 'Completed':
+            case 'COMPLETED':
                 return 'status-examcompleted';
             default:
                 return '';

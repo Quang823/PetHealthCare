@@ -3,9 +3,7 @@ import axios from "axios";
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
 import Modal from 'react-modal';
-
 
 const Wallet = () => {
     const [wallet, setWallet] = useState(null);
@@ -36,10 +34,11 @@ const Wallet = () => {
     const fetchTransactions = useCallback(() => {
         const walletId = localStorage.getItem('walletId');
 
-        axios.get(`http://localhost:8080/payment/getAll?walletId=${walletId}`)
+        axios.get(`http://localhost:8080/payment/get-all?walletId=${walletId}`)
             .then(res => {
-                if (Array.isArray(res.data)) {
-                    setTransactions(res.data);
+                if (res.data.status === "ok" && Array.isArray(res.data.data)) {
+                    console.log('Transactions data:', res.data.data); // Debug log
+                    setTransactions(res.data.data);
                 } else {
                     console.error('Unexpected transactions data structure:', res.data);
                 }
@@ -178,10 +177,11 @@ const Wallet = () => {
                     
                   
                 </div>
-                <div className="d-flex" style={{ fontSize:"25px", marginLeft:"250px", marginBottom:"30px", fontFamily:"Arial", fontStyle:"italic"}}>
-                    <div>Balance:</div>
-                    <div style={{fontWeight:"bold"}}> {wallet.balance}$</div>
-                    </div>
+                <div className="wallet-balance">
+    <div>Balance:</div>
+    <div>{wallet.balance}VND</div>
+</div>
+
                 <div className="wallet-actions">
                     <div className="action-group">
                         <input
