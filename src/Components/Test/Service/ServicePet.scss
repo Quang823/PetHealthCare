@@ -1,15 +1,5 @@
-.container {
-    padding: 20px;
-    
-}
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.add-button,  .edit-button, .delete-button {
+.add-button, .edit-button, .delete-button {
     padding: 5px 5px;
     margin: 0 5px;
     color: white;
@@ -18,9 +8,9 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    
 }
- .back-button{
+
+.back-button {
     padding: 8px 16px;
     margin: 0 5px;
     color: white;
@@ -31,7 +21,8 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     width: 100px;
 }
-.btn-add{
+
+.bttnn-add {
     padding: 8px 16px;
     margin: 0 5px;
     color: rgb(238, 229, 229);
@@ -55,16 +46,17 @@
 .add-button:active {
     background-color: #1e7e34;
 }
-.btn-add {
+
+.bttnn-add {
     background-color: #28a745;
 }
 
-.btn-add:hover {
+.bttnn-add:hover {
     background-color: #218838;
     transform: scale(1.05);
 }
 
-.btn-add:active {
+.bttnn-add:active {
     background-color: #1e7e34;
 }
 
@@ -106,16 +98,6 @@
 .delete-button:active {
     background-color: #bd2130;
 }
-/* ServicePet.scss */
-.container {
-    padding: 20px;
-}
-
-.hehe {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .table {
     margin-top: 20px;
@@ -129,13 +111,46 @@
     background-color: #f9f9f9;
 }
 
-.btn-add {
-    margin-right: 10px;
+.form-container h3 {
+    margin-bottom: 20px;
 }
 
-.btn {
-    margin-right: 10px;
+.form-container input[type="text"],
+.form-container input[type="number"],
+.form-container input[type="file"],
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
+
+.form-container button {
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.form-container button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.form-container button:active {
+    background-color: #1e7e34;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+
+
 .pagination {
     display: flex;
     justify-content: center;
@@ -143,13 +158,13 @@
     margin-top: 20px;
     list-style-type: none;
     padding: 0;
-  }
-  
-  .pagination li {
+}
+
+.pagination li {
     margin: 0 5px;
-  }
-  
-  .pagination a {
+}
+
+.pagination a {
     display: block;
     padding: 8px 16px;
     text-decoration: none;
@@ -157,18 +172,18 @@
     background-color: #f2f2f2;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-  }
-  
-  .pagination a:hover {
+}
+
+.pagination a:hover {
     background-color: #e6e6e6;
-  }
-  
-  .pagination .active a {
+}
+
+.pagination .active a {
     background-color: #4CAF50;
     color: white;
-  }
-  
-  .pagination .disabled a {
+}
+
+.pagination .disabled a {
     opacity: 0.6;
     cursor: not-allowed;
-  }
+}

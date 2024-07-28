@@ -46,9 +46,10 @@ const RegisterForm = () => {
     };
 
     const validateName = (name) => {
-        const re = /^[a-zA-Z\s]{6,}$/; // Regular expression to check for only letters and spaces, minimum 6 characters
+        const re = /^[a-zA-Z\s]{6,12}$/; // Regular expression to check for only letters and spaces, between 6 and 12 characters
         return re.test(name);
     };
+
 
     const handleEmailChange = (event) => {
         const value = event.target.value;
@@ -91,9 +92,10 @@ const RegisterForm = () => {
         const value = event.target.value;
         setName(value);
         const isValid = validateName(value);
-        setNameError(isValid ? "" : "Name must be at least 6 characters and contain only letters");
+        setNameError(isValid ? "" : "Name must be between 6 and 12 characters (letters only)");
         setIsNameValid(isValid);
     };
+
 
     const loginLink = (event) => {
         event.preventDefault();

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import Table from 'react-bootstrap/Table';
+import { Modal, Button, Table, Form, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { jwtDecode } from 'jwt-decode';
+import { confirmAlert } from 'react-confirm-alert'; // Import the confirm dialog
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { jwtDecode } from 'jwt-decode'; // Import jwt-decode correctly
 import { useNavigate } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa";
-import './TablePet.scss';
+import './TablePet.scss'; // Ensure your custom styles are imported
 
 const TablePet = () => {
     const navigate = useNavigate();
@@ -107,7 +109,7 @@ const TablePet = () => {
 
         formData.append('request', requestJson);
         if (file) formData.append('file', file);
-
+        console.log("pform", petForm)
         const request = isEdit
             ? axios.put(`http://localhost:8080/pet/update/${petForm.petId}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             : axios.post(`http://localhost:8080/pet/create/${userID}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
@@ -126,45 +128,37 @@ const TablePet = () => {
             });
     };
 
-
-
     const handleDeletePet = (petId) => {
-        axios.get(`http://localhost:8080/bookingDetail/getBookingDetailByPetIsDeleted/${petId}`)
-            .then(res => {
-                if (res.data.length > 0) {
-                    if (window.confirm('This pet has booking details. Please check your booking history before deleting this pet. Do you want to cancel them before deleting the pet?')) {
-                        axios.post('http://localhost:8080/bookingDetail/cancelBookingDetailByPet', { petId })
-                            .then(() => {
-                                deletePet(petId);
+        confirmAlert({
+            title: 'Confirm to delete',
+            message: 'Are you sure you want to delete this pet?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        axios.delete(`http://localhost:8080/pet/deletePet/${petId}`)
+                            .then(res => {
+                                if (res.data.message === "Pet is existing in booking") {
+                                    toast.error("This pet has booking details. Please check your booking history before deleting this pet.");
+                                } else {
+                                    setData(data.filter(pet => pet.petId !== petId));
+                                    toast.success("Delete pet success");
+                                }
                             })
                             .catch(err => {
                                 console.log(err);
-                                toast.error("Failed to cancel booking details");
+                                toast.error("Failed to delete pet");
                             });
                     }
-                } else {
-                    if (window.confirm('Are you sure you want to delete this pet?')) {
-                        deletePet(petId);
-                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => toast.info("Pet deletion canceled")
                 }
-            })
-            .catch(err => {
-                console.log(err);
-                toast.error("Failed to fetch booking details");
-            });
+            ]
+        });
     };
 
-    const deletePet = (petId) => {
-        axios.delete(`http://localhost:8080/pet/deletePet/${userID}/${petId}`)
-            .then(() => {
-                setData(data.filter(pet => pet.petId !== petId));
-                toast.success("Delete pet success");
-            })
-            .catch(err => {
-                console.log(err);
-                toast.error("Failed to delete pet");
-            });
-    };
 
     const handleViewVaccine = (petId, petName) => {
         navigate(`/vaccine/${petId}`, { state: { petName } });
@@ -172,6 +166,39 @@ const TablePet = () => {
 
     const handleViewMedicalHistory = (petId) => {
         navigate(`/medical-history/${petId}`);
+    };
+
+    const handleActionChange = (e, pet) => {
+        const action = e.target.value;
+
+        switch (action) {
+            case 'edit':
+                setShowEditForm(true);
+                setPetForm({
+                    petId: pet.petId,
+                    petName: pet.petName,
+                    petAge: pet.petAge,
+                    petGender: pet.petGender,
+                    petType: pet.petType,
+                    vaccination: pet.vaccination,
+                    imageUrl: pet.imageUrl
+                });
+                break;
+            case 'delete':
+                handleDeletePet(pet.petId);
+                break;
+            case 'viewVaccine':
+                handleViewVaccine(pet.petId, pet.petName);
+                break;
+            case 'viewHistory':
+                handleViewMedicalHistory(pet.petId);
+                break;
+            default:
+                break;
+        }
+
+        // Reset the selected value back to the default
+        e.target.selectedIndex = 0;
     };
 
     const resetForm = () => {
@@ -190,11 +217,15 @@ const TablePet = () => {
 
     return (
         <div className="phs-table-container">
-            <h4 className="phs-header">List of pets:</h4>
-            <button onClick={() => setShowForm(true)} className="phs-bbtn phs-bbtn-add">
-                <h4>Add New Pet</h4> 
-            </button>
-            <table className="phs-styled-table">
+            <h4 className="phs-header">List of Pets</h4>
+            <Button
+                onClick={() => setShowForm(true)}
+                className="phs-bbtn phs-bbtn-add"
+                variant="primary"
+            >
+                <FaPlus className="add-icon" /> Add New Pet
+            </Button>
+            <Table className="phs-styled-table" responsive="md" striped hover>
                 <thead>
                     <tr>
                         <th>Pet Name</th>
@@ -215,113 +246,149 @@ const TablePet = () => {
                             <td>{pet.petType}</td>
                             <td>{pet.vaccination}</td>
                             <td>
-                                {pet.imageUrl && <img src={pet.imageUrl} alt={pet.petName} style={{ width: '150px', height: '150px' }} />}
+                                {pet.imageUrl && <img src={pet.imageUrl} alt={pet.petName} className="pet-image" style={{ width: '170px', height: '120px' }} />}
                             </td>
                             <td>
-                                <button
-                                    className="phs-bbtn phs-bbtn-warning"
-                                    onClick={() => {
-                                        setShowEditForm(true);
-                                        setPetForm({
-                                            petId: pet.petId,
-                                            petName: pet.petName,
-                                            petAge: pet.petAge,
-                                            petGender: pet.petGender,
-                                            petType: pet.petType,
-                                            vaccination: pet.vaccination,
-                                            imageUrl: pet.imageUrl
-                                        });
-                                    }}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    className="phs-bbtn phs-bbtn-danger"
-                                    onClick={() => handleDeletePet(pet.petId)}
-                                >
-                                    Delete
-                                </button>
-                                <button
-                                    className="phs-bbtn phs-bbtn-view"
-                                    onClick={() => handleViewVaccine(pet.petId, pet.petName)}
-                                >
-                                    Vaccine
-                                </button>
-                                <button
-                                    className="phs-bbtn phs-bbtn-med"
-                                    onClick={() => handleViewMedicalHistory(pet.petId)}
-                                >
-                                    History
-                                </button>
+                                <Form.Select onChange={(e) => handleActionChange(e, pet)} className="action-select">
+                                    <option value="">Select Action</option>
+                                    <option value="edit">Edit</option>
+                                    <option value="delete">Delete</option>
+                                    <option value="viewHistory">View History</option>
+                                </Form.Select>                           
                             </td>
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </Table>
 
-
-
-            {(showForm || showEditForm) && (
-                <div className="phs-form-container">
-                    <h4>{showEditForm ? 'Edit Pet' : 'Add New Pet'}</h4>
-                    <form>
-                        <input
-                            type="text"
-                            name="petName"
-                            value={petForm.petName}
-                            onChange={handleChange}
-                            placeholder="Pet Name"
-                            className={validationMessages.petName ? 'invalid' : ''}
-                        />
-                        {validationMessages.petName && <span className="phs-errorss-messages">{validationMessages.petName}</span>}
-                        <input
-                            type="text"
-                            name="petAge"
-                            value={petForm.petAge}
-                            onChange={handleChange}
-                            placeholder="Pet Age"
-                            className={validationMessages.petAge ? 'invalid' : ''}
-                        />
-                        {validationMessages.petAge && <span className="phs-errorss-messages">{validationMessages.petAge}</span>}
-                        <select name="petGender" value={petForm.petGender} onChange={handleChange}>
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                        <select name="petType" value={petForm.petType} onChange={handleChange}>
-                            <option value="">Select Pet Type</option>
-                            <option value="DOG">DOG</option>
-                            <option value="CAT">CAT</option>
-                            <option value="BIRD">BIRD</option>
-                            <option value="FISH">FISH</option>
-                            <option value="RABBIT">RABBIT</option>
-                        </select>
-                        <input
-                            type="text"
-                            name="vaccination"
-                            value={petForm.vaccination}
-                            onChange={handleChange}
-                            placeholder="Vaccination"
-                        />
-                        <input type="file" onChange={handleFileChange} />
-                        <button type="button" onClick={() => handleSubmit(showEditForm)} className="phs-bbtn phs-bbtn-success">
-                            Save Pet
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setShowForm(false);
-                                setShowEditForm(false);
-                                resetForm();
-                            }}
-                            className="phs-bbtn phs-bbtn-danger"
-                        >
-                            Cancel
-                        </button>
-                    </form>
-                </div>
-            )}
+            <Modal
+                show={showForm || showEditForm}
+                onHide={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}
+                className="pet-modal"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>{showEditForm ? 'Edit Pet' : 'Add New Pet'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Row className="mb-3">
+                            <Col md={6}>
+                                <Form.Group>
+                                    <Form.Label>Pet Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="petName"
+                                        value={petForm.petName}
+                                        onChange={handleChange}
+                                        isInvalid={!!validationMessages.petName}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {validationMessages.petName}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group>
+                                    <Form.Label>Pet Age</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="petAge"
+                                        value={petForm.petAge}
+                                        onChange={handleChange}
+                                        isInvalid={!!validationMessages.petAge}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {validationMessages.petAge}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col md={6}>
+                                <Form.Group>
+                                    <Form.Label>Pet Gender</Form.Label>
+                                    <Form.Select
+                                        name="petGender"
+                                        value={petForm.petGender}
+                                        onChange={handleChange}
+                                        isInvalid={!!validationMessages.petGender}
+                                    >
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        {validationMessages.petGender}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group>
+                                    <Form.Label>Pet Type</Form.Label>
+                                    <Form.Select
+                                        name="petType"
+                                        value={petForm.petType}
+                                        onChange={handleChange}
+                                        isInvalid={!!validationMessages.petType}
+                                    >
+                                        <option value="">Select Type</option>
+                                        <option value="DOG">DOG</option>
+                                        <option value="CAT">CAT</option>
+                                        <option value="BIRD">BIRD</option>
+                                        <option value="FISH">FISH</option>
+                                        <option value="RABBIT">RABBIT</option>
+                                    </Form.Select>
+                                    <Form.Control.Feedback type="invalid">
+                                        {validationMessages.petType}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col md={12}>
+                                <Form.Group>
+                                    <Form.Label>Vaccination</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="vaccination"
+                                        placeholder='Optional'
+                                        value={petForm.vaccination}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col md={12}>
+                                <Form.Group>
+                                    <Form.Label>Image</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        name="file"
+                                        onChange={handleFileChange}
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={() => handleSubmit(showEditForm)}
+                    >
+                        {showEditForm ? 'Update Pet' : 'Add Pet'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
+
 export default TablePet;
