@@ -45,43 +45,44 @@ const ManageAccount = () => {
     }
     const handleSave = async (updatedUser) => {
         console.log('Saving updated user:', updatedUser);
-        // try {
-        //     const updatedData = await updateUser(updatedUser);
 
-        //     setUser(updatedData);
-        //     setIsEditing(false);
-        //     alert('User information updated successfully!');
-        // } catch (error) {
-        //     console.error('Update failed:', error); // Add this line
-        //     alert('Failed to update user information. Please try again later.');
-        // }
         try {
             const token = localStorage.getItem('token');
             const decodedToken = jwtDecode(token);
             const userID = decodedToken.User.map.userID;
+
+            const formData = new FormData();
+            formData.append("request", JSON.stringify({
+                name: updatedUser.name,
+                email: updatedUser.email,
+                phone: updatedUser.phone,
+                address: updatedUser.address,
+                password: updatedUser.password,
+            }));
+
+            // Append file only if it exists
+            if (updatedUser.file) {
+                formData.append("file", updatedUser.file);
+            }
+
             const response = await axios.put(
                 `http://localhost:8080/account/update/${userID}`,
-                updatedUser,
+                formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
                     },
                 }
-
             );
             console.log('Update response:', response.data);
-            //navigate('/')
-            toast.success("Update success")
-            navigate('/manageAcc')
-            setIsEditing(false)
-
-            // You can update the state here if needed
-            // (but it might be redundant based on your API response)
+            toast.success("Update success");
+            navigate('/manageAcc');
+            setIsEditing(false);
         } catch (error) {
             console.error('Error updating user:', error);
-            throw error;
+            toast.error('Failed to update user information. Please try again later.');
         }
-
     };
 
     return (
@@ -94,7 +95,6 @@ const ManageAccount = () => {
 
                     <p>Name: {user?.name}</p>
                     <p>Email: {user.email}</p>
-
                     <p>Phone: {user.phone}</p>
                     <p>Address: {user.address}</p>
 
