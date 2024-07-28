@@ -26,6 +26,24 @@
             }
         }
 
+        .wallet-balance {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+            margin-bottom: 30px;
+            font-family: Arial;
+            font-style: italic;
+            
+            div {
+                margin-right: 5px;
+                
+                &:last-child {
+                    font-weight: bold;
+                }
+            }
+        }
+
         .wallet-actions {
             .action-group {
                 display: flex;
@@ -33,7 +51,6 @@
 
                 input {
                     flex-grow: 0;
-                   
                     margin-right: 10px;
                     border: 1px solid #ccc;
                     border-radius: 5px;
@@ -41,12 +58,13 @@
                 }
 
                 button {
-                   margin-bottom: 20px;
+                    margin-bottom: 20px;
                     background-color: #4CAF50;
                     color: white;
                     border: none;
                     border-radius: 5px;
                     cursor: pointer;
+                    
                     &:hover {
                         background-color: #45a049;
                     }
@@ -61,7 +79,6 @@
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-               
 
                 &:hover {
                     background-color: #0069d9;

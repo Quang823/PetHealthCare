@@ -254,7 +254,7 @@ const TablePet = () => {
                                     <option value="edit">Edit</option>
                                     <option value="delete">Delete</option>
                                     <option value="viewHistory">View History</option>
-                                </Form.Select>
+                                </Form.Select>                           
                             </td>
                         </tr>
                     ))}
