@@ -31,6 +31,10 @@ import { useAuth, UserProvider } from './Context/UserContext';
 import LoginForm from './Components/LoginForm/LoginForm';
 import RegisterForm from './Components/RegisterForm/RegisterForm';
 import PublicRoute from './Routes/PublicRoute';
+import ResetPassword from './Components/Forgot&Reset/ResetPassword';
+import ForgotPassword from './Components/Forgot&Reset/ForgetPassword';
+import VerifyOTP from './Components/Forgot&Reset/VerifyOTP';
+import HomeFake from './Components/Home/HomeFake';
 
 
 function App() {
@@ -50,8 +54,12 @@ function App() {
        <Route path="/*" element={<AppRoute />} />
        </Route>
        <Route element={<PublicRoute />}>
+       <Route path='/home' element={<HomeFake />} />
             <Route path='/login' element={<LoginForm />} />
             <Route path='/register' element={<RegisterForm />} />
+            <Route path='/reset-password' element={<ResetPassword />} />
+                <Route path='/forgot-password' element={<ForgotPassword />} />
+                <Route path='/verify-otp' element={<VerifyOTP />} />
           </Route>
 
 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus } from "react-icons/fa";
 import './TablePet.scss';
 
 const TablePet = () => {
@@ -126,8 +127,6 @@ const TablePet = () => {
             });
     };
 
-
-
     const handleDeletePet = (petId) => {
         axios.get(`http://localhost:8080/bookingDetail/getBookingDetailByPetIsDeleted/${petId}`)
             .then(res => {
@@ -191,10 +190,10 @@ const TablePet = () => {
     return (
         <div className="phs-table-container">
             <h4 className="phs-header">List of pets:</h4>
-            <button onClick={() => setShowForm(true)} className="phs-bbtn phs-bbtn-add">
-                <h4>Add New Pet</h4> 
-            </button>
-            <table className="phs-styled-table">
+            <Button onClick={() => setShowForm(true)} className="phs-bbtn phs-bbtn-add">
+                Add New Pet
+            </Button>
+            <Table striped bordered hover className="phs-styled-table">
                 <thead>
                     <tr>
                         <th>Pet Name</th>
@@ -218,8 +217,8 @@ const TablePet = () => {
                                 {pet.imageUrl && <img src={pet.imageUrl} alt={pet.petName} style={{ width: '150px', height: '150px' }} />}
                             </td>
                             <td>
-                                <button
-                                    className="phs-bbtn phs-bbtn-warning"
+                                <Button
+                                    variant="warning"
                                     onClick={() => {
                                         setShowEditForm(true);
                                         setPetForm({
@@ -234,36 +233,21 @@ const TablePet = () => {
                                     }}
                                 >
                                     Edit
-                                </button>
-                                <button
-                                    className="phs-bbtn phs-bbtn-danger"
-                                    onClick={() => handleDeletePet(pet.petId)}
-                                >
-                                    Delete
-                                </button>
-                                <button
-                                    className="phs-bbtn phs-bbtn-view"
-                                    onClick={() => handleViewVaccine(pet.petId, pet.petName)}
-                                >
-                                    Vaccine
-                                </button>
-                                <button
-                                    className="phs-bbtn phs-bbtn-med"
-                                    onClick={() => handleViewMedicalHistory(pet.petId)}
-                                >
-                                    History
-                                </button>
+                                </Button>
+                                <Button variant="danger" onClick={() => handleDeletePet(pet.petId)}>Delete</Button>
+                                <Button variant="info" onClick={() => handleViewVaccine(pet.petId, pet.petName)}>Vaccine</Button>
+                                <Button variant="secondary" onClick={() => handleViewMedicalHistory(pet.petId)}>History</Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </Table>
 
-
-
-            {(showForm || showEditForm) && (
-                <div className="phs-form-container">
-                    <h4>{showEditForm ? 'Edit Pet' : 'Add New Pet'}</h4>
+            <Modal show={showForm || showEditForm} onHide={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{showEditForm ? 'Edit Pet' : 'Add New Pet'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
                     <form>
                         <input
                             type="text"
@@ -304,24 +288,19 @@ const TablePet = () => {
                             placeholder="Vaccination"
                         />
                         <input type="file" onChange={handleFileChange} />
-                        <button type="button" onClick={() => handleSubmit(showEditForm)} className="phs-bbtn phs-bbtn-success">
-                            Save Pet
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setShowForm(false);
-                                setShowEditForm(false);
-                                resetForm();
-                            }}
-                            className="phs-bbtn phs-bbtn-danger"
-                        >
-                            Cancel
-                        </button>
                     </form>
-                </div>
-            )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={() => handleSubmit(showEditForm)}>
+                        Save Pet
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
+
 export default TablePet;

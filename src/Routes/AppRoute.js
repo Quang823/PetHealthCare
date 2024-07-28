@@ -49,10 +49,10 @@ const AppRoute = () => {
                     <Route path='/wallet' element={<Wallet />} />
                 <Route path='/manageAcc' element={<ManageAccount />} />
                 <Route path='/about' element={<About />} />
-                <Route path='/reset-password' element={<ResetPassword />} />
+             
                 <Route path='/contact' element={<Contact />} />
                 <Route path='/service' element={<ServicePage />} />
-
+                <Route path='/reset-password' element={<ResetPassword />} />
                 <Route path='/forgot-password' element={<ForgotPassword />} />
                 <Route path='/verify-otp' element={<VerifyOTP />} />
                 <Route path='/booking' element={

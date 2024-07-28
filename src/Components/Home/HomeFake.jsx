@@ -26,7 +26,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-const HomePage = () => {
+const HomeFake = () => {
     const { user } = useAuth();
     let navigate = useNavigate();
     const [service, setService] = useState([]);
@@ -103,7 +103,7 @@ const HomePage = () => {
     return (
        
         <div className="HomePage" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
-            
+            <Header/>
             <div className="headerDiv">
                 <div className="headerText">
                     <h4>Fur-ever friends</h4>
@@ -273,9 +273,9 @@ const HomePage = () => {
                     </Row>
                 </Container>
             </div>
-          
+          <Footer/>
         </div>
     );
 };
 
-export default HomePage;
+export default HomeFake;
