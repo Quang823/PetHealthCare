@@ -191,7 +191,7 @@ const PaymentPage = () => {
             });
             
             console.log("Payment Response:", paymentResponse);
-            if(paymentResponse.data === "Payment success"){
+            if(paymentResponse.data.data === "Payment success"){
                 toast.success("Booking and payment successful!");
                 navigate('/payment-success');  
             }else{

@@ -126,10 +126,12 @@ const RegisterForm = () => {
                 password: password,
             });
 
-            alert("Registration Successful");
+          
+            toast.success("Registration Successful");
             navigate('/login');
         } catch (err) {
-            alert("Error: " + err.message);
+            
+            toast.error("Email already exists, please change to another email");
         } finally {
             setIsLoading(false);
         }
