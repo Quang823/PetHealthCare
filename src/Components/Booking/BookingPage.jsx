@@ -10,7 +10,7 @@ const BookingPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedBookings = JSON.parse(localStorage.getItem('bookedInfo')) || [];
+        const storedBookings = JSON.parse(localStorage.getItem('bookings')) || [];
         setBookings(storedBookings);
     }, []);
 
@@ -32,7 +32,7 @@ const BookingPage = () => {
 
         const updatedBookings = [...bookings, newBooking];
         setBookings(updatedBookings);
-        localStorage.setItem('bookedInfo', JSON.stringify(updatedBookings));
+        localStorage.setItem('', JSON.stringify(updatedBookings));
 
         // Update the booked slots in local storage
         const bookedSlots = JSON.parse(localStorage.getItem('bookedSlots')) || {};

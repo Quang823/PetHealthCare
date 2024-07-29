@@ -65,7 +65,7 @@ const PaymentPage = () => {
     }, []);
     
     useEffect(() => {
-        const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
+        const bookedInfo = JSON.parse(localStorage.getItem('bookings'));
         if (bookedInfo) {
             setBookings(bookedInfo);
         }
@@ -111,7 +111,7 @@ const PaymentPage = () => {
             console.log("Booking Response:", bookingResponse.data);
             toast.success("Booking successful!");
             localStorage.setItem('currentBookingId', bookingResponse.data.data.bookingId);
-            localStorage.removeItem('bookedInfo');
+            localStorage.removeItem('bookings');
             localStorage.removeItem('selectedDate');
         } catch (error) {
             console.error('Booking failed:', error.response?.data || error);
