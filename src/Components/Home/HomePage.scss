@@ -3,7 +3,6 @@
 .HomePage {
   background: url('../../Assets/hand-painted-watercolor-pastel-sky-background_23-2148902771.avif')no-repeat;
   background-size: cover;
-  background-color: red;
   .headerDiv {
 
     display: flex;
@@ -419,7 +418,7 @@
 
     .serviceImage {
       max-width: 70%;
-      height: 150px;
+      max-height: 150px !important;
       border-radius: 8px;
       margin-bottom: 1rem;
       object-fit: cover;
@@ -471,7 +470,8 @@
       border-radius: 20px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      
+      width: 50%;
+      margin-right: 25%;
 
       &:hover {
         background-color: #0056b3;

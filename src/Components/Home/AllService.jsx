@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import './HomePage.scss';
+import './AllService.scss';
 const AllService = () => {
     const [services, setServices] = useState([]);
 
@@ -28,7 +28,7 @@ const AllService = () => {
                     {services.map(service => (
                         <Col md={4} key={service.id}>
                             <div className="serviceBox">
-                            <img src={service.imageUrl} alt={service.name} className="serviceImage" />
+                                <img src={service.imageUrl} alt={service.name} className="serviceImage" />
                                 <h4>{service.name}</h4>
                                 <p>{service.price}</p>
                                 <p>{service.description}</p>

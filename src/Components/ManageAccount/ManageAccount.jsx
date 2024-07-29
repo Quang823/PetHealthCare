@@ -1,13 +1,12 @@
-// src/components/UserInfo.js
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
-import updateUser from './EditUser';
-import UpdateUser from './UpdateUser';
-import './ManageAccount.scss'
+import './ManageAccount.scss';
 import EditUserForm from './EditUser';
 import { toast } from 'react-toastify';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 const ManageAccount = () => {
     const [user, setUser] = useState('');
     const [isEditing, setIsEditing] = useState(false);
@@ -16,10 +15,15 @@ const ManageAccount = () => {
     useEffect(() => {
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found in localStorage.');
+                return;
+            }
+
             const decodedToken = jwtDecode(token);
             const userID = decodedToken.User.map.userID;
-            if (!token || !userID) {
-                console.error('No token or user ID found in localStorage.');
+            if (!userID) {
+                console.error('No user ID found in token.');
                 return;
             }
 
@@ -33,21 +37,28 @@ const ManageAccount = () => {
                 localStorage.setItem('user', JSON.stringify(response.data));
             } catch (error) {
                 console.error('Error fetching user info:', error);
+                toast.error('Error fetching user information. Please try again later.');
             }
         };
 
         fetchUserInfo();
     }, [isEditing]);
 
-
     if (!user) {
         return <div>Loading user information...</div>;
     }
+
     const handleSave = async (updatedUser) => {
         console.log('Saving updated user:', updatedUser);
 
         try {
             const token = localStorage.getItem('token');
+            if (!token) {
+                toast.error('Session expired. Please login again.');
+                navigate('/login');
+                return;
+            }
+
             const decodedToken = jwtDecode(token);
             const userID = decodedToken.User.map.userID;
 
@@ -60,7 +71,7 @@ const ManageAccount = () => {
                 password: updatedUser.password,
             }));
 
-            // Append file only if it exists
+
             if (updatedUser.file) {
                 formData.append("file", updatedUser.file);
             }
@@ -76,9 +87,10 @@ const ManageAccount = () => {
                 }
             );
             console.log('Update response:', response.data);
-            toast.success("Update success");
-            navigate('/manageAcc');
+            toast.success("Update successful");
             setIsEditing(false);
+
+            setUser(response.data);
         } catch (error) {
             console.error('Error updating user:', error);
             toast.error('Failed to update user information. Please try again later.');
@@ -92,18 +104,15 @@ const ManageAccount = () => {
                 <EditUserForm user={user} onSave={handleSave} />
             ) : (
                 <div>
-
                     <p>Name: {user?.name}</p>
                     <p>Email: {user.email}</p>
                     <p>Phone: {user.phone}</p>
                     <p>Address: {user.address}</p>
-
-                    <p></p>
                     <button onClick={() => setIsEditing(true)}>Edit</button>
                 </div>
             )}
         </div>
     );
-};;
+};
 
 export default ManageAccount;

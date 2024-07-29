@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
 import { Modal, Button, Table, Form, Row, Col } from 'react-bootstrap';
-
+import { FaPlus } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import {jwtDecode} from 'jwt-decode'; // Fixed import statement
+import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import './TablePet.scss';
 
@@ -105,8 +105,7 @@ const TablePet = () => {
             petAge,
             petGender,
             petType,
-            vaccination,
-            imageUrl: file ? '' : imageUrl
+            vaccination
         }));
 
         if (file) {
@@ -114,7 +113,7 @@ const TablePet = () => {
         } else if (isEdit && !file && imageUrl) {
             formData.append('file', imageUrl);
         }
-        console.log("sdasdas",petForm.imageUrl);
+        console.log("sdasdas", petForm.imageUrl);
 
         const request = isEdit
             ? axios.put(`http://localhost:8080/pet/update/${petForm.petId}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -261,7 +260,7 @@ const TablePet = () => {
                                     <option value="edit">Edit</option>
                                     <option value="delete">Delete</option>
                                     <option value="viewHistory">View History</option>
-                                </Form.Select>                           
+                                </Form.Select>
 
                             </td>
                         </tr>
@@ -345,9 +344,9 @@ const TablePet = () => {
                                         <option value="">Select Type</option>
                                         <option value="DOG">DOG</option>
                                         <option value="CAT">CAT</option>
+                                        <option value="CHICKEN">CHICKEN</option>
                                         <option value="BIRD">BIRD</option>
-                                        <option value="FISH">FISH</option>
-                                        <option value="RABBIT">RABBIT</option>
+                                        <option value="HAMSTER">HAMSTER</option>
                                     </Form.Select>
                                     <Form.Control.Feedback type="invalid">
                                         {validationMessages.petType}
