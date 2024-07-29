@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import BookingDetail from '../Booking/BookingDetail';
 import { jwtDecode } from 'jwt-decode';
 import logo from '../../Assets/v186_574.png';
@@ -11,6 +11,8 @@ import axios from 'axios';
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { v4 as uuidv4 } from 'uuid';
 import { toast, ToastContainer } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './Payment.scss';
 
@@ -30,30 +32,30 @@ const PaymentPage = () => {
                 console.error('No token found in localStorage.');
                 return;
             }
-    
+
             try {
                 const decodedToken = jwtDecode(token);
                 const userID = decodedToken.User.map.userID;
-                
+
                 // Fetch user information
                 const userResponse = await axios.get(`http://localhost:8080/account/getaccount/${userID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                
+
                 // Fetch wallet information
                 const walletResponse = await axios.get(`http://localhost:8080/wallet/get-by-user?userId=${userID}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                
+
                 // Store walletId in localStorage
-                localStorage.getItem('walletId', walletResponse.data.walletId);
-                
+                localStorage.setItem('walletId', walletResponse.data.data.walletId);
+
                 // Combine user and wallet information
-                setUser({...userResponse.data, wallet: walletResponse.data});
+                setUser({ ...userResponse.data, wallet: walletResponse.data });
             } catch (error) {
                 console.error('Error fetching user info:', error);
                 toast.error("Failed to fetch user information. Please try logging in again.");
@@ -63,7 +65,7 @@ const PaymentPage = () => {
         };
         fetchUserInfo();
     }, []);
-    
+
     useEffect(() => {
         const bookedInfo = JSON.parse(localStorage.getItem('bookings'));
         if (bookedInfo) {
@@ -72,155 +74,83 @@ const PaymentPage = () => {
         setBillCode(uuidv4());
     }, []);
 
-
-    const handleGoBack = () => {
-        navigate('/booking');
-    };
-
-    const handleBooking = async () => {
-        if (!user) {
-            console.error('User information is missing.');
-            return;
-        }
-
-        const bookingData = {
-            customerId: user.userId,
-            date: selectedDate,
-            status: "Unpaid",
-            totalPrice: bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0),
-            bookingDetails: bookings.map(booking => ({
-                petId: booking.petId,
-                veterinarianId: booking.doctorId,
-                serviceId: booking.serviceId,
-                needCage: false,
-                date: booking.date,
-                slotId: parseInt(booking.slotTime, 10)
-            })),
-            billCode: billCode
-        };
-
-        try {
-            const token = localStorage.getItem('token');
-            const bookingResponse = await axios.post('http://localhost:8080/booking/add', bookingData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            console.log("Booking Response:", bookingResponse.data);
-            toast.success("Booking successful!");
-            localStorage.setItem('currentBookingId', bookingResponse.data.data.bookingId);
-            localStorage.removeItem('bookings');
-            localStorage.removeItem('selectedDate');
-        } catch (error) {
-            console.error('Booking failed:', error.response?.data || error);
-            toast.error("Booking failed. Please try again.");
-        }
-    };
-   
-
     const handlePayment = async () => {
         if (!user) {
             console.error('User information is missing.');
             toast.error("User information not found. Please log in again.");
             return;
         }
-    
+
         const walletId = localStorage.getItem('walletId');
         if (!walletId) {
             console.error('Wallet ID not found in localStorage.');
             toast.error("Wallet not found. Please contact support.");
             return;
         }
-    
-        const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0);
-    
-        // Check wallet balance if available
-        if (user.wallet && user.wallet.balance < totalCost) {
-            toast.error("Insufficient balance. Please top up your wallet.");
-            return;
-        }
-    
-        const bookingData = {
-            customerId: user.userId,
-            date: selectedDate,
-            status: "Unpaid",
-            totalPrice: totalCost,
-            bookingDetails: bookings.map(booking => ({
-                petId: booking.petId,
-                veterinarianId: booking.doctorId,
-                serviceId: booking.serviceId,
-                needCage: false,
-                date: booking.date,
-                slotId: parseInt(booking.slotTime, 10)
-            })),
-            billCode: billCode
+
+        const paymentData = {
+            walletId: walletId,
+            bookingId: localStorage.getItem('currentBookingId'),
+            amount: totalCost
         };
-    
+
         try {
-            const token = localStorage.getItem('token');
-            
-            // Step 1: Create the booking
-            const bookingResponse = await axios.post('http://localhost:8080/booking/add', bookingData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-    
-            console.log("Booking Response:", bookingResponse.data);
-            
-            const bookingId = bookingResponse.data.data.bookingId;
-    
-            // Prepare the payment data
-            const paymentData = {
-                walletId: walletId,
-                bookingId: bookingId,
-                amount: totalCost
-            };
-    
-            console.log("Payment Data:", paymentData); // Log the payment data for debugging
-    
-            // Step 2: Process the payment
             const paymentResponse = await axios.post('http://localhost:8080/payment/pay-booking', paymentData, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'application/json'
                 }
             });
-            
-            console.log("Payment Response:", paymentResponse);
-            if(paymentResponse.data.data === "Payment success"){
-                toast.success("Booking and payment successful!");
-                navigate('/payment-success');  
-            }else{
-                toast.error("Booking or payment failed. Please try again.");
-                 navigate('/payment-failure');
+
+            console.log("Payment Response:", paymentResponse.data);
+            if (paymentResponse.data.data === "Payment success") {
+                toast.success("Payment successful!");
+                navigate('/payment-success');
+                localStorage.removeItem('bookedInfo');
+                localStorage.removeItem('bookedSlots');
+                localStorage.removeItem('currentBookingId');
+                localStorage.removeItem('selectedDate');
+            } else {
+                toast.error("Payment failed. Please try again.");
+                navigate('/payment-failure');
+                localStorage.removeItem('bookedInfo');
+                localStorage.removeItem('bookedSlots');
+                localStorage.removeItem('currentBookingId');
+                localStorage.removeItem('selectedDate');
             }
-           
-            // Clear local storage
-            localStorage.removeItem('bookedInfo');
-            localStorage.removeItem('selectedDate');
         } catch (error) {
-            console.error('Booking or payment failed:', error.response?.data || error);
-            toast.error("Booking or payment failed. Please try again.");
+            console.error('Payment failed:', error.response?.data || error);
+            toast.error("Payment failed. Please try again.");
             navigate('/payment-failure');
         }
     };
-    
+
+    const confirmPayment = () => {
+        confirmAlert({
+            title: 'Confirm Payment',
+            message: 'Are you sure you want to proceed with the payment?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: handlePayment
+                },
+                {
+                    label: 'No'
+                }
+            ]
+        });
+    };
+
+    const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0);
 
     if (loading) {
-        return <p className="loading-text">Loading...</p>;
+        return <div>Loading...</div>;
     }
-
-    const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
 
     return (
         <div className='paymentPage'>
             <ToastContainer />
             <h3>PAYMENT</h3>
-            <button className="go-back-button" onClick={handleGoBack}>Go Back</button>
             <div className="payment-page-container">
                 <div className='logo-div'>
                     <div className="logo-container">
@@ -235,8 +165,8 @@ const PaymentPage = () => {
                 <h4>Payment</h4>
                 <div className="middle-bill">
                     <div className='payment-info'>
-                        <h7><b>Bill code: </b>{billCode}</h7>
-                        <h7><b>Date:</b> {selectedDate.toLocaleDateString()}</h7>
+                        <p><b>Bill code: </b>{billCode}</p>
+                        <p><b>Date:</b> {selectedDate.toLocaleDateString()}</p>
                     </div>
                     <div className="customer-info">
                         <h5>Customer information</h5>
@@ -244,16 +174,13 @@ const PaymentPage = () => {
                         <p><b>Email:</b> {user?.email}</p>
                         <p><b>Phone:</b> {user?.phone}</p>
                         <p><b>Address:</b> {user?.address}</p>
-
                     </div>
                     <div className="booking-details">
                         <h5>Booking details</h5>
                         <BookingDetail bookings={bookings} showDeleteButton={false} />
                     </div>
-
-                    
                     <div className="total-cost">
-                        <p>Total Cost: ${totalCost.toFixed(2)}</p>
+                        <p>Total Cost: {totalCost} VND</p>
                     </div>
                 </div>
                 <div className="qr-signature">
@@ -262,12 +189,9 @@ const PaymentPage = () => {
                         <p>Signature: {user?.name}</p>
                         <div className="signature-line"></div>
                     </div>
-                    <div className="qr-code">
-                        <img src={qrCode} alt="QR Code" />
-                    </div>
                 </div>
                 <div className="pay">
-                    <button onClick={handlePayment}>Pay</button>
+                    <button onClick={confirmPayment}>Pay</button>
                 </div>
             </div>
         </div>

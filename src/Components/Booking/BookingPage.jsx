@@ -3,10 +3,13 @@ import BookingForm from './BookingForm';
 import BookingDetail from './BookingDetail';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import './BookingPage.scss';
+import { jwtDecode } from 'jwt-decode';
 
 const BookingPage = () => {
     const [bookings, setBookings] = useState([]);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,8 +17,42 @@ const BookingPage = () => {
         setBookings(storedBookings);
     }, []);
 
-    const Payment = () => {
-        navigate('/payment');
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found in localStorage.');
+                return;
+            }
+
+            try {
+                const decodedToken = jwtDecode(token);
+                const userID = decodedToken.User.map.userID;
+
+                // Fetch user information
+                const userResponse = await axios.get(`http://localhost:8080/account/getaccount/${userID}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                setUser(userResponse.data);
+            } catch (error) {
+                console.error('Error fetching user info:', error);
+                toast.error("Failed to fetch user information. Please try logging in again.");
+            }
+        };
+        fetchUserInfo();
+    }, []);
+
+    const Payment = async () => {
+        try {
+            await handleBooking(); // Lưu thông tin booking trước khi chuyển sang trang payment
+            navigate('/payment');
+        } catch (error) {
+            console.error('Booking failed:', error);
+            toast.error("Booking failed. Please try again.");
+        }
     };
 
     const handleBookingComplete = (newBooking) => {
@@ -55,6 +92,46 @@ const BookingPage = () => {
         localStorage.setItem('bookedSlots', JSON.stringify(bookedSlots));
     };
 
+    const handleBooking = async () => {
+        if (!user) {
+            console.error('User information is missing.');
+            toast.error("User information not found. Please log in again.");
+            return;
+        }
+
+        const bookingData = {
+            customerId: user.userId,
+            date: new Date(),
+            status: "Unpaid",
+            totalPrice: bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0),
+            bookingDetails: bookings.map(booking => ({
+                petId: booking.petId,
+                veterinarianId: booking.doctorId,
+                serviceId: booking.serviceId,
+                needCage: false,
+                date: booking.date,
+                slotId: parseInt(booking.slotTime, 10)
+            }))
+        };
+
+        try {
+            const token = localStorage.getItem('token');
+            const bookingResponse = await axios.post('http://localhost:8080/booking/add', bookingData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log("Booking Response:", bookingResponse.data);
+            toast.success("Booking saved successfully!");
+            localStorage.setItem('currentBookingId', bookingResponse.data.data.bookingId);
+        } catch (error) {
+            console.error('Booking failed:', error.response?.data || error);
+            toast.error("Booking failed. Please try again.");
+        }
+    };
+
     const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost), 0);
 
     // Collect all booked slots, including the doctor ID as key
@@ -76,7 +153,7 @@ const BookingPage = () => {
                     <div className="booking-detail-wrapper">
                         <h3>Booking Details</h3>
                         <BookingDetail bookings={bookings} onDelete={handleDelete} showDeleteButton={true} />
-                        <div className="booking-total-cost">Total Cost: ${totalCost.toFixed(2)}</div>
+                        <div className="booking-total-cost">Total Cost: {totalCost} VND</div>
                         <button id='paymentbutton' onClick={Payment}>Payment</button>
                     </div>
                 )}

@@ -35,6 +35,11 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('bookedSlots');
+    localStorage.removeItem('currentBookingId');
+    localStorage.removeItem('selectedDate');
+    localStorage.removeItem('walletId');
+    localStorage.removeItem('bookedInfo');
     setUser({ email: '', auth: false, role: '' });
     console.log('Logout called, user reset');
   };

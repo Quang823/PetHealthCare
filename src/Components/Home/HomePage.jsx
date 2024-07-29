@@ -37,6 +37,7 @@ const HomePage = () => {
     const handleShowAll = () => {
         navigate('/allservices'); // Route to the new page
     };
+
     // const handleBooked = () => {
     //     navigate('/booking')
     // }
@@ -170,19 +171,20 @@ const HomePage = () => {
 
             <div className="section services" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
                 <Container>
-                    <h3 className="section-title">Our Services</h3>
+                    <h3 className="section-title">Our Best Services</h3>
+
                     <div className="showAllButtonDiv">
                         <button onClick={handleShowAll} className="showAllButton">Show All</button>
                     </div>
                     {/* <Row>
                         {service.slice(0, 3).map(service => (
                             <Col md={4} key={service.id}>
-                                <div className="serviceBox">
-                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" />
+                                <div className="serviceBox" style={{ width: '330px', height: '400px' }}>
+                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" style={{ width: '300px', height: '200px' }} />
                                     <h4>{service.name}</h4>
                                     <p>{service.description}</p>
                                     <p>{service.price}</p>
-                                    <button onClick={handleBooked}>Book</button>
+                                    {/* <button onClick={handleBooked}>Book</button> */}
                                 </div>
                             </Col>
                         ))}
@@ -211,10 +213,12 @@ const HomePage = () => {
                     <Row>
                         {veterinarians.map(vet => (
                             <Col md={4} key={vet.userId}>
-                                <div className="serviceBox">
-                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" />
+                                <div className="serviceBox" style={{ width: '330px', height: '400px' }}>
+                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" style={{ width: '300px', height: '300px' }} />
                                     <h4> Veterinarian:  {vet.name}</h4>
-                                    <button onClick={handleBooked}>Book</button>
+
+                                    {/* <button onClick={handleBooked}>Book</button> */}
+
                                 </div>
                             </Col>
                         ))}

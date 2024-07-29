@@ -62,7 +62,7 @@ const BookingDetail = ({ bookings, onDelete, showDeleteButton = true }) => {
             {bookings.map((booking, index) => (
                 <div key={index} className="booking-detail-card">
                     <p>Pet: {booking.petName} ; Service: {booking.serviceName} ; Doctor: {booking.doctorName} ;
-                        Slot: {booking.slotTime} ; Cost: ${booking.totalCost}; Date: {booking.date}
+                        Slot: {booking.slotTime} ; Cost: {booking.totalCost} VND; Date: {booking.date}
                     </p>
                     {showDeleteButton && (<button onClick={() => handleDelete(index)} className="deletes-button">Delete</button>
                     )}

@@ -11,6 +11,7 @@ const Wallet = () => {
     const [withdrawAmount, setWithdrawAmount] = useState('');
     const [transactions, setTransactions] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [validationError, setValidationError] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -55,15 +56,32 @@ const Wallet = () => {
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const vnpResponseCode = searchParams.get('vnp_ResponseCode');
-    
+
         if (vnpResponseCode) {
             handleVNPayReturn();
         }
     }, [location.search]);
 
+    const validateDepositAmount = (amount) => {
+        // Check if amount is a valid number
+        if (!amount || isNaN(amount) || amount <= 0) {
+            setValidationError('Please enter a valid amount (positive number only).');
+            return false;
+        }
+
+        // Check if amount is an integer and has a maximum of 8 digits
+        const amountInt = parseInt(amount, 10);
+        if (amountInt !== parseFloat(amount) || amount.length > 8) {
+            setValidationError('Please enter a valid amount (up to 8 digits).');
+            return false;
+        }
+
+        setValidationError('');
+        return true;
+    };
+
     const handleDeposit = async () => {
-        if (!wallet || !depositAmount || isNaN(depositAmount) || depositAmount <= 0) {
-            alert('Please enter a valid amount');
+        if (!validateDepositAmount(depositAmount)) {
             return;
         }
 
@@ -146,92 +164,89 @@ const Wallet = () => {
     return (
         <div className="wallet">
             <div className="wallet-card">
-                <h2 style={{fontFamily:"Georgia", fontWeight:"bold"}}>YOUR WALLET</h2>
-                <div className="wallet-info" style={{marginLeft:"200px"}}>
+                <h2 style={{ fontFamily: "Georgia", fontWeight: "bold" }}>YOUR WALLET</h2>
+                <div className="wallet-info" style={{ marginLeft: "200px" }}>
                     <div className="d-flex" >
-                        <div style={{fontStyle:"italic"}}>
-                         Name:
-                       </div>
-                        <div style={{fontWeight:"bold", marginLeft:"5px"}}>
-                        {wallet.user.name}
-                        </div> 
+                        <div style={{ fontStyle: "italic" }}>
+                            Name:
+                        </div>
+                        <div style={{ fontWeight: "bold", marginLeft: "5px" }}>
+                            {wallet.user.name}
+                        </div>
                     </div>
 
-
                     <div className="d-flex" >
-                        <div style={{fontStyle:"italic"}}>
-                         Phone:
-                       </div>
-                        <div style={{fontWeight:"bold", marginLeft:"5px"}}>
-                        {wallet.user.phone}
-                        </div> 
+                        <div style={{ fontStyle: "italic" }}>
+                            Phone:
+                        </div>
+                        <div style={{ fontWeight: "bold", marginLeft: "5px" }}>
+                            {wallet.user.phone}
+                        </div>
                     </div>
                     <div className="d-flex" >
-                        <div style={{fontStyle:"italic"}}>
-                         Address:
-                       </div>
-                        <div style={{fontWeight:"bold", marginLeft:"5px"}}>
-                        {wallet.user.address}
-                        </div> 
+                        <div style={{ fontStyle: "italic" }}>
+                            Address:
+                        </div>
+                        <div style={{ fontWeight: "bold", marginLeft: "5px" }}>
+                            {wallet.user.address}
+                        </div>
                     </div>
-                    
-                  
                 </div>
                 <div className="wallet-balance">
-    <div>Balance:</div>
-    <div>{wallet.balance}VND</div>
-</div>
+                    <div>Balance:</div>
+                    <div>{wallet.balance} VND</div>
+                </div>
 
                 <div className="wallet-actions">
                     <div className="action-group">
                         <input
-                            type="number"
+                            type="text" // Changed from number to text for better control
                             value={depositAmount}
-                            onChange={(e) => setDepositAmount(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setDepositAmount(value);
+                                validateDepositAmount(value);
+                            }}
                             placeholder="Enter amount to deposit"
-                            style={{height:"45px", width:"250%"}}
+                            style={{ height: "45px", width: "250%" }}
                         />
-                        <button onClick={handleDeposit}>Deposit Money </button>
+                        {validationError && <div className="error-message">{validationError}</div>}
+                        <button onClick={handleDeposit}>Deposit Money</button>
                     </div>
-                    
+
                     <button onClick={handleViewHistory}>Transaction History</button>
                 </div>
-
-
-
             </div>
-            
-            
-            <Modal
-    className="lichsu"
-    isOpen={isModalOpen}
-    onRequestClose={() => setIsModalOpen(false)}
-    contentLabel="Transaction History"
->
-    <h2>Transaction History</h2>
-    {transactions.length === 0 ? (
-        <p>No transactions found.</p>
-    ) : (
-        <ul>
-            {transactions.map(transaction => {
-                const { date, time } = formatDateTime(transaction.transactionDate);
-                return (
-                    <li key={transaction.transactionId}>
-                        <p><strong>Transaction ID:</strong> {transaction.transactionId}</p>
-                        <div className="date-time">
-                            <p className="date"><strong>Date:</strong> {date}</p>
-                            <p className="time"><strong>Time:</strong> {time}</p>
-                        </div>
-                        <p><strong>Amount:</strong> {transaction.amount}</p>
-                        <p><strong>Type:</strong> {transaction.transactionType}</p>
-                    </li>
-                );
-            })}
-        </ul>
-    )}
-    <button onClick={() => setIsModalOpen(false)}>Close</button>
-</Modal>
 
+            <Modal
+                className="lichsu"
+                isOpen={isModalOpen}
+                onRequestClose={() => setIsModalOpen(false)}
+                contentLabel="Transaction History"
+            >
+                <h2>Transaction History</h2>
+                {transactions.length === 0 ? (
+                    <p>No transactions found.</p>
+                ) : (
+                    <ul>
+                        {transactions.map(transaction => {
+                            const { date, time } = formatDateTime(transaction.transactionDate);
+                            return (
+                                <li key={transaction.transactionId}>
+                                    <p><strong>Transaction ID:</strong> {transaction.transactionId}</p>
+                                    <div className="date-time">
+                                        <p className="date"><strong>Date:</strong> {date}</p>
+                                        <p className="time"><strong>Time:</strong> {time}</p>
+                                    </div>
+                                    <p><strong>Amount:</strong> {transaction.amount}</p>
+                                    <p><strong>Type:</strong> {transaction.transactionType}</p>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                )}
+                <button onClick={() => setIsModalOpen(false)}>Close</button>
+            </Modal>
         </div>
     );
 };

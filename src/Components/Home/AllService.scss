@@ -1,0 +1,70 @@
+// HomePage.scss
+.AllServicesPage {
+    padding: 20px 0;
+    background-color: #f9f9f9;
+    background: linear-gradient(45deg, #8cffa5, #81beff, #ff99e9);
+    .section-title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+        font-family: 'Arial, sans-serif';
+        font-weight: bolder;
+        font-size: 24px;
+        text-transform: uppercase;
+    }
+
+    .serviceBox {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 15px 0;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+        height: 400px; /* Fixed height */
+        width: 100%; /* Fixed width */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &:hover {
+            transform: translateY(-10px);
+        }
+
+        .serviceImage {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        p {
+            font-size: 1em;
+            color: #777;
+
+            &:first-of-type {
+                font-weight: bold;
+                color: #444;
+            }
+        }
+    }
+
+    @media (min-width: 768px) {
+        .serviceBox {
+            width: 100%; /* Ensures the boxes fit within their columns on larger screens */
+        }
+    }
+
+    @media (min-width: 992px) {
+        .serviceBox {
+            width: 100%; /* Adjusts the width for larger screens */
+        }
+    }
+}
