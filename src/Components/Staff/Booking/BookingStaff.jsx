@@ -7,7 +7,7 @@ const BookingStaff = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone, setPhoneNumber] = useState('');
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value);
@@ -20,8 +20,8 @@ const BookingStaff = () => {
   };
 
   const handleFetchBookingDetails = async () => {
-    if (!selectedDate || !phoneNumber) {
-    
+    if (!selectedDate || !phone) {
+      
       return;
     }
 
@@ -36,7 +36,7 @@ const BookingStaff = () => {
 
       const response = await axios.get(`http://localhost:8080/bookingDetail/getAllBookingDetail_ByPhoneNumberAndDate`, {
         params: {
-          phoneNumber,
+          phone,
           date: formattedDate
         },
         headers: {
@@ -102,7 +102,7 @@ const BookingStaff = () => {
         <input
           type="text"
           placeholder="Enter phone number"
-          value={phoneNumber}
+          value={phone}
           onChange={handlePhoneChange}
         />
         <input
