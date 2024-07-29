@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Modal, Button, Table, Form, Row, Col } from 'react-bootstrap';
-
+import { FaPlus } from 'react-icons/fa';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
@@ -106,7 +106,6 @@ const TablePet = () => {
             petGender,
             petType,
             vaccination,
-            imageUrl: file ? '' : imageUrl
         }));
 
         if (file) {
