@@ -67,7 +67,7 @@ const PaymentPage = () => {
     }, []);
 
     useEffect(() => {
-        const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
+        const bookedInfo = JSON.parse(localStorage.getItem('bookings'));
         if (bookedInfo) {
             setBookings(bookedInfo);
         }

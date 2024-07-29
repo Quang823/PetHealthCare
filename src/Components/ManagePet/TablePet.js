@@ -113,7 +113,7 @@ const TablePet = () => {
         } else if (isEdit && !file && imageUrl) {
             formData.append('file', imageUrl);
         }
-        console.log("sdasdas", petForm.imageUrl);
+       
 
         const request = isEdit
             ? axios.put(`http://localhost:8080/pet/update/${petForm.petId}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })

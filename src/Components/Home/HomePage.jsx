@@ -37,8 +37,14 @@ const HomePage = () => {
     const handleShowAll = () => {
         navigate('/allservices'); // Route to the new page
     };
-    const handleBooked = () => {
-        navigate('/booking')
+
+    // const handleBooked = () => {
+    //     navigate('/booking')
+    // }
+
+
+    const handleBooked = (serviceName) => {
+        navigate('/booking', { state: { selectedService: serviceName } });
     }
 
 
@@ -170,7 +176,7 @@ const HomePage = () => {
                     <div className="showAllButtonDiv">
                         <button onClick={handleShowAll} className="showAllButton">Show All</button>
                     </div>
-                    <Row>
+                    {/* <Row>
                         {service.slice(0, 3).map(service => (
                             <Col md={4} key={service.id}>
                                 <div className="serviceBox" style={{ width: '330px', height: '400px' }}>
@@ -182,7 +188,22 @@ const HomePage = () => {
                                 </div>
                             </Col>
                         ))}
-                    </Row>
+                    </Row> */
+
+
+                        <Row>
+                            {service.slice(0, 3).map(service => (
+                                <Col md={4} key={service.id}>
+                                    <div className="serviceBox">
+                                        <img src={service.imageUrl} alt={service.name} className="serviceImage" />
+                                        <h4>{service.name}</h4>
+                                        <p>{service.description}</p>
+                                        <p>{service.price}</p>
+                                        <button onClick={() => handleBooked(service.name)}>Book</button>
+                                    </div>
+                                </Col>
+                            ))}
+                        </Row>}
                 </Container>
             </div>
 
@@ -195,7 +216,9 @@ const HomePage = () => {
                                 <div className="serviceBox" style={{ width: '330px', height: '400px' }}>
                                     <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" style={{ width: '300px', height: '300px' }} />
                                     <h4> Veterinarian:  {vet.name}</h4>
+
                                     {/* <button onClick={handleBooked}>Book</button> */}
+
                                 </div>
                             </Col>
                         ))}

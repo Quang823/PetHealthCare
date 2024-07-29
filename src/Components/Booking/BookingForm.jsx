@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
@@ -5,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './BookingForm.scss';
 import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
+import { useLocation } from 'react-router-dom';
 
 const BookingForm = ({ onBookingComplete, bookedSlots }) => {
     const [userID, setUserID] = useState('');
@@ -18,6 +20,9 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
     const [selectedSlot, setSelectedSlot] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [totalCost, setTotalCost] = useState(0);
+
+    const location = useLocation();
+    const { selectedService: initialService, selectedPet: initialPet, selectedDoctor: initialDoctor } = location.state || {};
 
     useEffect(() => {
         const fetchUserID = () => {
@@ -88,6 +93,61 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         setTotalCost(service ? service.price : 0);
     }, [selectedService, services]);
 
+    useEffect(() => {
+        // Set initial values from state if provided
+        if (initialService) setSelectedService(initialService);
+        if (initialPet) setSelectedPet(initialPet);
+        if (initialDoctor) setSelectedDoctor(initialDoctor);
+    }, [initialService, initialPet, initialDoctor]);
+
+    const filterSlots = (slots) => {
+        const now = new Date();
+        const currentHour = now.getHours();
+
+        // Get existing bookings from local storage
+        const existingBookings = JSON.parse(localStorage.getItem('bookings')) || [];
+
+        // Check if a slot is booked
+        const isSlotBooked = (slot) => {
+            return existingBookings.some(booking => {
+                const isSameDate = booking.date === selectedDate.toLocaleDateString('en-CA');
+                const isSamePet = booking.petId === pets.find(pet => pet.petName === selectedPet)?.petId;
+                const isSameDoctor = booking.doctorId === doctors.find(doctor => doctor.name === selectedDoctor)?.userId;
+                const isSameSlot = booking.slotTime === slot.slot.slotId;
+
+                // Get the serviceId of the selected service
+                const selectedServiceId = services.find(service => service.name === selectedService)?.serviceId;
+                const isSameService = booking.serviceId === selectedServiceId;
+
+                // Check if the booking matches the selected date, doctor, slot, and service
+                const isExactMatch = isSameDate && isSamePet && isSameDoctor && isSameSlot && isSameService;
+                const isServiceOnlyChange = isSameDate && isSamePet && isSameDoctor && isSameSlot && !isSameService;
+                const isPetOnlyChange = isSameDate && !isSamePet && isSameDoctor && isSameSlot && isSameService;
+                const isPetAndServiceChange = isSameDate && !isSamePet && isSameDoctor && isSameSlot && !isSameService;
+                const isDoctorOnlyChange = isSameDate && isSamePet && !isSameDoctor && isSameSlot && isSameService;
+
+                return isExactMatch || isServiceOnlyChange || isPetOnlyChange || isPetAndServiceChange || isDoctorOnlyChange;
+            });
+        };
+
+        const isSameDay = (date1, date2) => {
+            return (
+                date1.getDate() === date2.getDate() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getFullYear() === date2.getFullYear()
+            );
+        };
+
+        if (isSameDay(selectedDate, now)) {
+            return slots.filter(slot => {
+                const slotHour = parseInt(slot.slot.startTime.split(':')[0], 10);
+                return slotHour > currentHour && !isSlotBooked(slot);
+            });
+        } else {
+            return slots.filter(slot => !isSlotBooked(slot));
+        }
+    };
+
     const handleBooking = async () => {
         if (!selectedPet || !selectedService || !selectedDoctor || !selectedSlot || !selectedDate) {
             toast.error('Please fill in all fields before booking.');
@@ -112,26 +172,27 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
         };
 
         try {
-            // Simulate booking API call
-            // const response = await axios.post('http://localhost:8080/book-appointment', newBooking);
-
-            // Assume booking is successful
             const response = { status: 200 };
 
             if (response.status === 200) {
                 onBookingComplete(newBooking);
 
+                // Save booking details to local storage
+                const existingBookings = JSON.parse(localStorage.getItem('bookings')) || [];
+                existingBookings.push(newBooking);
+                localStorage.setItem('bookings', JSON.stringify(existingBookings));
+
+                // Clear fields as necessary
                 //setSelectedPet('');
                 //setSelectedService('');
                 //setSelectedDoctor('');
-                setSelectedSlot('');
-                //setTotalCost(0);
+                //setSelectedSlot('');
+                setTotalCost(0);
             } else {
                 throw new Error('Booking failed');
             }
         } catch (error) {
             toast.error('Booking failed: ' + error.message);
-
         }
     };
 
@@ -149,28 +210,6 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
     const handleSlotSelection = (e, slotId) => {
         e.preventDefault();
         setSelectedSlot(slotId);
-    };
-
-    const filterSlots = (slots) => {
-        const now = new Date();
-        const currentHour = now.getHours();
-
-        const isSameDay = (date1, date2) => {
-            return (
-                date1.getDate() === date2.getDate() &&
-                date1.getMonth() === date2.getMonth() &&
-                date1.getFullYear() === date2.getFullYear()
-            );
-        };
-
-        if (isSameDay(selectedDate, now)) {
-            return slots.filter(slot => {
-                const slotHour = parseInt(slot.slot.startTime.split(':')[0], 10);
-                return slotHour > currentHour;
-            });
-        } else {
-            return slots;
-        }
     };
 
     const maxDate = new Date();
