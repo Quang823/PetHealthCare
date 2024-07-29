@@ -1,5 +1,5 @@
 .container {
-    max-width: 1500px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
   }
@@ -57,7 +57,8 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: auto;
+    width: 100px;
+    display: grid;
   }
   
   .styled-table button:hover {
