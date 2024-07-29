@@ -28,13 +28,56 @@ const Addslotcancel = () => {
   const [showAvailableVets, setShowAvailableVets] = useState(false);
   const [inputDate, setInputDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedSlot, setSelectedSlot] = useState('');
+  const [showInputFields, setShowInputFields] = useState(false); // Initialize as false
 
   useEffect(() => {
+   
     fetchCancelledBookings();
     setShowAvailableVets(false);
     setAvailableVets([]);
     setNoAvailableVets(false);
   }, [selectedDate, selectedSlot]);
+  const handlehideInput =() =>{
+    setShowInputFields(false);
+  }
+  
+  const cancelBooking = async (bookingDetailId) => {
+    const cancelledBookings = JSON.parse(localStorage.getItem('cancelledBookings'));
+    const booking = cancelledBookings.find(booking => booking.bookingDetailId === bookingDetailId);
+    console.log('Booking Object:', booking);
+    const userId = booking.pet.user ? booking.pet.user.userId : null;
+  console.log('User ID:', userId);
+  
+    try {
+      const response = await axios.get(`http://localhost:8080/bookingDetail/staffCancelBookingDetail/`, {
+        params: {
+          bookingDetailID: bookingDetailId,
+          userId: userId,
+        }
+      });
+  
+      if (response.data.status === "ok") {
+        toast.success('Booking cancelled successfully');
+        setCancelledBookings(prevBookings => prevBookings.filter(booking => booking.bookingDetailId !== bookingDetailId));
+      } else {
+        toast.error('Failed to cancel booking. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+  
+      // Check for the specific error message and display a relevant toast notification
+      if (error.response && error.response.data && error.response.data.message) {
+        if (error.response.data.message === 'booking/bookingDetail is already cancelled or completed or pending') {
+          toast.error('The booking is already cancelled, completed, or pending.');
+        } else {
+          toast.error('An error occurred while cancelling the booking.');
+        }
+      } else {
+        toast.error('An error occurred while cancelling the booking.');
+      }
+    }
+  };
+  
 
   const updateVetSlot = async (bookingDetailId, serviceSlotId, date) => {
     try {
@@ -85,6 +128,10 @@ const Addslotcancel = () => {
       const filteredBookings = response.data.filter(
         (booking) => new Date(booking.date).toDateString() === selectedDate.toDateString()
       );
+  
+      // Store the fetched bookings in localStorage
+      localStorage.setItem('cancelledBookings', JSON.stringify(filteredBookings));
+  
       setCancelledBookings(filteredBookings);
     } catch (error) {
       console.error('Error fetching cancelled bookings:', error);
@@ -98,6 +145,7 @@ const Addslotcancel = () => {
     setInputDate(booking.date);
     setNoAvailableVets(false);
     setIsLoading(true);
+    setShowInputFields(true); // Show input fields when "View" is clicked
 
     try {
       const response = await axios.post('http://localhost:8080/sev-slot/vet-available', {
@@ -204,7 +252,8 @@ const Addslotcancel = () => {
               <td>{booking.pet.user.phone}</td>
               <td>{booking.user.name}</td>
               <td>
-                <button onClick={() => handleAddSlot(booking)}>View doctor</button>
+                <button onClick={() => handleAddSlot(booking)}>Update</button>
+                <button onClick={() => cancelBooking(booking.bookingDetailId)}>Cancel</button>
               </td>
             </tr>
           ))}
@@ -253,29 +302,34 @@ const Addslotcancel = () => {
       {noAvailableVets && (
         <div className="no-vets-message">
           <p>No veterinarians are available for the selected slot and date.</p>
-          <div className="input-container">
-            <h3>Enter Date and Select Slot to Display Available Veterinarians</h3>
-            <label>
-              Date:
-              <input
-                type="date"
-                value={inputDate}
-                onChange={(e) => setInputDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
-              />
-            </label>
-            <label>
-              Slot:
-              <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
-                <option value="">Select a slot</option>
-                {slots.map((slot) => (
-                  <option key={slot.id} value={slot.id}>
-                    {slot.startTime} - {slot.endTime}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+        </div>
+      )}
+
+      {showInputFields && (
+         // Conditionally render input fields
+        <div className="input-container">
+          <h3>Enter Date and Select Slot to Display Available Veterinarians</h3>
+          <button onClick={handlehideInput} className="close-button">Close</button>
+          <label>
+            Date:
+            <input
+              type="date"
+              value={inputDate}
+              onChange={(e) => setInputDate(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+            />
+          </label>
+          <label>
+            Slot:
+            <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
+              <option value="">Select a slot</option>
+              {slots.map((slot) => (
+                <option key={slot.id} value={slot.id}>
+                  {slot.startTime} - {slot.endTime}
+                </option>
+              ))}
+            </select>
+          </label>
           <button onClick={handleCheckAvailability}>Check Availability</button>
         </div>
       )}

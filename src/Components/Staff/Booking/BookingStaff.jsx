@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './BookingStaff.scss';
 
@@ -6,84 +6,55 @@ const BookingStaff = () => {
   const [bookingDetails, setBookingDetails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
 
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
-    
-  };
+  useEffect(() => {
+    const fetchBookingDetails = async () => {
+      setLoading(true);
+      setError(null);
 
-  const handlePhoneChange = (event) => {
-    setPhoneNumber(event.target.value);
-    
-  };
+      try {
+        const response = await axios.get("http://localhost:8080/bookingDetail/getBookingDetailByPaidBooking");
+        console.log('API Response:', response.data);
+        setBookingDetails(response.data);
+      } catch (error) {
+        console.error('Error fetching booking details:', error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleFetchBookingDetails = async () => {
-    if (!selectedDate || !phoneNumber) {
-    
-      return;
-    }
+    fetchBookingDetails();
+  }, []);
 
-    setLoading(true);
-    setError(null);
-
+  const handleUpdateStatus = async (bookingDetailId) => {
     try {
-      // Convert the date from MM-DD-YYYY to YYYY-MM-DD
-      const [month, day, year] = selectedDate.split('-');
-      const formattedDate = `${year}-${month}-${day}`;
-     
-
-      const response = await axios.get(`http://localhost:8080/bookingDetail/getAllBookingDetail_ByPhoneNumberAndDate`, {
-        params: {
-          phoneNumber,
-          date: formattedDate
-        },
+      const res = await axios.put(`http://localhost:8080/bookingDetail/update/status/${bookingDetailId}`, {
+        status: 'CONFIRMED'
+      }, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
         }
       });
-
-      console.log('API Response:', response.data);
-      setBookingDetails(response.data);
+      if (res.status === 200) {
+        setBookingDetails((prevDetails) =>
+          prevDetails.map((detail) =>
+            detail.bookingDetailId === bookingDetailId ? { ...detail, status: 'CONFIRMED' } : detail
+          )
+        );
+      } else {
+        console.error('Failed to update status:', res.statusText);
+      }
     } catch (error) {
-      console.error('Error fetching booking details:', error);
-      setError(error);
-    } finally {
-      setLoading(false);
+      console.error('Error updating status:', error);
     }
   };
-  const handleupdateStatus = async (bookingDetailId) =>{
-        try{
-          const res = await axios.put(`http://localhost:8080/bookingDetail/update/status/${bookingDetailId}`,{
-            status:'CONFIRMED'
-          },{
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            }
-          });
-          if (res.status === 200) {
-            setBookingDetails((prevDetails) =>
-              prevDetails.map((detail) =>
-                detail.bookingDetailId === bookingDetailId ? { ...detail, status: 'CONFIRMED' } : detail
-              )
-            );
-          } else {
-            console.error('Failed to update status:', res.statusText);
-          }
-        }catch (error) {
-          console.error('Error updating status:', error);
-        }
-  }
 
   const formatDate = (dateString) => {
     const [year, month, day] = dateString.split('-');
-    const formattedDate = `${month}-${day}-${year}`;
-    return formattedDate;
+    return `${month}-${day}-${year}`;
   };
-
-  console.log('Current bookingDetails state:', bookingDetails);
 
   if (loading) return (
     <div className="loading-indicator">
@@ -91,6 +62,7 @@ const BookingStaff = () => {
       <p>Loading...</p>
     </div>
   );
+
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -98,53 +70,48 @@ const BookingStaff = () => {
       <div className="header">
         <h2>Booking Staff</h2>
       </div>
-      <div className="filters">
-        <input
-          type="text"
-          placeholder="Enter phone number"
-          value={phoneNumber}
-          onChange={handlePhoneChange}
-        />
-        <input
-          type="text"
-          placeholder="MM-DD-YYYY"
-          value={selectedDate}
-          onChange={handleDateChange}
-        />
-        <button onClick={handleFetchBookingDetails}>Fetch Booking Details</button>
-      </div>
-      <div className="table">
-        <div className="table-header">
-          <div className="header-item">Booking Detail ID</div>
-          <div className="header-item">Pet Name</div>
-          <div className="header-item">Service Name</div>
-          <div className="header-item">Need Cage</div>
-          <div className="header-item">Date</div>
-          <div className="header-item">Slot Start Time</div>
-          <div className="header-item">Status</div>
-          <div className="header-item">Action</div>
-        </div>
-        {bookingDetails.length > 0 ? (
-          bookingDetails.map((detail) => (
-            <div key={detail.bookingDetailId} className="table-row">
-              <div className="table-item">{detail.bookingDetailId}</div>
-              <div className="table-item">{detail.pet?.petName || 'N/A'}</div>
-              <div className="table-item">{detail.services?.name || 'N/A'}</div>
-              <div className="table-item">{detail.needCage ? 'Yes' : 'No'}</div>
-              <div className="table-item">{formatDate(detail.date)}</div>
-              <div className="table-item">{detail.slot?.startTime || 'N/A'}</div>
-              <div className="table-item">{detail.status}</div>
-              <div className="table-item">
-                {detail.status === 'WAITING' && (
-                  <button className='table-row' onClick={() => handleupdateStatus(detail.bookingDetailId)}>Confirm</button>
-                )}
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="no-data">No booking details found</div>
-        )}
-      </div>
+      <table className="booking-table">
+        <thead>
+          <tr>
+            <th>Booking Detail ID</th>
+            <th>Pet Name</th>
+            <th>Service Name</th>
+            <th>Need Cage</th>
+            <th>Date</th>
+            <th>Slot Start Time</th>
+            <th>Status</th>
+            <th>Phone</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookingDetails.length > 0 ? (
+            bookingDetails.map((detail) => (
+              <tr key={detail.bookingDetailId}>
+                <td>{detail.bookingDetailId}</td>
+                <td>{detail.pet?.petName || 'N/A'}</td>
+                <td>{detail.services?.name || 'N/A'}</td>
+                <td>{detail.needCage ? 'Yes' : 'No'}</td>
+                <td>{formatDate(detail.date)}</td>
+                <td>{detail.slot?.startTime || 'N/A'}</td>
+                
+                <td>{detail.status}</td>
+                <td>{detail.user.phone}</td>
+                <td>
+                  {detail.status === 'WAITING' && (
+                    <button onClick={() => handleUpdateStatus(detail.bookingDetailId)}>Confirm</button>
+                  )}
+                </td>
+                
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="8">No booking details found</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };
