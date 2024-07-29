@@ -35,6 +35,7 @@ import ResetPassword from './Components/Forgot&Reset/ResetPassword';
 import ForgotPassword from './Components/Forgot&Reset/ForgetPassword';
 import VerifyOTP from './Components/Forgot&Reset/VerifyOTP';
 import HomeFake from './Components/Home/HomeFake';
+import Addslotcancel from './Components/Staff/Slot/Addslotcancel';
 
 
 function App() {
@@ -93,6 +94,7 @@ function App() {
             <Route path="bkneedCage" element={<BKNeedCage />} />
             <Route path="refundStaff" element={<RefundStaff />} />
             <Route path="addCageStaff" element={<AddCageStaff />} />
+            <Route path="addslotcancel" element={<Addslotcancel />} />
 
           </Route>
         </Route>

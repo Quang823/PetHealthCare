@@ -72,34 +72,56 @@ function Home({ Toggle }) {
     };
 
     const handleCancelSlot = async (bookingDetail) => {
-        const { bookingDetailId, date, pet: { vetId }, vetCancelled } = bookingDetail;
+        const { bookingDetailId, date, vetCancelled } = bookingDetail;
     
-        // Kiểm tra nếu slot đã bị hủy bởi bác sĩ thú y
         if (vetCancelled) {
             toast.error('This slot has already been cancelled.');
             return;
         }
     
-        const formattedDate = new Date(date).toISOString().split('T')[0]; // Format date as yyyy-MM-dd
+        const formattedDate = new Date(date).toISOString().split('T')[0];
         const token = localStorage.getItem('token');
+        
         try {
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.User.map.userID;
-            await axios.get(`http://localhost:8080/bookingDetail/vetCancelBookingDetail/?dateTime=${formattedDate}&vetId=${userId}`);
-            setBookingDetails(prevDetails =>
-                prevDetails.map(detail =>
-                    detail.bookingDetailId === bookingDetailId
-                        ? { ...detail, vetCancelled: true }
-                        : detail
-                )
-            );
-            toast.success('Slot has been successfully cancelled');
-            fetchBookingDetails(); // Refresh the booking details
+    
+            console.log('Sending request with:', { dateTime: formattedDate, vetId: userId });
+    
+            const response = await axios.get('http://localhost:8080/bookingDetail/vetCancelBookingDetail/', {
+                params: {
+                    dateTime: formattedDate,
+                    vetId: userId
+                }
+            });
+    
+            console.log('Server response:', response.data);
+    
+            if (response.data.status === "ok") {
+                setBookingDetails(prevDetails =>
+                    prevDetails.map(detail => 
+                        detail.bookingDetailId === bookingDetailId
+                            ? { ...detail, vetCancelled: true }
+                            : detail
+                    )
+                );
+                toast.success(response.data.message || 'Slot has been successfully cancelled');
+                fetchBookingDetails();
+            } else {
+                toast.error(response.data.message || 'Failed to cancel the slot');
+            }
         } catch (error) {
             console.error('Error cancelling slot:', error);
-            alert('Failed to cancel the slot. Please try again.');
+            if (error.response) {
+                console.error('Server responded with:', error.response.data);
+                console.error('Status code:', error.response.status);
+                toast.error(error.response.data.message || 'Failed to cancel the slot. Please try again.');
+            } else {
+                toast.error('An error occurred while cancelling the slot. Please try again.');
+            }
         }
     };
+    
 
     const filteredBookingDetails = bookingDetails.filter(b => {
         const bookingDate = new Date(b.date);
