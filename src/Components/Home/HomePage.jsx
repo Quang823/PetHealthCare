@@ -184,11 +184,11 @@ const HomePage = () => {
                                     <h4>{service.name}</h4>
                                     <p>{service.description}</p>
                                     <p>{service.price}</p>
-                                    {/* <button onClick={handleBooked}>Book</button> */}
+                                    <button onClick={handleBooked}>Book</button>
                                 </div>
                             </Col>
                         ))}
-                    </Row> */
+                    </Row> */}
 
 
                         <Row>
@@ -203,7 +203,7 @@ const HomePage = () => {
                                     </div>
                                 </Col>
                             ))}
-                        </Row>}
+                        </Row>
                 </Container>
             </div>
 
@@ -213,8 +213,8 @@ const HomePage = () => {
                     <Row>
                         {veterinarians.map(vet => (
                             <Col md={4} key={vet.userId}>
-                                <div className="serviceBox" style={{ width: '330px', height: '400px' }}>
-                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" style={{ width: '300px', height: '300px' }} />
+                                <div className="serviceBox" style={{ width: '420px', height: '400px' }}>
+                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" style={{ width: '380px', height: '320px' }} />
                                     <h4> Veterinarian:  {vet.name}</h4>
 
                                     {/* <button onClick={handleBooked}>Book</button> */}
