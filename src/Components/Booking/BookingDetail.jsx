@@ -4,25 +4,8 @@ import './BookingDetail.scss';
 const BookingDetail = ({ bookings, onDelete, showDeleteButton = true }) => {
     if (!bookings || bookings.length === 0) return null;
 
-    // const handleDelete = (index) => {
-    //     const updatedBookings = [...bookings];
-    //     const bookingToDelete = updatedBookings[index];
 
-    //     updatedBookings.splice(index, 1);
-    //     localStorage.setItem('bookedInfo', JSON.stringify(updatedBookings));
-
-    //     const bookedSlots = JSON.parse(localStorage.getItem('bookedSlots')) || {};
-    //     if (bookingToDelete) {
-    //         const doctorSlots = bookedSlots[bookingToDelete.doctorId] || [];
-    //         bookedSlots[bookingToDelete.doctorId] = doctorSlots.filter(slot => slot !== `${bookingToDelete.slotTime}-${bookingToDelete.date}`);
-    //         localStorage.setItem('bookedSlots', JSON.stringify(bookedSlots));
-    //     }
-
-    //     onDelete(updatedBookings);
-    // };
-
-
-    const handleDelete = (index) => {
+    const   handleDelete = (index) => {
         // Clone bookings array to avoid direct mutation
         const updatedBookings = [...bookings];
         const bookingToDelete = updatedBookings[index];
@@ -50,6 +33,7 @@ const BookingDetail = ({ bookings, onDelete, showDeleteButton = true }) => {
             // Update local storage with the updated booked slots
             localStorage.setItem('bookedSlots', JSON.stringify(bookedSlots));
 
+            
         }
 
         // Call the onDelete callback to update the UI or perform any additional actions

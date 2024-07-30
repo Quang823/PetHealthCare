@@ -247,7 +247,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
                         <option value="">Select Service</option>
                         {services.map((service) => (
                             <option key={service.name} value={service.name}>
-                                {service.name} - {service.price} VND
+                                {service.name} - ${service.price}
                             </option>
                         ))}
                     </select>
@@ -286,7 +286,7 @@ const BookingForm = ({ onBookingComplete, bookedSlots }) => {
                     </div>
                 </label>
                 <label>
-                    Total Cost: {totalCost} VND
+                    Total Cost: ${totalCost}
                 </label>
                 <button type="button" onClick={handleBooking}>Book Appointment</button>
             </form>

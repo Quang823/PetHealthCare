@@ -110,6 +110,13 @@ const PaymentPage = () => {
                 localStorage.removeItem('bookedSlots');
                 localStorage.removeItem('currentBookingId');
                 localStorage.removeItem('selectedDate');
+            } else {
+                toast.error("Payment failed. Please try again.");
+                navigate('/payment-failure');
+                localStorage.removeItem('bookings');
+                localStorage.removeItem('bookedSlots');
+                localStorage.removeItem('currentBookingId');
+                localStorage.removeItem('selectedDate');
             }
         } catch (error) {
             console.error('Payment failed:', error.response?.data || error);
