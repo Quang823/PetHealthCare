@@ -58,11 +58,6 @@ function Home({ Toggle }) {
     };
 
     const handleExamine = async (bookingDetail) => {
-        if (bookingDetail.booking.status === 'COMPLETED') {
-            alert('This booking has already been completed. Please select another booking for examination.');
-            return;
-        }
-
         try {
             await axios.put(`http://localhost:8080/bookingDetail/update/status/${bookingDetail.bookingDetailId}`, { status: 'EXAMINING' });
             navigate('/examineDoctor', { state: { bookingDetail: { ...bookingDetail, booking: { ...bookingDetail.booking, status: 'EXAMINING' } } } });
@@ -71,17 +66,10 @@ function Home({ Toggle }) {
         }
     };
 
-    const handleCancelSlot = async (bookingDetail) => {
-        const { bookingDetailId, date, vetCancelled } = bookingDetail;
-    
-        if (vetCancelled) {
-            toast.error('This slot has already been cancelled.');
-            return;
-        }
-    
-        const formattedDate = new Date(date).toISOString().split('T')[0];
+    const handleCancelSlot = async () => {
+        const formattedDate = selectedDate.toISOString().split('T')[0];
         const token = localStorage.getItem('token');
-        
+    
         try {
             const decodedToken = jwtDecode(token);
             const userId = decodedToken.User.map.userID;
@@ -99,14 +87,14 @@ function Home({ Toggle }) {
     
             if (response.data.status === "ok") {
                 setBookingDetails(prevDetails =>
-                    prevDetails.map(detail => 
-                        detail.bookingDetailId === bookingDetailId
+                    prevDetails.map(detail =>
+                        detail.date === formattedDate
                             ? { ...detail, vetCancelled: true }
                             : detail
                     )
                 );
                 toast.success(response.data.message || 'Slot has been successfully cancelled');
-                fetchBookingDetails();
+                fetchBookingDetails(); // Refresh booking details
             } else {
                 toast.error(response.data.message || 'Failed to cancel the slot');
             }
@@ -130,12 +118,18 @@ function Home({ Toggle }) {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        const optionsDate = { day: '2-digit', month: '2-digit', year: 'numeric' };
-        const optionsTime = { hour: '2-digit', minute: '2-digit' };
-        const formattedDate = date.toLocaleDateString('en-GB', optionsDate);
-        const formattedTime = date.toLocaleTimeString('en-GB', optionsTime);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+        const formattedDate = `${year}-${month}-${day}`; // YYYY-MM-DD format
+        const formattedTime = `${hours}:${minutes}`; // HH:MM format
+    
         return { formattedDate, formattedTime };
     };
+    
 
     const isToday = (date) => {
         const today = new Date();
@@ -166,13 +160,19 @@ function Home({ Toggle }) {
                     <div className='container-fluid'>
                         <div className='d-flex justify-content-between align-items-center'>
                             <h2 className="my-4">Schedule</h2>
-                            <div className="date-picker">
+                            <div className="d-flex align-items-center">
                                 <DatePicker
                                     selected={selectedDate}
                                     onChange={(date) => setSelectedDate(date)}
                                     dateFormat="dd MMMM yyyy"
                                     className="form-control"
                                 />
+                                {/* <button
+                                    className="bttn btn-danger ms-3"
+                                    onClick={handleCancelSlot}
+                                >
+                                    <FaTimes className='icoon' /> Cancel Slot
+                                </button> */}
                             </div>
                         </div>
                         {loading ? (
@@ -221,13 +221,13 @@ function Home({ Toggle }) {
                                                         >
                                                             <FaEye className='icoon' /> View
                                                         </button>
-                                                        <button
+                                                        {/* <button
                                                             className="bttn btn-danger"
                                                             onClick={() => handleCancelSlot(detail)}
                                                             disabled={detail.vetCancelled}
                                                         >
-                                                             <FaTimes className='icoon' /> {detail.vetCancelled ? 'Cancelled' : 'Cancel Slot'}
-                                                        </button>
+                                                            <FaTimes className='icoon' /> {detail.vetCancelled ? 'Cancelled' : 'Cancel Slot'}
+                                                        </button> */}
                                                     </td>
                                                 </tr>
                                             );
@@ -250,6 +250,7 @@ function Home({ Toggle }) {
                         onClose={() => setShowModal(false)}
                     />
                 )}
+                <button className="back-button" onClick={handleBack}>Back</button>
             </div>
         </>
     );

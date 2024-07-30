@@ -36,6 +36,10 @@ import ForgotPassword from './Components/Forgot&Reset/ForgetPassword';
 import VerifyOTP from './Components/Forgot&Reset/VerifyOTP';
 import HomeFake from './Components/Home/HomeFake';
 import Addslotcancel from './Components/Staff/Slot/Addslotcancel';
+import AboutFake from './Components/About/AboutFake';
+import ContactFAke from './Components/Contact/ContactFake';
+import ServiceFake from './Components/Home/ServiceFake';
+import Slotdoctor from './Components/Doctors/Slotdoctor';
 
 
 function App() {
@@ -56,6 +60,9 @@ function App() {
        </Route>
        <Route element={<PublicRoute />}>
        <Route path='/home' element={<HomeFake />} />
+          <Route path='/aboutfake' element={<AboutFake />} />
+          <Route path='/contactfake' element={<ContactFAke />} />
+          <Route path='/servicefake' element={<ServiceFake />} />
             <Route path='/login' element={<LoginForm />} />
             <Route path='/register' element={<RegisterForm />} />
             <Route path='/reset-password' element={<ResetPassword />} />
@@ -78,9 +85,10 @@ function App() {
         {/* Protected routes for Veterinarian */}
         <Route element={<ProtectedRoute allowedRoles={['Veterinarian']} />}>
           <Route path='/doctor/*' element={<Doctor />} />
-          <Route path='scheduleDoctor' element={<Schedule />} />
+          {/* <Route path='scheduleDoctor' element={<Schedule />} />
           <Route path='home' element={<Home />} />
           <Route path='examineDoctor' element={<VetExaminationForm />} />
+          <Route path='slotdoctor' element={<Slotdoctor />} /> */}
         </Route>
 
 
