@@ -57,4 +57,17 @@
     color: #28a745;
     margin-top: 5px;
   }
+  .password-container {
+    i {
+      position: absolute;
+      right: 10px; 
+      cursor: pointer;
+      color: #888; 
+      transition: color 0.3s;
+      i:hover {
+        color: #000; 
+    }
+  }
+  }
   
+

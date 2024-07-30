@@ -176,34 +176,21 @@ const HomePage = () => {
                     <div className="showAllButtonDiv">
                         <button onClick={handleShowAll} className="showAllButton">Show All</button>
                     </div>
-                    {/* <Row>
+
+
+                    <Row>
                         {service.slice(0, 3).map(service => (
                             <Col md={4} key={service.id}>
-                                <div className="serviceBox" style={{ width: '330px', height: '400px' }}>
-                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" style={{ width: '300px', height: '200px' }} />
+                                <div className="serviceBox">
+                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" />
                                     <h4>{service.name}</h4>
                                     <p>{service.description}</p>
                                     <p>{service.price}</p>
-                                    {/* <button onClick={handleBooked}>Book</button> */}
+                                    <button onClick={() => handleBooked(service.name)}>Book</button>
                                 </div>
                             </Col>
                         ))}
-                    </Row> */
-
-
-                        <Row>
-                            {service.slice(0, 3).map(service => (
-                                <Col md={4} key={service.id}>
-                                    <div className="serviceBox">
-                                        <img src={service.imageUrl} alt={service.name} className="serviceImage" />
-                                        <h4>{service.name}</h4>
-                                        <p>{service.description}</p>
-                                        <p>{service.price}</p>
-                                        <button onClick={() => handleBooked(service.name)}>Book</button>
-                                    </div>
-                                </Col>
-                            ))}
-                        </Row>}
+                    </Row>
                 </Container>
             </div>
 
@@ -213,8 +200,8 @@ const HomePage = () => {
                     <Row>
                         {veterinarians.map(vet => (
                             <Col md={4} key={vet.userId}>
-                                <div className="serviceBox" style={{ width: '330px', height: '400px' }}>
-                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" style={{ width: '300px', height: '300px' }} />
+                                <div className="serviceBox" style={{ width: '400px', height: '400px' }}>
+                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" style={{ width: '340px', height: '300px' }} />
                                     <h4> Veterinarian:  {vet.name}</h4>
 
                                     {/* <button onClick={handleBooked}>Book</button> */}

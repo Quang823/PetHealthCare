@@ -106,21 +106,14 @@ const PaymentPage = () => {
             if (paymentResponse.data.data === "Payment success") {
                 toast.success("Payment successful!");
                 navigate('/payment-success');
-                localStorage.removeItem('bookedInfo');
-                localStorage.removeItem('bookedSlots');
-                localStorage.removeItem('currentBookingId');
-                localStorage.removeItem('selectedDate');
-            } else {
-                toast.error("Payment failed. Please try again.");
-                navigate('/payment-failure');
-                localStorage.removeItem('bookedInfo');
+                localStorage.removeItem('bookings');
                 localStorage.removeItem('bookedSlots');
                 localStorage.removeItem('currentBookingId');
                 localStorage.removeItem('selectedDate');
             }
         } catch (error) {
             console.error('Payment failed:', error.response?.data || error);
-            toast.error("Payment failed. Please try again.");
+            toast.error("You do not have enough money to pay. Please check your wallet.");
             navigate('/payment-failure');
         }
     };
@@ -139,6 +132,10 @@ const PaymentPage = () => {
                 }
             ]
         });
+        localStorage.removeItem('bookings');
+        localStorage.removeItem('bookedSlots');
+        localStorage.removeItem('currentBookingId');
+        localStorage.removeItem('selectedDate');
     };
 
     const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0);
