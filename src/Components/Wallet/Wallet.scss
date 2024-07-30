@@ -4,28 +4,31 @@
     align-items: center;
     height: 70vh;
     background: linear-gradient(45deg, #8cffa5, #81beff, #ff99e9);
-
+    
     .wallet-card {
-        background-color: white;
+        background: url("../../Assets/pngtree-cute-style-daily-needs-pet-supplies-full-screen-poster-image_192913.jpg") no-repeat;
+        background-size: contain;
+        background-position: center;
+        background-color: #f8f8f8;
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         width: 40%;
-
+        
         h2 {
             text-align: center;
             color: #333;
             margin-bottom: 20px;
         }
-
+        
         .wallet-info {
             margin-bottom: 20px;
-
+            
             p {
                 margin: 10px 0;
             }
         }
-
+        
         .wallet-balance {
             display: flex;
             justify-content: center;
@@ -43,43 +46,56 @@
                 }
             }
         }
-
+        
         .wallet-actions {
             .action-group {
                 display: flex;
+                flex-direction: column;
                 margin-bottom: 10px;
-
+                
                 input {
                     flex-grow: 0;
                     margin-right: 10px;
                     border: 1px solid #ccc;
                     border-radius: 5px;
                     margin-bottom: 10px;
+                    max-width: 100%;
                 }
-
+                
+                .error-message {
+                    color: red;
+                    font-size: 14px;
+                    margin-top: -10px; /* Adjust as needed */
+                    margin-bottom: 10px; /* Add spacing below the error message */
+                }
+                
                 button {
-                    margin-bottom: 20px;
+                  
                     background-color: #4CAF50;
                     color: white;
                     border: none;
                     border-radius: 5px;
                     cursor: pointer;
+                    width: 40%;
+                    margin-left: 30%;
                     
                     &:hover {
                         background-color: #45a049;
                     }
                 }
             }
-
+            
             button {
-                width: 100%;
+                
                 padding: 10px;
                 background-color: #007bff;
                 color: white;
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-
+                width: 40%;
+                margin-left: 30%;
+             
                 &:hover {
                     background-color: #0069d9;
                 }
@@ -105,28 +121,28 @@
     outline: none;
     max-height: 80vh; /* Adjust this value as needed */
     overflow-y: auto; /* Enable vertical scrolling if needed */
-
+    
     h2 {
         text-align: center;
         margin-bottom: 20px;
     }
-
+    
     ul {
         list-style: none;
         padding: 0;
-
+        
         li {
             background: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 10px;
-
+            
             .date-time {
                 display: flex;
                 justify-content: space-between;
                 margin-bottom: 10px;
-
+                
                 .date,
                 .time {
                     flex: 1;
@@ -135,7 +151,7 @@
             }
         }
     }
-
+    
     button {
         width: 100%;
         padding: 10px;
@@ -144,7 +160,7 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-
+        
         &:hover {
             background-color: #45a049;
         }

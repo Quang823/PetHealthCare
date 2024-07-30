@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import Modal from 'react-modal';
 
 const RefundPage = () => {
     const [refunds, setRefunds] = useState([]);
@@ -8,6 +9,7 @@ const RefundPage = () => {
     const [error, setError] = useState(null);
     const [selectedRefund, setSelectedRefund] = useState(null);
     const [bookingDetails, setBookingDetails] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchRefunds = async () => {
@@ -40,18 +42,16 @@ const RefundPage = () => {
         fetchRefunds();
     }, []);
 
-    const handleRefundClick = async (refund) => {
-        setSelectedRefund(refund);
-        console.log('Selected refund:', refund);
-
+    const handleViewClick = async (bookingDetailId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${refund.bookingDetail.id}`, {
+            const response = await axios.get(`http://localhost:8080/refund/getRefundByBookingDetailId/${bookingDetailId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
             console.log('Booking details fetched:', response.data);
-            setBookingDetails(response.data);
+            setBookingDetails([response.data]);
+            setIsModalOpen(true); // Open modal when data is fetched
         } catch (error) {
             console.error('Error fetching booking details:', error);
             setError('Failed to fetch booking detail');
@@ -72,24 +72,34 @@ const RefundPage = () => {
                         <th>Refund Percent</th>
                         <th>Refund Date</th>
                         <th>Booking Detail ID</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {refunds.map(refund => (
-                        <tr key={refund.transactionNo} onClick={() => handleRefundClick(refund)}>
+                        <tr key={refund.transactionNo}>
                             <td>{refund.transactionNo}</td>
                             <td>{refund.amount}</td>
                             <td>{refund.refundPercent}</td>
                             <td>{refund.refundDate}</td>
                             <td>{refund.bookingDetail?.id}</td>
+                            <td>
+                                <button onClick={() => handleViewClick(refund.bookingDetail?.id)}>View</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
 
-            {selectedRefund && bookingDetails.length > 0 && (
-                <div>
-                    <h2>Booking Details for Refund #{selectedRefund.transactionNo}</h2>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={() => setIsModalOpen(false)}
+                contentLabel="Booking Details"
+            >
+                <h2>Booking Details</h2>
+                {bookingDetails.length === 0 ? (
+                    <p>No booking details found.</p>
+                ) : (
                     <table>
                         <thead>
                             <tr>
@@ -122,8 +132,9 @@ const RefundPage = () => {
                             ))}
                         </tbody>
                     </table>
-                </div>
-            )}
+                )}
+                <button onClick={() => setIsModalOpen(false)}>Close</button>
+            </Modal>
         </div>
     );
 };

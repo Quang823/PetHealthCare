@@ -167,15 +167,15 @@ const Wallet = () => {
                 <h2 style={{ fontFamily: "Georgia", fontWeight: "bold" }}>YOUR WALLET</h2>
                 <div className="wallet-info" style={{ marginLeft: "200px" }}>
                     <div className="d-flex" >
-                        <div style={{ fontStyle: "italic" }}>
+                        {/* <div style={{ fontStyle: "italic" }}>
                             Name:
-                        </div>
+                        </div> */}
                         <div style={{ fontWeight: "bold", marginLeft: "5px" }}>
                             {wallet.user.name}
                         </div>
                     </div>
 
-                    <div className="d-flex" >
+                    {/* <div className="d-flex" >
                         <div style={{ fontStyle: "italic" }}>
                             Phone:
                         </div>
@@ -190,7 +190,7 @@ const Wallet = () => {
                         <div style={{ fontWeight: "bold", marginLeft: "5px" }}>
                             {wallet.user.address}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="wallet-balance">
                     <div>Balance:</div>
@@ -214,6 +214,7 @@ const Wallet = () => {
                         <button onClick={handleDeposit}>Deposit Money</button>
                     </div>
 
+
                     <button onClick={handleViewHistory}>Transaction History</button>
                 </div>
             </div>
@@ -233,7 +234,7 @@ const Wallet = () => {
                             const { date, time } = formatDateTime(transaction.transactionDate);
                             return (
                                 <li key={transaction.transactionId}>
-                                    <p><strong>Transaction ID:</strong> {transaction.transactionId}</p>
+                                    {/* <p><strong>Transaction ID:</strong> {transaction.transactionId}</p> */}
                                     <div className="date-time">
                                         <p className="date"><strong>Date:</strong> {date}</p>
                                         <p className="time"><strong>Time:</strong> {time}</p>

@@ -95,7 +95,7 @@ const BookingHistory = () => {
     const cancelBookingDetail = (bookingDetailId, userId) => {
         confirmAlert({
             title: 'Confirm Cancel',
-            message: 'Are you sure you want to cancel this booking detail?',
+            message: 'Cancellation of booking may not be 100% refundable. Please check carefully before you cancel your booking! Are you sure you want to cancel this booking detail?',
             buttons: [
                 {
                     label: 'Yes',
@@ -134,9 +134,12 @@ const BookingHistory = () => {
 
                                 toast.success("Cancel success");
                             }
+                            if (response.data.status === "failed") {
+                                toast.error("This booking detail has bean cancelled");
+                            }
                         } catch (error) {
                             console.error('Error canceling booking detail:', error);
-                            toast.error("Failed to cancel booking detail");
+                            toast.error("This booking detail has bean cancelled");
                         }
                     }
                 },
@@ -152,6 +155,7 @@ const BookingHistory = () => {
         setPendingPaymentBooking(booking);
         setShowConfirmPayment(true);
     };
+
 
     const confirmPayment = async () => {
         const token = localStorage.getItem('token');
@@ -201,7 +205,6 @@ const BookingHistory = () => {
         </div>
     );
     if (error) return <p>Error: {error.message}</p>;
-
     return (
         <div className="booking-history-container">
             <div className="header-text">
@@ -234,9 +237,14 @@ const BookingHistory = () => {
                             <th>Date</th>
                             <th>Status</th>
                             <th>Total Price</th>
+                            {/* <th>Pet Name</th>
+                            <th>Veterinarian Name</th>
+                            <th>Slot</th>
+                            <th>Service Name</th> */}
                             <th>Actions</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {bookingHistory.filter(booking =>
                             booking.status.toLowerCase().includes(searchTerm.toLowerCase())
@@ -245,6 +253,10 @@ const BookingHistory = () => {
                                 <td>{booking.date}</td>
                                 <td>{booking.status}</td>
                                 <td>{booking.totalPrice}</td>
+                                {/* <td>{booking.petName}</td>
+                                <td>{booking.veterinarianName}</td>
+                                <td>{booking.slot}</td>
+                                <td>{booking.serviceName}</td> */}
                                 <td>
                                     <button onClick={() => viewBookingDetails(booking.bookingId)}>View Booking Details</button>
                                     {booking.status.toLowerCase() === 'pending' && (
@@ -260,7 +272,7 @@ const BookingHistory = () => {
                 <div className="modal show">
                     <div className="modal-content">
                         <h3>Confirm Payment</h3>
-                        <p>Are you sure you want to pay again for booking ID: {pendingPaymentBooking.bookingId}?</p>
+                        <p>Are you sure you want to pay again for this booking: {pendingPaymentBooking.bookingId}?</p>
                         <p>Total amount: {pendingPaymentBooking.totalPrice}</p>
                         <button onClick={confirmPayment}>Confirm Payment</button>
                         <button onClick={() => {
@@ -283,6 +295,7 @@ const BookingHistory = () => {
                                     <th>Need Cage</th>
                                     <th>Status</th>
                                     <th>Pet Name</th>
+                                    <th>Pet Image</th>
                                     <th>Service Name</th>
                                     <th>Slot Time</th>
                                     <th>Total Price</th>
@@ -297,6 +310,7 @@ const BookingHistory = () => {
                                         <td>{detail.needCage ? 'Yes' : 'No'}</td>
                                         <td>{detail.status}</td>
                                         <td>{detail.pet.petName}</td>
+                                        <td>{detail.pet.imageUrl && <img src={detail.pet.imageUrl} alt={detail.pet.petName} style={{ width: '60px', height: '60px', objectFit: 'cover' }} />}</td>
                                         <td>{detail.services.name}</td>
                                         <td>{detail.slot.startTime} - {detail.slot.endTime}</td>
                                         <td>{detail.services.price}</td>

@@ -20,7 +20,7 @@ const SuccessFailurePage = () => {
             <div className="message-container failure">
                 <FontAwesomeIcon icon={faTimesCircle} className="iconc failure-icon" />
                 <h1>Payment Failed</h1>
-                <p>Your payment has failed. Please try again or choose another payment method.</p>
+                <p>Your payment has failed. You do not have enough money to pay. Please check your wallet.</p>
                 <div className="button-group">
                     <button className="btnc" onClick={handleRetryPayment}>Retry Payment</button>
                     <button className="btnc" onClick={handleViewWallet}>View Wallet</button>

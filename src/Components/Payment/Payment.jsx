@@ -120,7 +120,7 @@ const PaymentPage = () => {
             }
         } catch (error) {
             console.error('Payment failed:', error.response?.data || error);
-            toast.error("Payment failed. Please try again.");
+            toast.error("You do not have enough money to pay. Please check your wallet.");
             navigate('/payment-failure');
         }
     };
@@ -139,6 +139,10 @@ const PaymentPage = () => {
                 }
             ]
         });
+        localStorage.removeItem('bookings');
+        localStorage.removeItem('bookedSlots');
+        localStorage.removeItem('currentBookingId');
+        localStorage.removeItem('selectedDate');
     };
 
     const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0);

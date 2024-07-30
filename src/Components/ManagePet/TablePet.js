@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import { Modal, Button, Table, Form, Row, Col } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
 import axios from 'axios';
@@ -27,6 +26,7 @@ const TablePet = () => {
     });
     const [file, setFile] = useState(null);
     const [validationMessages, setValidationMessages] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -82,10 +82,21 @@ const TablePet = () => {
     };
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
+        const file = e.target.files[0];
+        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/webp', 'image/svg+xml'];
+
+        if (file && validImageTypes.includes(file.type)) {
+            setFile(file);
+        } else {
+            toast.error("Please select a valid image file (jpg, jpeg, png, gif, bmp, tiff, tif, webp, svg).");
+            e.target.value = null; // Reset the file input
+        }
     };
 
     const handleSubmit = (isEdit = false) => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+
         const { petName, petAge, petGender, petType, vaccination, imageUrl } = petForm;
         let messages = {
             petName: validatePetName(petName),
@@ -96,6 +107,7 @@ const TablePet = () => {
 
         if (Object.values(messages).some(msg => msg !== '')) {
             setValidationMessages(messages);
+            setIsSubmitting(false);
             return;
         }
 
@@ -113,7 +125,6 @@ const TablePet = () => {
         } else if (isEdit && !file && imageUrl) {
             formData.append('file', imageUrl);
         }
-       
 
         const request = isEdit
             ? axios.put(`http://localhost:8080/pet/update/${petForm.petId}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -129,7 +140,10 @@ const TablePet = () => {
             })
             .catch(err => {
                 console.log(err);
-                toast.error(isEdit ? "Failed to update pet" : "Failed to add new pet (Pet name is duplicated)");
+                toast.error(isEdit ? "Can not update pet (This pet has booking details) " : "Failed to add new pet (Pet name is duplicated)");
+            })
+            .finally(() => {
+                setIsSubmitting(false);
             });
     };
 
@@ -220,7 +234,6 @@ const TablePet = () => {
 
     return (
         <div className="phs-table-container">
-
             <h4 className="phs-header">List of Pets</h4>
             <Button
                 onClick={() => setShowForm(true)}
@@ -230,7 +243,6 @@ const TablePet = () => {
                 <FaPlus className="add-icon" /> Add New Pet
             </Button>
             <Table className="phs-styled-table" responsive="md" striped hover>
-
                 <thead>
                     <tr>
                         <th>Pet Name</th>
@@ -251,150 +263,119 @@ const TablePet = () => {
                             <td>{pet.petType}</td>
                             <td>{pet.vaccination}</td>
                             <td>
-                                {pet.imageUrl && <img src={pet.imageUrl} alt={pet.petName} className="pet-image" style={{ width: '170px', height: '120px' }} />}
+                                {pet.imageUrl && <img src={pet.imageUrl} alt={pet.petName} style={{ width: '130px', height: '130px', objectFit: 'cover' }} />}
                             </td>
                             <td>
-
-                                <Form.Select onChange={(e) => handleActionChange(e, pet)} className="action-select">
+                                <Form.Select onChange={(e) => handleActionChange(e, pet)}>
                                     <option value="">Select Action</option>
                                     <option value="edit">Edit</option>
                                     <option value="delete">Delete</option>
+                                    <option value="viewVaccine">View Vaccine</option>
                                     <option value="viewHistory">View History</option>
                                 </Form.Select>
-
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
 
-
-            <Modal
-                show={showForm || showEditForm}
-                onHide={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}
-                className="pet-modal"
-            >
-
+            <Modal show={showForm || showEditForm} onHide={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}>
                 <Modal.Header closeButton>
                     <Modal.Title>{showEditForm ? 'Edit Pet' : 'Add New Pet'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-
                     <Form>
-                        <Row className="mb-3">
-                            <Col md={6}>
-                                <Form.Group>
-                                    <Form.Label>Pet Name</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="petName"
-                                        value={petForm.petName}
-                                        onChange={handleChange}
-                                        isInvalid={!!validationMessages.petName}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {validationMessages.petName}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                        <Form.Group as={Row} controlId="formPetName">
+                            <Form.Label column sm={3}>Pet Name:</Form.Label>
+                            <Col sm={9}>
+                                <Form.Control
+                                    type="text"
+                                    name="petName"
+                                    value={petForm.petName}
+                                    onChange={handleChange}
+                                    isInvalid={validationMessages.petName}
+                                />
+                                <Form.Control.Feedback type="invalid">{validationMessages.petName}</Form.Control.Feedback>
                             </Col>
-                            <Col md={6}>
-                                <Form.Group>
-                                    <Form.Label>Pet Age</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="petAge"
-                                        value={petForm.petAge}
-                                        onChange={handleChange}
-                                        isInvalid={!!validationMessages.petAge}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {validationMessages.petAge}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="formPetAge">
+                            <Form.Label column sm={3}>Pet Age:</Form.Label>
+                            <Col sm={9}>
+                                <Form.Control
+                                    type="number"
+                                    name="petAge"
+                                    value={petForm.petAge}
+                                    onChange={handleChange}
+                                    isInvalid={validationMessages.petAge}
+                                />
+                                <Form.Control.Feedback type="invalid">{validationMessages.petAge}</Form.Control.Feedback>
                             </Col>
-                        </Row>
-                        <Row className="mb-3">
-                            <Col md={6}>
-                                <Form.Group>
-                                    <Form.Label>Pet Gender</Form.Label>
-                                    <Form.Select
-                                        name="petGender"
-                                        value={petForm.petGender}
-                                        onChange={handleChange}
-                                        isInvalid={!!validationMessages.petGender}
-                                    >
-                                        <option value="">Select Gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </Form.Select>
-                                    <Form.Control.Feedback type="invalid">
-                                        {validationMessages.petGender}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="formPetGender">
+                            <Form.Label column sm={3}>Pet Gender:</Form.Label>
+                            <Col sm={9}>
+                                <Form.Control as="select" name="petGender" value={petForm.petGender} onChange={handleChange}>
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </Form.Control>
+                                {validationMessages.petGender && <div className="invalid-feedback">{validationMessages.petGender}</div>}
                             </Col>
-                            <Col md={6}>
-                                <Form.Group>
-                                    <Form.Label>Pet Type</Form.Label>
-                                    <Form.Select
-                                        name="petType"
-                                        value={petForm.petType}
-                                        onChange={handleChange}
-                                        isInvalid={!!validationMessages.petType}
-                                    >
-                                        <option value="">Select Type</option>
-                                        <option value="DOG">DOG</option>
-                                        <option value="CAT">CAT</option>
-                                        <option value="CHICKEN">CHICKEN</option>
-                                        <option value="BIRD">BIRD</option>
-                                        <option value="HAMSTER">HAMSTER</option>
-                                    </Form.Select>
-                                    <Form.Control.Feedback type="invalid">
-                                        {validationMessages.petType}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="formPetType">
+                            <Form.Label column sm={3}>Pet Type:</Form.Label>
+                            <Col sm={9}>
+                                <Form.Control as="select" name="petType" value={petForm.petType} onChange={handleChange}>
+                                    <option value="">Select Pet Type</option>
+                                    <option value="DOG">DOG</option>
+                                    <option value="CAT">CAT</option>
+                                    <option value="CHICKEN">CHICKEN</option>
+                                    <option value="BIRD">BIRD</option>
+                                    <option value="HAMSTER">HAMSTER</option>
+                                </Form.Control>
+                                {validationMessages.petType && <div className="invalid-feedback">{validationMessages.petType}</div>}
                             </Col>
-                        </Row>
-                        <Row className="mb-3">
-                            <Col md={12}>
-                                <Form.Group>
-                                    <Form.Label>Vaccination</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="vaccination"
-                                        placeholder='Optional'
-                                        value={petForm.vaccination}
-                                        onChange={handleChange}
-                                    />
-                                </Form.Group>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="formVaccination">
+                            <Form.Label column sm={3}>Vaccination:</Form.Label>
+                            <Col sm={9}>
+                                <Form.Control
+                                    type="text"
+                                    name="vaccination"
+                                    value={petForm.vaccination}
+                                    onChange={handleChange}
+                                />
                             </Col>
-                        </Row>
-                        <Row className="mb-3">
-                            <Col md={12}>
-                                <Form.Group>
-                                    <Form.Label>Image</Form.Label>
-                                    <Form.Control
-                                        type="file"
-                                        name="file"
-                                        onChange={handleFileChange}
-                                    />
-                                </Form.Group>
+                        </Form.Group>
+
+                        <Form.Group as={Row} controlId="formFile">
+                            <Form.Label column sm={3}>Image:</Form.Label>
+                            <Col sm={9}>
+                                <Form.Control
+                                    type="file"
+                                    name="file"
+                                    accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff,.tif,.webp,.svg"
+                                    onChange={handleFileChange}
+                                />
+                                {petForm.imageUrl && !file && (
+                                    <div className="mt-2">
+                                        <img src={petForm.imageUrl} alt="Current" style={{ maxWidth: '100%', height: 'auto' }} />
+                                    </div>
+                                )}
                             </Col>
-                        </Row>
+                        </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}
-                    >
-                        Cancel
+                    <Button variant="secondary" onClick={() => { setShowForm(false); setShowEditForm(false); resetForm(); }}>
+                        Close
                     </Button>
-                    <Button
-                        variant="primary"
-                        onClick={() => handleSubmit(showEditForm)}
-                    >
-                        {showEditForm ? 'Update Pet' : 'Add Pet'}
-
+                    <Button variant="primary" onClick={() => handleSubmit(showEditForm)} disabled={isSubmitting}>
+                        {showEditForm ? 'Update' : 'Save Changes'}
                     </Button>
                 </Modal.Footer>
             </Modal>
