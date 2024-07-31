@@ -41,16 +41,22 @@
         }
 
         h2 {
-            font-size: var(--h2FontSize);
-            color: green;
+            font-size: 1.5rem;
+            color: #00a558;
+            text-transform: uppercase;
+            font-family: 'Arial, sans-serif';
+            font-weight: bolder;
         }
     }
 
     .menuDiv, .settingsDiv {
         .divTitle {
-            font-size: var(--h3FontSize);
+            font-size: 1rem;
             color: var(--blackColor);
             padding: 0 1.5rem 1.5rem;
+            text-transform: uppercase;
+            font-family: 'Arial, sans-serif';
+            font-weight: bolder;
         }
 
         .menuLists {
@@ -69,18 +75,21 @@
                     content: '';
                     height: 0%;
                     left: 0;
-                    width: 5px;
+                    width: 8px;
                     bottom: 0;
                     border-top-right-radius: 10px;
                     border-bottom-right-radius: 10px;
-                    background: var(--PrimaryColor);
+                     background: linear-gradient(45deg, #0276f1,#00df77, #00eb62);
+                     color: linear-gradient(45deg, #0276f1,#00df77, #00eb62);
                 }
 
                 .menuLink {
                     color: gray;
-                    font-weight: 500;
                     transition: 0;
                     text-decoration: none; /* Bỏ gạch chân */
+                    text-transform: uppercase;
+                    font-family: 'Arial, sans-serif';
+                    font-weight: bolder;
                     list-style: none;
                     
                     .icon {
@@ -89,7 +98,7 @@
                 }
 
                 &:hover .menuLink {
-                    color: var(--PrimaryColor);
+                    color: linear-gradient(45deg, #81beff,#59ffb2, #00ff6a);
                     transition: 0;
                 }
 
@@ -109,7 +118,7 @@
 
         .icon {
             position: absolute;
-            background: var(--HoverColor);
+            background: linear-gradient(45deg, #81beff,#59ffb2, #00ff6a);
             border: 10px solid var(--whiteColor);
             font-size: 3rem;
             border-radius: 50%;
@@ -122,7 +131,7 @@
         .cardContent {
             position: relative;
             padding: 1rem;
-            background: var(--HoverColor);
+            background: linear-gradient(45deg, #81beff,#59ffb2, #00ff6a);
             border-radius: 10px;
             overflow: hidden;
 
@@ -130,8 +139,11 @@
                 font-size: var(--h3FontSize);
                 margin-top: 1rem;
                 padding: 1rem 0;
-                font-weight: 800;
+               
                 color: var(--blackColor);
+                text-transform: uppercase;
+            font-family: 'Arial, sans-serif';
+            font-weight: bolder;
             }
 
             p {

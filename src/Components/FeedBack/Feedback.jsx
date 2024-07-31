@@ -37,20 +37,20 @@ const Feedback = () => {
       setShowModal(false);
       setRating(0);
       setFeedbackContent('');
-      
+
       setBookings((prevBookings) =>
         prevBookings.map((booking) =>
           booking.bookingDetailId === selectedBookingId
             ? { ...booking, feedback: { rating: feedback.rating, feedbackContent: feedback.feedbackContent } }
             : booking,
-            toast.success("Feedback success")
+          toast.success("Feedback success")
         )
-        
+
       );
     } catch (error) {
       toast.error("Cannot feedback")
       console.error('Error submitting feedback:', error);
-     
+
     }
   };
 
@@ -67,15 +67,15 @@ const Feedback = () => {
 
   return (
     <div className='feedback'>
-      <h1>Booking Detail History</h1>
+      <h2>Feedback</h2>
       <table className="booking-table">
         <thead>
           <tr>
-            
+
             <th>Date</th>
             <th>Pet Name</th>
             <th>Service</th>
-           
+
             <th>Total Price</th>
             <th>Actions</th>
           </tr>
@@ -83,7 +83,7 @@ const Feedback = () => {
         <tbody>
           {bookings.map((booking, index) => (
             <tr key={index}>
-              
+
               <td>{booking.date}</td>
               <td>{booking.pet.petName}</td>
               <td>{booking.services.name}</td>
@@ -95,7 +95,7 @@ const Feedback = () => {
                     <p>Feedback: {booking.feedback.feedbackContent}</p>
                   </div>
                 ) : (
-<button onClick={() => openModal(booking.bookingDetailId)}>Submit Feedback</button>
+                  <button onClick={() => openModal(booking.bookingDetailId)}>Submit Feedback</button>
                 )}
               </td>
             </tr>

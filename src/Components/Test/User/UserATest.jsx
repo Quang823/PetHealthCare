@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import './UserATest.scss';
 import ReactPaginate from 'react-paginate';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import SideBar from '../SideBar/SideBar';
+import { Modal, Button } from 'react-bootstrap';
 
 function UserATest() {
     const [users, setUsers] = useState([]);
-    const [showForm, setShowForm] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [newRole, setNewRole] = useState('');
@@ -18,14 +17,6 @@ function UserATest() {
     const indexOfLastPost = currentPage * postPerPage;
     const indexOfFirstPost = indexOfLastPost - postPerPage;
     const currentPosts = users.slice(indexOfFirstPost, indexOfLastPost);
-
-    const [newUser, setNewUser] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
-        role: ''
-    });
 
     useEffect(() => {
         fetch('http://localhost:8080/account/getAll')
@@ -38,15 +29,10 @@ function UserATest() {
         navigate('/admin');
     };
 
-    const handleAddNew = () => {
-        // Add functionality for adding a new user
-    };
-
     const handleEdit = (user) => {
         setCurrentUser(user);
         setNewRole(user.role);
         setShowEditForm(true);
-        setShowForm(false);
     };
 
     const handleEditSubmit = (e) => {
@@ -73,83 +59,86 @@ function UserATest() {
         axios.delete(`http://localhost:8080/account/delete/${userId}`)
             .then(() => {
                 setUsers(users.filter(user => user.userId !== userId));
-                toast.success("Delete success");
+                toast.success("User deleted successfully");
             })
             .catch(err => {
                 console.log(err);
-                toast.error("Failed to delete");
+                toast.error("Failed to delete user");
             });
     };
 
-    const handleChange = (e) => {
-        setNewUser({
-            ...newUser,
-            [e.target.name]: e.target.value
-        });
-    };
-
     return (
-        <>
-            <div className="container">
-                <div className='hehe'>
-                    <h2 className="my-4">Customer List</h2>
-                    {/* <button className="back-button" onClick={handleBack}>Back</button> */}
-                </div>
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Role</th>
+        <div className="useratest-container">
+            <div className='useratest-header'>
+                <h2 className="my-4">User Account List</h2>
+            </div>
+            <table className="useratest-table table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {currentPosts.map((user, index) => (
+                        <tr key={index}>
+                            <td>{user.name}</td>
+                            <td>{user.email}</td>
+                            <td>{user.phone}</td>
+                            <td>{user.address}</td>
+                            <td>{user.role}</td>
+                            <td>
+                                <button className="useratest-edit-button" onClick={() => handleEdit(user)}>Edit</button>
+                                <button className="useratest-delete-button" onClick={() => handleDelete(user.userId)}>Delete</button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {currentPosts.map((user, index) => (
-                            <tr key={index}>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.phone}</td>
-                                <td>{user.address}</td>
-                                <td>{user.role}</td>
-                                <td>
-                                    {/* <button className="edit-button" onClick={() => handleEdit(user)}>Edit</button> */}
-                                    <button className="delete-button" onClick={() => handleDelete(user.userId)}>Delete</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                    ))}
+                </tbody>
+            </table>
 
-                <ReactPaginate
-                    previousLabel={'Previous'}
-                    nextLabel={'Next'}
-                    pageCount={Math.ceil(users.length / postPerPage)}
-                    onPageChange={({ selected }) => setCurrentPage(selected + 1)}
-                    containerClassName={'pagination'}
-                    activeClassName={'active'}
-                />
+            <ReactPaginate
+                previousLabel={'Previous'}
+                nextLabel={'Next'}
+                pageCount={Math.ceil(users.length / postPerPage)}
+                onPageChange={({ selected }) => setCurrentPage(selected + 1)}
+                containerClassName={'useratest-pagination'}
+                activeClassName={'useratest-active'}
+            />
 
-                {showEditForm && (
-                    <div className="edit-form">
-                        <h3>Edit Role for {currentUser.name}</h3>
+            {showEditForm && (
+                <Modal show={showEditForm} onHide={() => setShowEditForm(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title style={{
+                            textAlign: 'center', color: '#333',
+                            fontFamily: 'Arial, sans-serif',
+                            fontWeight: 'bolder',
+                            fontSize: '1.5rem'
+                        }}>Edit Role for {currentUser.name}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
                         <form onSubmit={handleEditSubmit}>
-                            <label>
+                            <label style={{ width: '100%' }}>
                                 Role:
-                                <input
-                                    type="text"
+                                <select
                                     value={newRole}
                                     onChange={(e) => setNewRole(e.target.value)}
-                                />
+                                >
+                                    <option value="Customer">Customer</option>
+                                    <option value="Veterinarian">Veterinarian</option>
+                                    <option value="Staff">Staff</option>
+                                </select>
                             </label>
-                            <button type="submit">Save</button>
-                            <button type="button" onClick={() => setShowEditForm(false)}>Cancel</button>
+                            <Button type="submit">Save</Button>
+                            <Button variant="secondary" onClick={() => setShowEditForm(false)}>Cancel</Button>
                         </form>
-                    </div>
-                )}
-            </div>
-        </>
+                    </Modal.Body>
+                </Modal>
+            )}
+        </div>
     );
 }
 

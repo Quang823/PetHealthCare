@@ -4,7 +4,7 @@ import './Top.scss';
 import { BiSearchAlt } from 'react-icons/bi';
 import { TbMessageCircle } from "react-icons/tb";
 import { IoIosNotifications } from "react-icons/io";
-import v186_557 from '../../../../Assets/v186_557.png';
+import v186_557 from '../../../../Assets/v186_574.png';
 import video1 from '../../../../Assets/7515875-hd_1080_1920_30fps.mp4'
 import { TbArrowNarrowRight } from "react-icons/tb";
 import meo from '../../../../Assets/khach-san-thu-cung04.webp';
@@ -15,52 +15,53 @@ import { UserContext } from "../../../../Context/UserContext";
 import axios from "axios";
 const Top = () => {
     const navigate = useNavigate();
-    const [userName,setUserName] = useState('');
-    const [services,SetServices] = useState([]);
-    
-    useEffect(()=>{
-      const token = localStorage.getItem('token');
-      if( token){
-        try{
-          const decodedToken = jwtDecode(token);
-          if (decodedToken && decodedToken.User) {
-            setUserName(decodedToken.User.map.name); 
-        }
-        }catch(err){
-            console.error('Invalid token:', err);
-        }
-      }
+    const [userName, setUserName] = useState('');
+    const [services, SetServices] = useState([]);
 
-    },[]);
-    useEffect(() =>{
-     
-     const fectchService = async () =>{
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                if (decodedToken && decodedToken.User) {
+                    setUserName(decodedToken.User.map.name);
+                }
+            } catch (err) {
+                console.error('Invalid token:', err);
+            }
+        }
 
-        try{
-            const rs = await axios.get("http://localhost:8080/bookingDetail/getMostUsedServiceByMonthAndYear?month=7&year=2024");
-            SetServices(rs.data.services);
-     }catch(err){
-        console.log(err);
-     }
-     }
-     fectchService();
-    
-    },[])
+    }, []);
+    useEffect(() => {
+
+        const fectchService = async () => {
+
+            try {
+                const rs = await axios.get("http://localhost:8080/bookingDetail/getMostUsedServiceByMonthAndYear?month=7&year=2024");
+                SetServices(rs.data.services);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fectchService();
+
+    }, [])
 
     const handleGoToServices = () => {
         navigate('/testadmin/servicePet');
     };
-   
+
     return (
         <div className="topSection">
             <div className="headerSection flex">
                 <div className="title">
                     <h1>Welcome {userName} to Pet Health Care</h1>
-                    
+
                 </div>
-                <div className="searchBar flex">
-                    <input type="text" placeholder="Search Dashboard" />
-                    <BiSearchAlt className="icon" />
+                <div className="animatedBanner">
+                    <div className="message">Welcome to the Dashboard!</div>
+                    <div className="message">Check out the latest updates!</div>
+                    <div className="message">Your performance stats are here!</div>
                 </div>
                 <div className="adminDiv flex">
                     {/* <TbMessageCircle className="icon" />
@@ -98,7 +99,7 @@ const Top = () => {
                                 </span> */}
                                 {services.map(service => (
                                     <div key={service.serviceId} className="serviceItem flex">
-                                    
+
                                         <span className="serviceName">{service.name}</span>
                                     </div>
                                 ))}
@@ -110,12 +111,12 @@ const Top = () => {
 
                         </div>
                         <div className="imgDiv">
-                        {services.map(service => (
-                                    <div key={service.serviceId} className="serviceItem flex">
+                            {services.map(service => (
+                                <div key={service.serviceId} className="serviceItem flex">
                                     <img src={service.imageUrl} alt={service.name} className="serviceImage" />
-                                       
-                                    </div>
-                                ))}
+
+                                </div>
+                            ))}
                         </div>
                         {/* <div className="sideBarCard">
                 <BsQuestionCircle className="icon" />

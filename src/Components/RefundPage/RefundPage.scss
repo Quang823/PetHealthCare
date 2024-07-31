@@ -1,0 +1,80 @@
+.refunds-page {
+    background: linear-gradient(45deg, #8cffa5, #81beff, #ff99e9);
+    padding-bottom: 15%;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        text-transform: uppercase;
+        font-family: 'Arial, sans-serif';
+        font-weight: bolder;
+        font-size: 2rem;
+    }
+}
+
+.refunds-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.refunds-table th, .refunds-table td {
+    border: 1px solid #252525;
+    padding: 8px;
+    text-align: center;
+}
+.refunds-table td{
+    background-color: #eeeeee;
+}
+.refunds-table th {
+    background-color: #32a374;
+    text-align: center;
+}
+
+/* Modal Styles */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.booking-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.booking-detail-table th, .booking-detail-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.booking-detail-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}

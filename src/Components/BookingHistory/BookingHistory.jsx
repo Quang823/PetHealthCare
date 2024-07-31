@@ -37,7 +37,9 @@ const BookingHistory = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                const sortedData = response.data.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date descending
+
+                // Sort by bookingId descending (newest first)
+                const sortedData = response.data.sort((a, b) => b.bookingId - a.bookingId);
                 setBookingHistory(sortedData);
                 setUnfilteredBookingHistory(sortedData);
                 console.log('Booking history fetched:', response.data);
@@ -48,6 +50,7 @@ const BookingHistory = () => {
                 setLoading(false);
             }
         };
+
         fetchBookingHistory();
     }, [showConfirmPayment]);
 
@@ -154,6 +157,7 @@ const BookingHistory = () => {
     const handlePayment = (booking) => {
         setPendingPaymentBooking(booking);
         setShowConfirmPayment(true);
+
     };
 
 
@@ -272,7 +276,7 @@ const BookingHistory = () => {
                 <div className="modal show">
                     <div className="modal-content">
                         <h3>Confirm Payment</h3>
-                        <p>Are you sure you want to pay again for this booking: {pendingPaymentBooking.bookingId}?</p>
+                        <p>Are you sure you want to pay again for this booking?</p>
                         <p>Total amount: {pendingPaymentBooking.totalPrice}</p>
                         <button onClick={confirmPayment}>Confirm Payment</button>
                         <button onClick={() => {

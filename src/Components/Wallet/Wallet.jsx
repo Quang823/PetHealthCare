@@ -39,7 +39,11 @@ const Wallet = () => {
             .then(res => {
                 if (res.data.status === "ok" && Array.isArray(res.data.data)) {
                     console.log('Transactions data:', res.data.data); // Debug log
-                    setTransactions(res.data.data);
+
+                    // Sort transactions by transactionDate in descending order
+                    const sortedTransactions = res.data.data.sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate));
+
+                    setTransactions(sortedTransactions);
                 } else {
                     console.error('Unexpected transactions data structure:', res.data);
                 }
