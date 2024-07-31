@@ -37,16 +37,22 @@ const HomePage = () => {
     const handleShowAll = () => {
         navigate('/allservices'); // Route to the new page
     };
-    const handleBooked = () => {
-            navigate('/booking')
+
+    // const handleBooked = () => {
+    //     navigate('/booking')
+    // }
+
+
+    const handleBooked = (serviceName) => {
+        navigate('/booking', { state: { selectedService: serviceName } });
     }
-   
+
 
     useEffect(() => {
         const fetchService = async () => {
             try {
                 const bookedInfo = JSON.parse(localStorage.getItem('bookedInfo'));
-                console.log("00000",bookedInfo)
+                console.log("00000", bookedInfo)
                 const rs = await axios.get("http://localhost:8080/Service/getAll");
                 setService(rs.data);
             } catch (er) {
@@ -101,9 +107,9 @@ const HomePage = () => {
         });
     };
     return (
-       
+
         <div className="HomePage" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
-            
+
             <div className="headerDiv">
                 <div className="headerText">
                     <h4>Fur-ever friends</h4>
@@ -156,7 +162,7 @@ const HomePage = () => {
                                 <img src={image3} alt="Image 3" className="box-image"></img>
                             </div>
                             <div className="text-container3">
-                                 <button onClick={() => scrollToSection(visitOurRef)} >Visit Our</button>
+                                <button onClick={() => scrollToSection(visitOurRef)} >Visit Our</button>
                             </div>
                         </div>
                     </div>
@@ -165,15 +171,16 @@ const HomePage = () => {
 
             <div className="section services" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
                 <Container>
-                    <h3 className="section-title">Our Services</h3>
+                    <h3 className="section-title">Our Best Services</h3>
+
                     <div className="showAllButtonDiv">
                         <button onClick={handleShowAll} className="showAllButton">Show All</button>
                     </div>
-                    <Row>
+                    {/* <Row>
                         {service.slice(0, 3).map(service => (
                             <Col md={4} key={service.id}>
-                                <div className="serviceBox">
-                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" />
+                                <div className="serviceBox" style={{ width: '330px', height: '400px' }}>
+                                    <img src={service.imageUrl} alt={service.name} className="serviceImage" style={{ width: '300px', height: '200px' }} />
                                     <h4>{service.name}</h4>
                                     <p>{service.description}</p>
                                     <p>{service.price}</p>
@@ -181,7 +188,22 @@ const HomePage = () => {
                                 </div>
                             </Col>
                         ))}
-                    </Row>
+                    </Row> */}
+
+
+                        <Row>
+                            {service.slice(0, 3).map(service => (
+                                <Col md={4} key={service.id}>
+                                    <div className="serviceBox">
+                                        <img src={service.imageUrl} alt={service.name} className="serviceImage" />
+                                        <h4>{service.name}</h4>
+                                        <p>{service.description}</p>
+                                        <p>{service.price}</p>
+                                        <button onClick={() => handleBooked(service.name)}>Book</button>
+                                    </div>
+                                </Col>
+                            ))}
+                        </Row>
                 </Container>
             </div>
 
@@ -191,10 +213,12 @@ const HomePage = () => {
                     <Row>
                         {veterinarians.map(vet => (
                             <Col md={4} key={vet.userId}>
-                                <div className="serviceBox">
-                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" />
+                                <div className="serviceBox" style={{ width: '420px', height: '400px' }}>
+                                    <img src={vet.imageUrl} alt={`Veterinarian: ${vet.name}`} className="vetImage" style={{ width: '380px', height: '320px' }} />
                                     <h4> Veterinarian:  {vet.name}</h4>
-                                    <button  onClick={handleBooked}>Book</button>
+
+                                    {/* <button onClick={handleBooked}>Book</button> */}
+
                                 </div>
                             </Col>
                         ))}
@@ -207,24 +231,24 @@ const HomePage = () => {
                     <h3 className="titlenew" ref={newsRef}>Latest Pet News</h3>
                     <Row className='newRow'>
                         <Col md={4} className='newCol'>
-                            <div className="newsBox" onClick={() =>window.location.href='https://petyeu.com.vn/cam-nang-thu-cung/co-nen-mac-do-cho-cun-cung-15.html'}>
+                            <div className="newsBox" onClick={() => window.location.href = 'https://petyeu.com.vn/cam-nang-thu-cung/co-nen-mac-do-cho-cun-cung-15.html'}>
                                 <img src={img7} alt="Pet Health Tips" className="newsImage" />
                                 <h4>Should pets wear clothes?</h4>
-                               
+
                             </div>
                         </Col>
                         <Col md={4} className='newCol'>
-                            <div className="newsBox" onClick={() =>window.location.href='https://petyeu.com.vn/cam-nang-thu-cung/loi-ich-cua-viec-cho-be-nuoi-thu-cung-10.html'}>
+                            <div className="newsBox" onClick={() => window.location.href = 'https://petyeu.com.vn/cam-nang-thu-cung/loi-ich-cua-viec-cho-be-nuoi-thu-cung-10.html'}>
                                 <img src={img8} alt="New Arrivals in Pet Shop" className="newsImage1" />
                                 <h4>Benefits of keeping pets for babies</h4>
                                 <p></p>
                             </div>
                         </Col>
                         <Col md={4} className='newCol'>
-                            <div className="newsBox" onClick={() =>window.location.href='https://petyeu.com.vn/cam-nang-thu-cung/ky-sinh-trung-nguyen-nhan-va-cach-khac-phuc-7.html'}>
+                            <div className="newsBox" onClick={() => window.location.href = 'https://petyeu.com.vn/cam-nang-thu-cung/ky-sinh-trung-nguyen-nhan-va-cach-khac-phuc-7.html'}>
                                 <img src={img9} alt="Upcoming Pet Events" className="newsImage" />
                                 <h4>Other ways to treat parasites in pets</h4>
-                               
+
                             </div>
                         </Col>
                     </Row>
@@ -235,45 +259,45 @@ const HomePage = () => {
                 <Container >
                     <h3 className="section-title" ref={visitOurRef}>Visit Our </h3>
                     <Row className="shopContent">
-                    <Col md={6}>
+                        <Col md={6}>
                             <div className="videoBox">
-                            <iframe 
-                                 className="shopVideo" 
-                                  src="https://www.youtube.com/embed/5UyVuZ5YWp0" 
-                                  title="YouTube video " 
-                                 frameBorder="0" 
-                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                               allowFullScreen>
-                               </iframe>
+                                <iframe
+                                    className="shopVideo"
+                                    src="https://www.youtube.com/embed/5UyVuZ5YWp0"
+                                    title="YouTube video "
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen>
+                                </iframe>
                             </div>
                         </Col>
                         <Col md={6} className="shopmg">
-                            <div className="shopBox" onClick={() =>window.location.href='https://infonet.vietnamnet.vn/da-co-hon-20000-luot-benh-nhan-dat-lich-kham-qua-bookingcare-175080.html'}>
+                            <div className="shopBox" onClick={() => window.location.href = 'https://infonet.vietnamnet.vn/da-co-hon-20000-luot-benh-nhan-dat-lich-kham-qua-bookingcare-175080.html'}>
                                 <img src={image6} alt="Pet Shop 1" className="shopImage" />
-                                
+
                                 <p>Info new newspaper talked about us .</p>
                             </div>
-                       
-                        
-                            <div className="shopBox" onClick={() =>window.location.href ='https://dantri.com.vn/nhan-tai-dat-viet/san-pham-nen-tang-dat-kham-booking-care-201908201625624751.htm'}>
+
+
+                            <div className="shopBox" onClick={() => window.location.href = 'https://dantri.com.vn/nhan-tai-dat-viet/san-pham-nen-tang-dat-kham-booking-care-201908201625624751.htm'}>
                                 <img src={image4} alt="Pet Shop 2" className="shopImage" />
-                                
+
                                 <p>Dan tri newspaper talked about us.</p>
                             </div>
-                        
-                        
-                            <div className="shopBox" onClick={() =>window.location.href ='https://vnexpress.net/dich-vu-lam-dep-cho-cho-dat-khach-ngay-tet-o-sai-gon-3711234.html'} >
+
+
+                            <div className="shopBox" onClick={() => window.location.href = 'https://vnexpress.net/dich-vu-lam-dep-cho-cho-dat-khach-ngay-tet-o-sai-gon-3711234.html'} >
                                 <img src={image5} alt="Pet Shop 3" className="shopImage" />
-                                
+
                                 <p>VnExpress newspaper talked about us.</p>
                             </div>
-                            
+
                         </Col>
-                        
+
                     </Row>
                 </Container>
             </div>
-          
+
         </div>
     );
 };
