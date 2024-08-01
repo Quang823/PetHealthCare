@@ -11,52 +11,55 @@ const Feedback = () => {
   const [rating, setRating] = useState(0);
   const [feedbackContent, setFeedbackContent] = useState('');
   const userID = JSON.parse(atob(localStorage.getItem('token').split('.')[1])).User.map.userID;
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchBookings = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(`http://localhost:8080/bookingDetail/getBookingDetailByCusIdStatus/${userID}`);
+        console.log('Fetched bookings:', response.data);
         setBookings(response.data);
       } catch (error) {
         console.error('Error fetching bookings:', error);
+        toast.error('Failed to load bookings');
+      }finally{
+        setIsLoading(false);
       }
     };
-
+  
     fetchBookings();
   }, [userID]);
 
   const handleFeedback = async () => {
-    const feedback = {
-      rating: rating.toString(),
-      feedbackContent,
-    };
-
     try {
-      const response = await axios.post(`http://localhost:8080/feedback/create/${selectedBookingId}`, feedback);
-      console.log(`Feedback submitted for booking detail ID: ${selectedBookingId}`, response.data);
-      setShowModal(false);
-      setRating(0);
-      setFeedbackContent('');
-
-      setBookings((prevBookings) =>
-        prevBookings.map((booking) =>
-          booking.bookingDetailId === selectedBookingId
-            ? { ...booking, feedback: { rating: feedback.rating, feedbackContent: feedback.feedbackContent } }
-            : booking,
-          toast.success("Feedback success")
-        )
-
-      );
+      const selectedBooking = bookings.find(booking => booking.bookingDetailId === selectedBookingId);
+      if (selectedBooking && selectedBooking.status === 'COMPLETED') {
+        const response = await axios.post(`http://localhost:8080/feedback/create/${selectedBookingId}`, {
+          feedbackContent,
+          rating
+        });
+        toast.success('Feedback submitted successfully');
+        setBookings(prevBookings => prevBookings.map(booking => 
+          booking.bookingDetailId === selectedBookingId 
+            ? { ...booking, feedback: response.data.data } 
+            : booking
+        ));
+        closeModal();
+      } else {
+        toast.error('Feedback error');
+      }
     } catch (error) {
-      toast.error("Cannot feedback")
       console.error('Error submitting feedback:', error);
-
+      toast.error('Error submitting feedback');
     }
   };
 
-  const openModal = (bookingDetailId) => {
+  const openModal = (e, bookingDetailId) => {
+    e.stopPropagation();
+    console.log('Opening modal for booking:', bookingDetailId);
     setSelectedBookingId(bookingDetailId);
     setShowModal(true);
+    console.log('showModal set to:', true);
   };
 
   const closeModal = () => {
@@ -66,42 +69,41 @@ const Feedback = () => {
   };
 
   return (
-    <div className='feedback'>
-      <h2>Feedback</h2>
-      <table className="booking-table">
-        <thead>
-          <tr>
-
-            <th>Date</th>
-            <th>Pet Name</th>
-            <th>Service</th>
-
-            <th>Total Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map((booking, index) => (
-            <tr key={index}>
-
-              <td>{booking.date}</td>
-              <td>{booking.pet.petName}</td>
-              <td>{booking.services.name}</td>
-              <td>{booking.booking.totalPrice}</td>
-              <td>
-                {booking.feedback ? (
-                  <div>
-                    <p>Rating: {booking.feedback.rating}</p>
-                    <p>Feedback: {booking.feedback.feedbackContent}</p>
-                  </div>
-                ) : (
-                  <button onClick={() => openModal(booking.bookingDetailId)}>Submit Feedback</button>
-                )}
-              </td>
+    <>
+      <div className='feedback'>
+        <h2>Feedback</h2>
+        <table className="booking-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Pet Name</th>
+              <th>Service</th>
+              <th>Total Price</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {bookings.map((booking, index) => (
+              <tr key={index}>
+                <td>{booking.date}</td>
+                <td>{booking.pet.petName}</td>
+                <td>{booking.services.name}</td>
+                <td>{booking.booking.totalPrice}</td>
+                <td>
+                  {booking.feedback ? (
+                    <div>
+                      <p>Rating: {booking.feedback.rating}</p>
+                      <p>Feedback: {booking.feedback.feedbackContent}</p>
+                    </div>
+                  ) : (
+                    <button onClick={(e) => openModal(e, booking.bookingDetailId)}>Submit Feedback</button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {showModal && (
         <div className="modal">
@@ -133,7 +135,7 @@ const Feedback = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
