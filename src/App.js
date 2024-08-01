@@ -52,40 +52,41 @@ function App() {
   return (
 
     <div className='app-container'>
-     <UserProvider>
-      <Routes>
-        {/* Public routes */}
-       <Route element={<ProtectedRoute allowedRoles={['Customer']} />}>
-       <Route path="/*" element={<AppRoute />} />
-       </Route>
-       <Route element={<PublicRoute />}>
-       <Route path='/home' element={<HomeFake />} />
-          <Route path='/aboutfake' element={<AboutFake />} />
-          <Route path='/contactfake' element={<ContactFAke />} />
-          <Route path='/servicefake' element={<ServiceFake />} />
+      <UserProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route element={<ProtectedRoute allowedRoles={['Customer']} />}>
+            <Route path="/*" element={<AppRoute />} />
+          </Route>
+          <Route element={<PublicRoute />}>
+            <Route path='/home' element={<HomeFake />} />
+            <Route path='/aboutfake' element={<AboutFake />} />
+            <Route path='/contactfake' element={<ContactFAke />} />
+            <Route path='/servicefake' element={<ServiceFake />} />
             <Route path='/login' element={<LoginForm />} />
             <Route path='/register' element={<RegisterForm />} />
             <Route path='/reset-password' element={<ResetPassword />} />
-                <Route path='/forgot-password' element={<ForgotPassword />} />
-                <Route path='/verify-otp' element={<VerifyOTP />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/verify-otp' element={<VerifyOTP />} />
           </Route>
 
 
-        {/* Protected routes for Admin */}
-        <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
-        {/* <Route > */}
-          <Route path="/testadmin/*" element={<TestAdminLayout />}>
-            <Route path="testadminUser" element={<UserATest />} />
-            <Route path="servicePet" element={<ServicePet />} />
-            <Route path="dashboard" element={<Body />} />
-            <Route path="addUser" element={<AddUser />} />
+          {/* Protected routes for Admin */}
+          <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
+            {/* <Route > */}
+            <Route path="/testadmin/*" element={<TestAdminLayout />}>
+              <Route path="testadminUser" element={<UserATest />} />
+              <Route path="servicePet" element={<ServicePet />} />
+              <Route path="dashboard" element={<Body />} />
+              <Route path="addUser" element={<AddUser />} />
+            </Route>
           </Route>
-        </Route>
 
-        {/* Protected routes for Veterinarian */}
-        <Route element={<ProtectedRoute allowedRoles={['Veterinarian']} />}>
-          <Route path='/doctor/*' element={<Doctor />} />
-          {/* <Route path='scheduleDoctor' element={<Schedule />} />
+          {/* Protected routes for Veterinarian */}
+          <Route element={<ProtectedRoute allowedRoles={['Veterinarian']} />}>
+            <Route path='/doctor/*' element={<Doctor />} />
+            <Route path='examineDoctor' element={<VetExaminationForm />} />
+            {/* <Route path='scheduleDoctor' element={<Schedule />} />
           <Route path='home' element={<Home />} />
           
           <Route path='slotdoctor' element={<Slotdoctor />} /> */}
@@ -93,24 +94,24 @@ function App() {
         </Route>
 
 
-        {/* Protected routes for Staff */}
-        <Route element={<ProtectedRoute allowedRoles={['Staff']} />}>
-          <Route path='/staff/*' element={<StaffLayout />}>
-            <Route path="bookingstaff" element={<BookingStaff />} />
-            <Route path="cagestaff" element={<Cage />} />
-            <Route path="editslotStaff" element={<EditSlot />} />
-            <Route path="addslot" element={<AddSlot />} />
-            <Route path="bkneedCage" element={<BKNeedCage />} />
-            <Route path="refundStaff" element={<RefundStaff />} />
-            <Route path="addCageStaff" element={<AddCageStaff />} />
-            <Route path="addslotcancel" element={<Addslotcancel />} />
+          {/* Protected routes for Staff */}
+          <Route element={<ProtectedRoute allowedRoles={['Staff']} />}>
+            <Route path='/staff/*' element={<StaffLayout />}>
+              <Route path="bookingstaff" element={<BookingStaff />} />
+              <Route path="cagestaff" element={<Cage />} />
+              <Route path="editslotStaff" element={<EditSlot />} />
+              <Route path="addslot" element={<AddSlot />} />
+              <Route path="bkneedCage" element={<BKNeedCage />} />
+              <Route path="refundStaff" element={<RefundStaff />} />
+              <Route path="addCageStaff" element={<AddCageStaff />} />
+              <Route path="addslotcancel" element={<Addslotcancel />} />
 
+            </Route>
           </Route>
-        </Route>
 
-        {/* Unauthorized route */}
-        <Route path="/unauthorized" element={<Unauthorized />} />
-      </Routes>
+          {/* Unauthorized route */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+        </Routes>
       </UserProvider>
       <ToastContainer
         position="top-right"

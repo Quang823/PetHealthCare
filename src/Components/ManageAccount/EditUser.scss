@@ -1,57 +1,53 @@
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    margin: 0 auto;
-}
+.edit-user-form {
+    .password-container {
+        position: relative;
+        display: flex;
+        align-items: center;
 
-form label {
-    font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
+        input {
+            flex: 1;
+            padding: 8px;
+            margin-right: 40px; // Adjust this value to provide space for the icon
+        }
 
-form input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
+        i {
+            position: absolute;
+            right: 10px; // Adjust this value as needed
+            cursor: pointer;
+            color: #888; // Icon color
+            transition: color 0.3s;
+        }
 
-form button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        i:hover {
+            color: #000; // Icon color on hover
+        }
+    }
 
-form button:hover {
-    background-color: #0056b3;
-}
+    .error-message {
+        color: red;
+        font-size: 0.875rem;
+    }
 
-.Goback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-}
+    .valid {
+        border: 1px solid #ced4da;
+    }
 
-.Goback:hover {
-    color: #0056b3;
-}
+    .invalid {
+        border: 1px solid red;
+    }
 
-.Goback svg {
-    margin-right: 5px;
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
 }

@@ -84,22 +84,27 @@ const Slotdoctor = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="slotdoctor">
-      <h1>Available Slots</h1>
-<div className="date-picker">
+    <div className="slotdoctor-container">
+      <h1 className="slotdoctor-title">Available Slots</h1>
+      <div className="slotdoctor-date-picker">
         <DatePicker
           selected={selectedDate}
           onChange={handleDateChange}
           dateFormat="yyyy-MM-dd"
           placeholderText="Select a date"
+          className="form-control"
         />
       </div>
-      <button onClick={handleCancelSlots} disabled={cancellationLoading}>
+      <button
+        className="slotdoctor-button"
+        onClick={handleCancelSlots}
+        disabled={cancellationLoading}
+      >
         {cancellationLoading ? 'Cancelling...' : 'Cancel Slots'}
       </button>
       {cancellationError && <p>Error cancelling slots: {cancellationError.message}</p>}
       {slots.length > 0 ? (
-        <table>
+        <table className="slotdoctor-table">
           <thead>
             <tr>
               <th>Date</th>
@@ -122,7 +127,7 @@ const Slotdoctor = () => {
           </tbody>
         </table>
       ) : (
-        <p>No slots available for the selected date.</p>
+        <p className="slotdoctor-no-slots">No slots available for the selected date.</p>
       )}
     </div>
   );

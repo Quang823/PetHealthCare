@@ -32,7 +32,7 @@ const RegisterForm = () => {
     const navigate = useNavigate();
 
     const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return re.test(String(email).toLowerCase());
     };
 
@@ -46,10 +46,9 @@ const RegisterForm = () => {
     };
 
     const validateName = (name) => {
-        const re = /^[a-zA-Z\s]{6,12}$/; // Regular expression to check for only letters and spaces, between 6 and 12 characters
+        const re = /^[a-zA-Z\s]{6,15}$/;
         return re.test(name);
     };
-
 
     const handleEmailChange = (event) => {
         const value = event.target.value;
@@ -92,10 +91,9 @@ const RegisterForm = () => {
         const value = event.target.value;
         setName(value);
         const isValid = validateName(value);
-        setNameError(isValid ? "" : "Name must be between 6 and 12 characters (letters only)");
+        setNameError(isValid ? "" : "Name must be between 6 and 15 characters (letters only)");
         setIsNameValid(isValid);
     };
-
 
     const loginLink = (event) => {
         event.preventDefault();
@@ -126,11 +124,9 @@ const RegisterForm = () => {
                 password: password,
             });
 
-          
             toast.success("Registration Successful");
             navigate('/login');
         } catch (err) {
-            
             toast.error("Email already exists, please change to another email");
         } finally {
             setIsLoading(false);

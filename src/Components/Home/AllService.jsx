@@ -3,9 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './AllService.scss';
+import { useNavigate } from 'react-router-dom';
 const AllService = () => {
+    let navigate = useNavigate();
     const [services, setServices] = useState([]);
-
+    const handleBooked = (serviceName) => {
+        navigate('/booking', { state: { selectedService: serviceName } });
+    }
     useEffect(() => {
         const fetchServices = async () => {
             try {
@@ -20,6 +24,7 @@ const AllService = () => {
         fetchServices();
     }, []);
 
+
     return (
         <div className="AllServicesPage">
             <Container>
@@ -32,6 +37,7 @@ const AllService = () => {
                                 <h4>{service.name}</h4>
                                 <p>{service.price}</p>
                                 <p>{service.description}</p>
+                                <button onClick={() => handleBooked(service.name)}>Book</button>
                             </div>
                         </Col>
                     ))}

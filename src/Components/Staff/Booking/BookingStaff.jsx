@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './BookingStaff.scss';
+import { toast } from 'react-toastify';
 
 const BookingStaff = () => {
   const [bookingDetails, setBookingDetails] = useState([]);
@@ -54,10 +55,12 @@ const BookingStaff = () => {
         }
       });
       if (res.status === 200) {
+        toast.success("Confirm successfully");
         setBookingDetails((prevDetails) =>
           prevDetails.map((detail) =>
             detail.bookingDetailId === bookingDetailId ? { ...detail, status: 'CONFIRMED' } : detail
           )
+
         );
         setFilteredBookingDetails((prevDetails) =>
           prevDetails.map((detail) =>

@@ -1,127 +1,123 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import './RefundPage.scss'; // Import the CSS file
 
 const RefundPage = () => {
     const [refunds, setRefunds] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [selectedRefund, setSelectedRefund] = useState(null);
-    const [bookingDetails, setBookingDetails] = useState([]);
+    const [selectedBookingDetail, setSelectedBookingDetail] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchRefunds = async () => {
             try {
-                const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
-                if (!token) {
-                    throw new Error('No token found');
-                }
+                const token = localStorage.getItem('token');
+                const decoded = jwtDecode(token);
+                const userId = decoded.User.map.userID;
 
-                const decodedToken = jwtDecode(token);
-                const userId = decodedToken.User.map.userID;
-
-                const response = await axios.get(`http://localhost:8080/refund/getRefundByUserId/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                console.log('Refunds fetched:', response.data);
+                const response = await axios.get(`http://localhost:8080/getRefundByUserId/${userId}`);
+                console.log('Refunds Data:', response.data);  // In dữ liệu ra console
                 setRefunds(response.data);
             } catch (error) {
                 console.error('Error fetching refunds:', error);
-                console.log('Error details:', error.response);
-                setError(`Error: ${error.response?.status} - ${error.response?.data?.message || error.message}`);
-            } finally {
-                setLoading(false);
             }
         };
 
         fetchRefunds();
     }, []);
 
-    const handleRefundClick = async (refund) => {
-        setSelectedRefund(refund);
-        console.log('Selected refund:', refund);
 
+
+    const handleViewDetails = async (bookingDetailId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/bookingDetail/getAllByBookingId/${refund.bookingDetail.id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            console.log('Booking details fetched:', response.data);
-            setBookingDetails(response.data);
+            const response = await axios.get(`http://localhost:8080/getRefundByBookingDetailId/${bookingDetailId}`);
+            setSelectedBookingDetail(response.data.bookingDetail);
+            setIsModalOpen(true);
         } catch (error) {
-            console.error('Error fetching booking details:', error);
-            setError('Failed to fetch booking detail');
+            console.error('Error fetching booking detail:', error);
         }
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedBookingDetail(null);
+    };
 
     return (
-        <div>
-            <h1>Refunds</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Transaction No</th>
-                        <th>Amount</th>
-                        <th>Refund Percent</th>
-                        <th>Refund Date</th>
-                        <th>Booking Detail ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {refunds.map(refund => (
-                        <tr key={refund.transactionNo} onClick={() => handleRefundClick(refund)}>
-                            <td>{refund.transactionNo}</td>
-                            <td>{refund.amount}</td>
-                            <td>{refund.refundPercent}</td>
-                            <td>{refund.refundDate}</td>
-                            <td>{refund.bookingDetail?.id}</td>
+        <div className='refunds-page'>
+            <h2>Refund History</h2>
+            {refunds.length === 0 ? (
+                <p>No refunds found.</p>
+            ) : (
+                <table className="refunds-table">
+                    <thead>
+                        <tr>
+                            <th>Refund Date</th>
+                            <th>Amount</th>
+                            <th>Refund Percent</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {refunds.map((refund) => {
 
-            {selectedRefund && bookingDetails.length > 0 && (
-                <div>
-                    <h2>Booking Details for Refund #{selectedRefund.transactionNo}</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Need Cage</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Booking ID</th>
-                                <th>Pet ID</th>
-                                <th>User ID</th>
-                                <th>Service ID</th>
-                                <th>Slot ID</th>
-                                <th>Feedback</th>
-                                <th>Refund</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {bookingDetails.map(detail => (
-                                <tr key={detail.id}>
-                                    <td>{detail.needCage ? 'Yes' : 'No'}</td>
-                                    <td>{detail.date}</td>
-                                    <td>{detail.status}</td>
-                                    <td>{detail.booking.id}</td>
-                                    <td>{detail.pet.id}</td>
-                                    <td>{detail.user.id}</td>
-                                    <td>{detail.services.id}</td>
-                                    <td>{detail.slot.id}</td>
-                                    <td>{detail.feedback ? 'Yes' : 'No'}</td>
-                                    <td>{detail.refund ? 'Yes' : 'No'}</td>
+                            return (
+                                <tr key={refund.transactionNo}>
+                                    <td>{new Date(refund.refundDate).toLocaleDateString()}</td>
+                                    <td>{refund.amount}</td>
+                                    <td>{refund.refundPercent}%</td>
+                                    <td>
+                                        <button onClick={() => handleViewDetails(refund.bookingDetail.bookingDetailId)}>View</button>
+                                    </td>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            )}
+
+            {isModalOpen && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <span className="close-button" onClick={closeModal}>&times;</span>
+                        <h3>Booking Detail</h3>
+                        <table className="booking-detail-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>User Name</th>
+                                    <th>Need Cage</th>
+                                    <th>Status</th>
+                                    <th>Pet Name</th>
+                                    <th>Pet Image</th>
+                                    <th>Service</th>
+                                    <th>Slot</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{selectedBookingDetail.date}</td>
+                                    <td>{selectedBookingDetail.user.name}</td>
+                                    <td>{selectedBookingDetail.needCage ? 'Yes' : 'No'}</td>
+                                    <td>{selectedBookingDetail.status}</td>
+                                    <td>{selectedBookingDetail.pet.petName}</td>
+                                    <td>
+                                        {selectedBookingDetail.pet.imageUrl && (
+                                            <img
+                                                src={selectedBookingDetail.pet.imageUrl}
+                                                alt={selectedBookingDetail.pet.petName}
+                                                style={{ width: '60px', height: '60px', objectFit: 'cover' }}
+                                            />
+                                        )}
+                                    </td>
+                                    <td>{selectedBookingDetail.services.name}</td>
+                                    <td>{selectedBookingDetail.slot.startTime} - {selectedBookingDetail.slot.endTime}</td>
+                                    <td>{selectedBookingDetail.services.price}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
         </div>

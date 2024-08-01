@@ -40,8 +40,12 @@ const Wallet = () => {
         axios.get(`http://localhost:8080/payment/get-all?walletId=${walletId}`)
             .then(res => {
                 if (res.data.status === "ok" && Array.isArray(res.data.data)) {
-                    console.log('Transactions data:', res.data.data);
-                    setTransactions(res.data.data);
+
+                    console.log('Transactions data:', res.data.data); // Debug log
+
+                    // Sort transactions by transactionDate in descending order
+                    const sortedTransactions = res.data.data.sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate));
+                    setTransactions(sortedTransactions);
                 } else {
                     console.error('Unexpected transactions data structure:', res.data);
                 }
@@ -176,16 +180,19 @@ const Wallet = () => {
             <div className="wallet-card">
                 <h2 style={{ fontFamily: "Georgia", fontWeight: "bold" }}>YOUR WALLET</h2>
                 <div className="wallet-info" style={{ marginLeft: "200px" }}>
-                    <div className="d-flex">
-                        <div style={{ fontStyle: "italic" }}>
+
+                    <div className="d-flex" >
+                        {/* <div style={{ fontStyle: "italic" }}>
                             Name:
-                        </div>
+                        </div> */}
                         <div style={{ fontWeight: "bold", marginLeft: "5px" }}>
                             {wallet.user.name}
                         </div>
                     </div>
 
-                    <div className="d-flex">
+
+                    {/* <div className="d-flex" >
+
                         <div style={{ fontStyle: "italic" }}>
                             Phone:
                         </div>
@@ -200,7 +207,7 @@ const Wallet = () => {
                         <div style={{ fontWeight: "bold", marginLeft: "5px" }}>
                             {wallet.user.address}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="wallet-balance">
                     <div>Balance:</div>
@@ -224,6 +231,7 @@ const Wallet = () => {
                         <button onClick={handleDeposit}>Deposit Money</button>
                     </div>
 
+
                     <button onClick={handleViewHistory}>Transaction History</button>
                 </div>
             </div>
@@ -243,7 +251,7 @@ const Wallet = () => {
                             const { date, time } = formatDateTime(transaction.transactionDate);
                             return (
                                 <li key={transaction.transactionId}>
-                                    <p><strong>Transaction ID:</strong> {transaction.transactionId}</p>
+                                    {/* <p><strong>Transaction ID:</strong> {transaction.transactionId}</p> */}
                                     <div className="date-time">
                                         <p className="date"><strong>Date:</strong> {date}</p>
                                         <p className="time"><strong>Time:</strong> {time}</p>

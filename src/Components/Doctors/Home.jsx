@@ -3,19 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { FaEye, FaStethoscope, FaTimes } from 'react-icons/fa';
+import { FaEye, FaStethoscope } from 'react-icons/fa';
 import { Spinner } from 'react-bootstrap';
 import Nav from './Nav';
 import BookingDetailModal from './BookingDetailModal';
+import MedicalHistoryModal from './MedicalHistoryModal';
 import './Homee.scss';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 
 function Home({ Toggle }) {
     const [bookingDetails, setBookingDetails] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedBookingDetail, setSelectedBookingDetail] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+    const [selectedMedicalHistory, setSelectedMedicalHistory] = useState(null);
+    const [showBookingModal, setShowBookingModal] = useState(false);
+    const [showMedicalModal, setShowMedicalModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -54,7 +57,7 @@ function Home({ Toggle }) {
 
     const handleViewDetail = (bookingDetail) => {
         setSelectedBookingDetail(bookingDetail);
-        setShowModal(true);
+        setShowBookingModal(true);
     };
 
     const handleExamine = async (bookingDetail) => {
@@ -66,55 +69,15 @@ function Home({ Toggle }) {
         }
     };
 
-    const handleCancelSlot = async () => {
-        const formattedDate = selectedDate.toISOString().split('T')[0];
-        const token = localStorage.getItem('token');
-    
+    const handleViewMedicalHistory = async (bookingDetail) => {
         try {
-            const decodedToken = jwtDecode(token);
-            const userId = decodedToken.User.map.userID;
-    
-            console.log('Sending request with:', { dateTime: formattedDate, vetId: userId });
-    
-            const response = await axios.get('http://localhost:8080/bookingDetail/vetCancelBookingDetail/', {
-                params: {
-                    dateTime: formattedDate,
-                    vetId: userId
-                }
-            });
-    
-            console.log('Server response:', response.data);
-    
-            if (response.data.status === "ok") {
-                setBookingDetails(prevDetails =>
-                    prevDetails.map(detail =>
-                        detail.date === formattedDate
-                            ? { ...detail, vetCancelled: true }
-                            : detail
-                    )
-                );
-                toast.success(response.data.message || 'Slot has been successfully cancelled');
-                fetchBookingDetails(); // Refresh booking details
-            } else {
-                toast.error(response.data.message || 'Failed to cancel the slot');
-            }
+            const res = await axios.get(`http://localhost:8080/medical-history/getMedicalHistoryByBookingDetailId/${bookingDetail.bookingDetailId}`);
+            setSelectedMedicalHistory(res.data);
+            setShowMedicalModal(true);
         } catch (error) {
-            console.error('Error cancelling slot:', error);
-            if (error.response) {
-                console.error('Server responded with:', error.response.data);
-                console.error('Status code:', error.response.status);
-                toast.error(error.response.data.message || 'Failed to cancel the slot. Please try again.');
-            } else {
-                toast.error('An error occurred while cancelling the slot. Please try again.');
-            }
+            console.error('Error fetching medical history:', error);
         }
     };
-    
-
-    const filteredBookingDetails = bookingDetails.filter(b => {
-        const bookingDate = new Date(b.date);
-        return bookingDate.toDateString() === selectedDate.toDateString();
-    });
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -123,13 +86,12 @@ function Home({ Toggle }) {
         const year = date.getFullYear();
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
-    
+
         const formattedDate = `${year}-${month}-${day}`; // YYYY-MM-DD format
         const formattedTime = `${hours}:${minutes}`; // HH:MM format
-    
+
         return { formattedDate, formattedTime };
     };
-    
 
     const isToday = (date) => {
         const today = new Date();
@@ -139,15 +101,27 @@ function Home({ Toggle }) {
     const getStatusClass = (status) => {
         switch (status) {
             case 'CONFIRMED':
-                return 'status-confirmed';
+                return 'statuss-confirmed';
             case 'EXAMINING':
-                return 'status-examining';
+                return 'statuss-examining';
             case 'COMPLETED':
-                return 'status-examcompleted';
+                return 'statuss-completed';
+            case 'PAID':
+                return 'statuss-paid';
             default:
                 return '';
         }
     };
+
+    const filteredBookingDetails = bookingDetails.filter(b => {
+        const bookingDate = new Date(b.date);
+        // Exclude CANCELLED bookings and include only bookings that are on the selected date
+        return (
+            bookingDate.toDateString() === selectedDate.toDateString() &&
+            b.booking.status !== 'CANCELLED' &&
+            b.status !== 'CANCELLED'
+        );
+    });
 
     return (
 
@@ -167,12 +141,6 @@ function Home({ Toggle }) {
                                     dateFormat="dd MMMM yyyy"
                                     className="form-control"
                                 />
-                                {/* <button
-                                    className="bttn btn-danger ms-3"
-                                    onClick={handleCancelSlot}
-                                >
-                                    <FaTimes className='icoon' /> Cancel Slot
-                                </button> */}
                             </div>
                         </div>
                         {loading ? (
@@ -211,7 +179,7 @@ function Home({ Toggle }) {
                                                         <button
                                                             className="bttn btn-primary"
                                                             onClick={() => handleExamine(detail)}
-                                                            disabled={!isToday(bookingDate) || detail.status === 'Completed'}
+                                                            disabled={!isToday(bookingDate) || detail.status === 'COMPLETED'}
                                                         >
                                                             <FaStethoscope className='icoon' /> Examine
                                                         </button>
@@ -221,13 +189,12 @@ function Home({ Toggle }) {
                                                         >
                                                             <FaEye className='icoon' /> View
                                                         </button>
-                                                        {/* <button
-                                                            className="bttn btn-danger"
-                                                            onClick={() => handleCancelSlot(detail)}
-                                                            disabled={detail.vetCancelled}
+                                                        <button
+                                                            className="bttn btn-secondary"
+                                                            onClick={() => handleViewMedicalHistory(detail)}
                                                         >
-                                                            <FaTimes className='icoon' /> {detail.vetCancelled ? 'Cancelled' : 'Cancel Slot'}
-                                                        </button> */}
+                                                            <FaEye className='icoon' /> View Medical
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             );
@@ -244,10 +211,17 @@ function Home({ Toggle }) {
                         )}
                     </div>
                 </div>
-                {showModal && (
+                {showBookingModal && (
                     <BookingDetailModal
                         bookingDetail={selectedBookingDetail}
-                        onClose={() => setShowModal(false)}
+                        onClose={() => setShowBookingModal(false)}
+                    />
+                )}
+                {showMedicalModal && (
+                    <MedicalHistoryModal
+                        show={showMedicalModal}
+                        onHide={() => setShowMedicalModal(false)}
+                        medicalHistory={selectedMedicalHistory}
                     />
                 )}
                 <button className="back-button" onClick={handleBack}>Back</button>

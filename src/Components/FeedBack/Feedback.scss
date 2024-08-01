@@ -1,15 +1,18 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-.feedbac{
-  background-color: #88DADC;
-  h1 {
+.feedback{
+  background: linear-gradient(45deg, #62e47e, #60a5ee, #e07dcb);
+  padding-top: 20px;
+  padding-bottom: 15%;
+  h2 {
     text-align: center;
-    color: #f23131;
     margin-bottom: 20px;
-    font-size: 2em;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-  }
+    color: #333;
+    text-transform: uppercase;
+    font-family: 'Arial, sans-serif';
+    font-weight: bolder;
+    font-size: 2rem;
+}
 }
 body {
   font-family: 'Roboto', sans-serif;

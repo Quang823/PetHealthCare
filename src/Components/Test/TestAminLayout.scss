@@ -47,7 +47,7 @@ body {
     flex-direction: column;
     padding: 1rem;
     overflow: auto;
-    background-color: #bdf994;
+    background: linear-gradient(45deg, #81beff, #ff99e9,#59ffb2, #00ff6a);
     select {
         appearance: none;
         background-color: #fff;
@@ -61,7 +61,7 @@ body {
     .container{
         .hehe{
             h2{
-                color: red;
+             
                 text-align: center;
             }
         }

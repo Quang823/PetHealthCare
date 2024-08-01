@@ -1,20 +1,21 @@
 .medical-history {
     padding: 20px;
     font-family: Arial, sans-serif;
-    margin-bottom: 140px;
-
+    padding-bottom: 12%;
+    background: linear-gradient(45deg, #62e47e, #60a5ee, #e07dcb);
    .header-text {
     text-align: center;
     margin-bottom: 20px;
     color: #343a40;
 
     h2 {
-        font-size: 24px;
+        font-size: 2rem;
         font-weight: bold;
         text-transform: uppercase;
+        font-family: 'Arial, sans-serif';
         margin: 0;
         padding: 10px 0;
-        border-bottom: 2px solid #007bff;
+        border-bottom: 2px solid #004691;
         display: inline-block;
     }
 }
@@ -60,7 +61,7 @@
         select, input, button {
             width: 24%;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #616161;
             border-radius: 5px;
             margin-right: 10px;
         }
@@ -90,23 +91,25 @@
     .timetable {
         border-collapse: collapse;
         width: 100%;
-
+        background-color: white;
         .timetable-header {
             display: flex;
-            background-color: #f2f2f2;
-            
-            .timetable-header-item {
+                 
+           .timetable-header-item {
                 flex: 1;
-                text-align: left;
+                text-align: center;
                 font-weight: bold;
+                border: 0.5px solid black;
+                padding-bottom: 10px;
+                padding-top: 10px;
                 
             }
         }
 
         .timetable-row {
             display: flex;
-            padding: 10px 0;
-            padding-left: 70px;
+            
+          
             cursor: pointer;
 
             &:nth-child(odd) {
@@ -115,7 +118,10 @@
 
             .timetable-item {
                 flex: 1;
-                text-align: left;
+                text-align: center;
+                border: 0.5px solid black;
+                padding: 10px 0;
+              
             }
 
             &:hover {
@@ -129,6 +135,7 @@
         justify-content: center;
         align-items: center;
         position: fixed;
+        text-align: center;
         top: 0;
         left: 0;
         width: 100%;
@@ -148,13 +155,13 @@
 
             .close-button {
                 position: absolute;
-                top: 10px;
+            
                 right: 10px;
                 cursor: pointer;
                 font-size: 24px;
                 font-weight: bold;
                 color: #aaa;
-
+                width: 8%;
                 &:hover {
                     color: #000;
                 }
@@ -171,7 +178,7 @@
             p {
                 margin: 10px 0;
                 line-height: 1.6;
-
+                text-align: left;
                 strong {
                     color: #007bff;
                 }

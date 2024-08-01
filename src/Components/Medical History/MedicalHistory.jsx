@@ -51,9 +51,9 @@ const MedicalHistory = () => {
     const handleSort = () => {
         const sortedData = [...medicalHistoryData].sort((a, b) => {
             if (sortOrder === 'asc') {
-                return new Date(a.dateMedical) - new Date(b.dateMedical);
+                return new Date(a.dateMedicalHistory) - new Date(b.dateMedicalHistory);
             } else {
-                return new Date(b.dateMedical) - new Date(a.dateMedical);
+                return new Date(b.dateMedicalHistory) - new Date(a.dateMedicalHistory);
             }
         });
         setMedicalHistoryData(sortedData);
@@ -70,7 +70,7 @@ const MedicalHistory = () => {
 
     const handleDateFilter = () => {
         const filteredData = medicalHistoryData.filter((medical) => {
-            const medicalDate = new Date(medical.dateMedical);
+            const medicalDate = new Date(medical.dateMedicalHistory);
             const start = startDate ? new Date(startDate) : new Date('1900-01-01');
             const end = endDate ? new Date(endDate) : new Date();
             return medicalDate >= start && medicalDate <= end;
@@ -93,11 +93,11 @@ const MedicalHistory = () => {
     };
 
     const filteredData = medicalHistoryData.filter((medical) =>
-        (searchDate === '' || new Date(medical.dateMedical).toISOString().slice(0, 10) === searchDate) &&
+        (searchDate === '' || new Date(medical.dateMedicalHistory).toISOString().slice(0, 10) === searchDate) &&
         (searchDoctor === '' || medical.veterinaryName.toLowerCase().includes(searchDoctor.toLowerCase())) &&
-        (searchDiagnosis === '' || medical.treatmentResult.toLowerCase().includes(searchDiagnosis.toLowerCase())) &&
+        (searchDiagnosis === '' || medical.diseaseName.toLowerCase().includes(searchDiagnosis.toLowerCase())) &&
         (selectedDoctor === '' || medical.veterinaryName === selectedDoctor) &&
-        (selectedDiagnosis === '' || medical.treatmentResult === selectedDiagnosis)
+        (selectedDiagnosis === '' || medical.diseaseName === selectedDiagnosis)
     );
 
     const colors = ['#ffcccc', '#ccffcc', '#ccccff', '#ffcc99', '#99ccff', '#ff99cc'];
@@ -138,7 +138,7 @@ const MedicalHistory = () => {
                 </select>
                 <select value={selectedDiagnosis} onChange={handleDiagnosisFilter}>
                     <option value="">All Diagnoses</option>
-                    {Array.from(new Set(medicalHistoryData.map(medical => medical.treatmentResult))).map(diagnosis => (
+                    {Array.from(new Set(medicalHistoryData.map(medical => medical.diseaseName))).map(diagnosis => (
                         <option key={diagnosis} value={diagnosis}>{diagnosis}</option>
                     ))}
                 </select>
@@ -148,10 +148,12 @@ const MedicalHistory = () => {
             </div>
             <div className="timetable">
                 <div className="timetable-header">
-                    <div className="timetable-header-item">HistoryID</div>
-                    <div className="timetable-header-item">Date</div>
-                    <div className="timetable-header-item">Doctor</div>
-                    <div className="timetable-header-item">Diagnosis</div>
+                    <div className="timetable-header-item">Date Medical</div>
+                    <div className="timetable-header-item">Veterinary Name</div>
+                    <div className="timetable-header-item">Disease Name</div>
+                    <div className="timetable-header-item">Treatment Method</div>
+                    <div className="timetable-header-item">Note</div>
+                    <div className="timetable-header-item">Reminders</div>
                     <div className="timetable-header-item">Important</div>
                 </div>
                 {filteredData.map((medical, index) => (
@@ -162,13 +164,15 @@ const MedicalHistory = () => {
                             backgroundColor: medical.important ? '#ffcc00' : colors[index % colors.length],
                             fontWeight: medical.important ? 'bold' : 'normal'
                         }}
-                        title={`Medical on ${medical.dateMedical} with ${medical.veterinaryName} for ${medical.treatmentResult}`}
+                        title={`Medical on ${medical.dateMedicalHistory} with ${medical.veterinaryName} for ${medical.diseaseName}`}
                         onClick={() => handleMedicalClick(medical)}
                     >
-                        <div className="timetable-item">{medical.medicalHistoryId}</div>
-                        <div className="timetable-item">{formatDate(medical.dateMedical)}</div>
+                        <div className="timetable-item">{formatDate(medical.dateMedicalHistory)}</div>
                         <div className="timetable-item">{medical.veterinaryName}</div>
-                        <div className="timetable-item">{medical.treatmentResult}</div>
+                        <div className="timetable-item">{medical.diseaseName}</div>
+                        <div className="timetable-item">{medical.treatmentMethod}</div>
+                        <div className="timetable-item">{medical.note}</div>
+                        <div className="timetable-item">{medical.reminders}</div>
                         <div className="timetable-item">
                             <input
                                 type="checkbox"
@@ -184,12 +188,12 @@ const MedicalHistory = () => {
                     <div className="modal-content">
                         <span className="close-button" onClick={handleCloseModal}>&times;</span>
                         <h2>Medical History Details</h2>
-                        <p><strong>Date:</strong> {formatDate(selectedMedical.dateMedical)}</p>
-                        <p><strong>Medical History ID:</strong> {selectedMedical.medicalHistoryId}</p>
-                        <p><strong>Doctor:</strong> {selectedMedical.veterinaryName}</p>
-                        <p><strong>Diagnosis:</strong> {selectedMedical.treatmentResult}</p>
-                        <p><strong>Notes:</strong> {selectedMedical.notes}</p>
-                        <p><strong>Important:</strong> {selectedMedical.important ? 'Yes' : 'No'}</p>
+                        <p><strong>Veterinary Name:</strong> {selectedMedical.veterinaryName}</p>
+                        <p><strong>Disease Name:</strong> {selectedMedical.diseaseName}</p>
+                        <p><strong>Treatment Method:</strong> {selectedMedical.treatmentMethod}</p>
+                        <p><strong>Note:</strong> {selectedMedical.note}</p>
+                        <p><strong>Reminders:</strong> {selectedMedical.reminders}</p>
+                        <p><strong>Date Medical:</strong> {formatDate(selectedMedical.dateMedicalHistory)}</p>
                     </div>
                 </div>
             )}
