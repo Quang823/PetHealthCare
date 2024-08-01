@@ -21,10 +21,8 @@ import AddSlot from './Components/Staff/Slot/AddSlot';
 import BKNeedCage from './Components/Staff/BKNeedCage/BKNeedCage';
 import RefundStaff from './Components/Staff/Refund/RefundStaff';
 import AddCageStaff from './Components/Staff/Cage/AddCageStaff';
-
 import Doctor from './Components/Doctors/Doctor';
 import Schedule from './Components/Doctors/Schedule/Schedule';
-
 import Home from './Components/Doctors/Home';
 import VetExaminationForm from './Components/Doctors/VetExaminationForm';
 import { useAuth, UserProvider } from './Context/UserContext';
