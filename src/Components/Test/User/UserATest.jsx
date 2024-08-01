@@ -51,24 +51,37 @@ function UserATest() {
     };
 
     const handleDelete = (user) => {
-        const apiUrl = user.isLocked
-            ? `http://localhost:8080/account/cancelDeleteUser/${user.userId}`
-            : `http://localhost:8080/account/delete/${user.userId}`;
-
-        const method = user.isLocked ? 'GET' : 'DELETE';
-
-        axios({
-            method: method,
-            url: apiUrl
-        })
-            .then(() => {
-                setUsers(users.map(u => u.userId === user.userId ? { ...u, isLocked: !u.isLocked } : u));
-                toast.success(user.isLocked ? "User unlocked successfully" : "User locked successfully");
-            })
-            .catch(err => {
-                console.error(err);
-                toast.error(user.isLocked ? "Failed to unlock user" : "Failed to lock user");
-            });
+        if (user.isLocked) {
+            // Unlock the user
+            axios.get(`http://localhost:8080/account/cancelDeleteUser/${user.userId}`)
+                .then(response => {
+                    if (response.data.status === "ok" || response.data.message === "User deleted successfully") {
+                        setUsers(users.map(u => u.userId === user.userId ? { ...u, isLocked: false } : u));
+                        toast.success("User unlocked successfully");
+                    } else {
+                        toast.error("Can not unlock user");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    toast.error("Failed to unlock user");
+                });
+        } else {
+            // Lock the user
+            axios.delete(`http://localhost:8080/account/delete/${user.userId}`)
+                .then(response => {
+                    if (response.data.status === "ok" || response.data.message === "User deleted successfully") {
+                        setUsers(users.map(u => u.userId === user.userId ? { ...u, isLocked: true } : u));
+                        toast.success("User locked successfully");
+                    } else if (response.data.status === "failed" && response.data.message === "User not found or booked") {
+                        toast.error("User is having booking, can not lock user");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    toast.error("Failed to lock user");
+                });
+        }
     };
 
 

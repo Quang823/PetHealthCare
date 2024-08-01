@@ -123,7 +123,7 @@ const AddSlot = () => {
                 <label htmlFor="slot">Select Slots:</label>
                 <div className="slot-container">
                     <div className="slot-group">
-                        {[1, 2, 3, 4].map((slot) => (
+                        {[1, 2, 3, 4, 5].map((slot) => (
                             <div key={slot} className="slot-item">
                                 <input
                                     type="checkbox"
@@ -139,7 +139,7 @@ const AddSlot = () => {
                         ))}
                     </div>
                     <div className="slot-group">
-                        {[5, 6, 7, 8].map((slot) => (
+                        {[6, 7, 8, 9, 10].map((slot) => (
                             <div key={slot} className="slot-item">
                                 <input
                                     type="checkbox"
