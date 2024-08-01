@@ -1,5 +1,15 @@
 .navbar {
     background-color: #343a40;
+    h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #008d86 !important;
+    text-transform: uppercase;
+    font-family: 'Arial, sans-serif';
+    font-weight: bolder;
+    font-size: 3rem;
+    padding: 20px;
+    }
   }
   
   .navbar-nav .nav-item .nav-link {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { useNavigate } from "react-router-dom";
+import './BkNeedCage.scss';
 
 const BKNeedCage = () => {
   const [booking, setBooking] = useState([]);
@@ -31,10 +32,10 @@ const BKNeedCage = () => {
   const currentPosts = booking.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <div className="container">
-      <h2 className="my-4">List Booking Need Cage</h2>
-     
-      <table className="table table-striped">
+    <div className="bk-need-cage-container">
+      <h2 className="bk-need-cage-title">List Booking Need Cage</h2>
+
+      <table className="bk-need-cage-table">
         <thead>
           <tr>
             <th>BookingDetailId</th>
@@ -51,7 +52,7 @@ const BKNeedCage = () => {
               <td>{new Date(bookingDetail.date).toLocaleDateString()}</td>
               <td>
                 <button
-                  className="edit-button"
+                  className="bk-need-cage-add-button"
                   onClick={() => handleAddCage(bookingDetail.bookingDetailId, bookingDetail.pet.petType)}
                 >
                   Add Cage
@@ -66,8 +67,8 @@ const BKNeedCage = () => {
         nextLabel={'Next'}
         pageCount={Math.ceil(booking.length / postPerPage)}
         onPageChange={({ selected }) => setCurrentPage(selected + 1)}
-        containerClassName={'pagination'}
-        activeClassName={'active'}
+        containerClassName={'bk-need-cage-pagination'}
+        activeClassName={'bk-need-cage-pagination-active'}
       />
     </div>
   );

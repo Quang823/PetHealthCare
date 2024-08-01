@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth, UserContext } from '../../Context/UserContext';
 import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
-import v186_574 from '../../Assets/v186_574.png';
+import v186_557 from '../../Assets/v186_574.png';
 
 function Sidebar() {
   const { logout, user } = useAuth();
@@ -35,11 +35,23 @@ function Sidebar() {
     <div className='bg-white sidebar p-2'>
       <div className='m-2'>
 
-        <div className="logoDiv flex">
-          <img src={v186_574} alt="Image Name" />
-
+        <div className="adminImage" style={{ width: '150px', height: '150px', marginLeft: '35px' }}>
+          <img src={v186_557} alt="Admin Image" />
         </div>
-        <span className='brand-name fs-4'>WELCOME <br />{userName}</span>
+        <span
+          className='brand-name fs-4'
+          style={{
+            fontSize: '1.2rem',
+            color: '#00a558',
+
+            fontFamily: 'Arial, sans-serif',
+            fontWeight: 'bolder',
+          }}
+        >
+          WELCOME <br />
+          {userName}
+        </span>
+
 
       </div>
       <hr className='text-dark' />
@@ -51,10 +63,6 @@ function Sidebar() {
         <NavLink className='list-group-item py-2' to="/staff/addslot" >
           <i className='bi bi-archive-fill me-3'></i>
           <span>Add Slot</span>
-        </NavLink>
-        <NavLink className='list-group-item py-2' to="/staff/editslotStaff" >
-          <i className='bi bi-archive-fill me-3'></i>
-          <span>Edit Slot</span>
         </NavLink>
         <NavLink className='list-group-item py-2' to="/staff/bookingstaff" >
           <i className='bi bi-bag-fill fs-5 me-3'></i>

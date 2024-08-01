@@ -42,7 +42,7 @@ const BookingStaff = () => {
     };
 
     fetchBookingDetails();
-  }, [currentDate,updateTrigger]);
+  }, [currentDate, updateTrigger]);
 
   const handleUpdateStatus = async (bookingDetailId) => {
     try {
@@ -83,7 +83,7 @@ const BookingStaff = () => {
       return matchesName && matchesPhone;
     });
     setFilteredBookingDetails(results);
-};
+  };
 
   if (loading) return (
     <div className="loading-indicator">
@@ -102,7 +102,7 @@ const BookingStaff = () => {
       <div className="search">
         <input
           type="text"
-          placeholder="Search by Name"
+          placeholder="Search by Pet Name"
           value={searchName}
           onChange={(e) => setSearchName(e.target.value)}
         />

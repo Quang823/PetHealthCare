@@ -40,6 +40,8 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('selectedDate');
     localStorage.removeItem('walletId');
     localStorage.removeItem('bookedInfo');
+    localStorage.removeItem('user');
+    localStorage.removeItem('bookingDetailId');
     setUser({ email: '', auth: false, role: '' });
     console.log('Logout called, user reset');
   };

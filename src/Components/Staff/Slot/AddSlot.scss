@@ -8,8 +8,13 @@
 }
 
 .slot-scheduler h2 {
+  margin-bottom: 20px;
+  font-size: 2rem !important;
+  color: #039433;
   text-align: center;
-  color: #343a40;
+  font-weight: bold;
+  font-family: 'Arial, sans-serif';
+  text-transform: uppercase;
 }
 
 .form-control {
@@ -28,12 +33,11 @@
 }
 
 label {
-  
   color: #495057;
-  
-                    .checkbox{
-                      margin-left: 10px;
-                    }
+}
+
+.checkbox {
+  margin-left: 10px;
 }
 
 .btn {

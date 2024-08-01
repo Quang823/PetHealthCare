@@ -1,37 +1,97 @@
 /* RefundStaff.module.css */
-.modalContent {
-    background-color: #58dcbb;
-    border-radius: 10px;
+.refundContainer {
+    background-color: #ffffffda;
+    border-radius: 20px;
     padding: 20px;
 }
 
-.modalHeader,
-.modalFooter {
-    border: none;
-}
-
-.modalTitle {
-    font-size: 24px;
+.refundTitle {
+    font-family: 'Arial, sans-serif';
+    text-align: center;
+    margin-bottom: 20px;
+    color: #00a558;
     font-weight: bold;
 }
 
-.modalBody {
-    max-height: 400px;
-    overflow-y: auto;
+.refundLoadingIndicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.modalBody p {
-    margin-bottom: 10px;
+.refundTable {
+    margin-top: 20px;
 }
 
-.sectionTitle {
+.refundTable th,
+.refundTable td {
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.refundTable th {
+    background-color: #f8f9fa;
+}
+
+.refundButtonInfo {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.refundButtonInfo:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.refundModalHeader {
+    background-color: #00a558;
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 15px 20px;
+    border-bottom: none;
+}
+
+.refundModalTitle {
+    font-family: 'Arial, sans-serif';
+    font-weight: bold;
+    margin: 0;
+}
+
+.refundModalBody {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.refundSectionTitle {
     margin-top: 20px;
     font-weight: bold;
-    color: #007bff;
+    color: #343a40;
+    border-bottom: 2px solid #00a558;
+    padding-bottom: 5px;
 }
 
-.serviceImage {
-    margin-top: 10px;
-    border-radius: 5px;
-    width: 100%;
+.refundModalFooter {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px 20px;
+    background-color: #f5f5f5;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top: none;
+}
+
+.refundModalCloseButton {
+    background-color: #00a558;
+    border-color: #00a558;
+    color: #fff;
+}
+
+.refundModalCloseButton:hover {
+    background-color: #008f48;
+    border-color: #008f48;
 }
