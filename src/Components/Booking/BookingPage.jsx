@@ -69,7 +69,7 @@ const BookingPage = () => {
 
         const updatedBookings = [...bookings, newBooking];
         setBookings(updatedBookings);
-        localStorage.setItem('', JSON.stringify(updatedBookings));
+        //localStorage.setItem('updatedBookings', JSON.stringify(updatedBookings));
 
         // Update the booked slots in local storage
         const bookedSlots = JSON.parse(localStorage.getItem('bookedSlots')) || {};
@@ -124,7 +124,6 @@ const BookingPage = () => {
             });
 
             console.log("Booking Response:", bookingResponse.data);
-            toast.success("Booking saved successfully!");
             localStorage.setItem('currentBookingId', bookingResponse.data.data.bookingId);
         } catch (error) {
             console.error('Booking failed:', error.response?.data || error);

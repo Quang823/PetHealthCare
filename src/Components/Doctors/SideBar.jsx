@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { CiLogout } from "react-icons/ci";
 import { useAuth } from '../../Context/UserContext';
+import './SideBar.scss';
+import v186_557 from '../../Assets/v186_574.png';
 
 function Sidebar() {
     const { logout, user } = useAuth();
@@ -16,8 +18,8 @@ function Sidebar() {
 
     return (
         <div className='bg-white sidebar p-2'>
-            <div className='m-2'>
-                <i className='bi bi-bootstrap-fill me-3 fs-4'></i>
+            <div className="adminImage" style={{ width: '200px', height: '200px', marginLeft: '10px' }}>
+                <img src={v186_557} alt="Admin Image" />
             </div>
             <hr className='text-dark' />
             <div className='list-group list-group-flush'>
@@ -30,7 +32,7 @@ function Sidebar() {
                     <i className='bi bi-house fs-5 me-3'></i>
                     <span>Slot</span>
                 </NavLink>
-                
+
                 <button className='list-group-item py-2' onClick={handleLogout}>
                     <i className='bi bi-power fs-5 me-3'></i>
                     <span>Logout</span>

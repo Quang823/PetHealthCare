@@ -95,7 +95,7 @@ const PaymentPage = () => {
         };
 
         try {
-            const paymentResponse = await axios.post('http://localhost:8080/payment/pay-booking', paymentData, {
+            const paymentResponse = await axios.post(`http://localhost:8080/payment/pay-booking`, paymentData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'application/json'
@@ -105,22 +105,24 @@ const PaymentPage = () => {
             console.log("Payment Response:", paymentResponse.data);
             if (paymentResponse.data.data === "Payment success") {
                 toast.success("Payment successful!");
+
+                // Clear specific items from localStorage
+                localStorage.removeItem('bookings');
+                localStorage.removeItem('bookedSlots');
+                localStorage.removeItem('currentBookingId');
+                localStorage.removeItem('selectedDate');
+
                 navigate('/payment-success');
-                localStorage.removeItem('bookings');
-                localStorage.removeItem('bookedSlots');
-                localStorage.removeItem('currentBookingId');
-                localStorage.removeItem('selectedDate');
             } else {
-                toast.error("Payment failed. Please try again.");
-                navigate('/payment-failure');
+                toast.error("You do not have enough money to pay. Please check your wallet.");
                 localStorage.removeItem('bookings');
                 localStorage.removeItem('bookedSlots');
                 localStorage.removeItem('currentBookingId');
                 localStorage.removeItem('selectedDate');
+                navigate('/payment-failure');
             }
         } catch (error) {
             console.error('Payment failed:', error.response?.data || error);
-            toast.error("You do not have enough money to pay. Please check your wallet.");
             navigate('/payment-failure');
         }
     };
@@ -139,10 +141,6 @@ const PaymentPage = () => {
                 }
             ]
         });
-        localStorage.removeItem('bookings');
-        localStorage.removeItem('bookedSlots');
-        localStorage.removeItem('currentBookingId');
-        localStorage.removeItem('selectedDate');
     };
 
     const totalCost = bookings.reduce((acc, booking) => acc + parseFloat(booking.totalCost || 0), 0);
@@ -154,7 +152,7 @@ const PaymentPage = () => {
     return (
         <div className='paymentPage'>
             <ToastContainer />
-            <h3>PAYMENT</h3>
+            <h2>PAYMENT</h2>
             <div className="payment-page-container">
                 <div className='logo-div'>
                     <div className="logo-container">

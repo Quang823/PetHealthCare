@@ -270,7 +270,6 @@ const TablePet = () => {
                                     <option value="">Select Action</option>
                                     <option value="edit">Edit</option>
                                     <option value="delete">Delete</option>
-                                    <option value="viewVaccine">View Vaccine</option>
                                     <option value="viewHistory">View History</option>
                                 </Form.Select>
                             </td>

@@ -1,19 +1,19 @@
 import React from 'react';
 import './BookingDetailModal.scss';
-import { FaTimes } from 'react-icons/fa'; // Using react-icons for a better close button
+import { FaTimes } from 'react-icons/fa';
 
 const BookingDetailModal = ({ bookingDetail, onClose }) => {
     if (!bookingDetail) return null;
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <h2 style={{ color: '#2c3e50' }}>Booking Detail</h2> {/* Professional dark color for header */}
-                <button className="close-button" onClick={onClose}>
+        <div className="booking-detail-modal-overlay" onClick={onClose}>
+            <div className="booking-detail-modal-content" onClick={(e) => e.stopPropagation()}>
+                <h2 className="booking-detail-modal-header">Booking Detail</h2>
+                <button className="booking-detail-modal-close-button" onClick={onClose} style={{ width: '5%' }}>
                     <FaTimes />
                 </button>
-                <div className="detail">
-                    <div className="table-container">
+                <div className="booking-detail-modal-detail">
+                    <div className="booking-detail-modal-table-container">
                         <h3>Pet Information</h3>
                         <table>
                             <tbody>
@@ -34,6 +34,12 @@ const BookingDetailModal = ({ bookingDetail, onClose }) => {
                                     <td>{bookingDetail.pet.petType}</td>
                                 </tr>
                                 <tr>
+                                    <th>Pet Image</th>
+
+                                    <td> {bookingDetail.pet.imageUrl && <img src={bookingDetail.pet.imageUrl} alt={bookingDetail.pet.petName} style={{ width: '130px', height: '130px', objectFit: 'cover' }} />}</td>
+                                </tr>
+
+                                <tr>
                                     <th>Vaccination</th>
                                     <td>{bookingDetail.pet.vaccination}</td>
                                 </tr>
@@ -41,7 +47,7 @@ const BookingDetailModal = ({ bookingDetail, onClose }) => {
                         </table>
                     </div>
 
-                    <div className="table-container">
+                    <div className="booking-detail-modal-table-container">
                         <h3>Owner Information</h3>
                         <table>
                             <tbody>
@@ -65,7 +71,7 @@ const BookingDetailModal = ({ bookingDetail, onClose }) => {
                         </table>
                     </div>
 
-                    <div className="table-container">
+                    <div className="booking-detail-modal-table-container">
                         <h3>Service Information</h3>
                         <table>
                             <tbody>
@@ -85,7 +91,7 @@ const BookingDetailModal = ({ bookingDetail, onClose }) => {
                         </table>
                     </div>
 
-                    <div className="table-container">
+                    <div className="booking-detail-modal-table-container">
                         <h3>Slot Information</h3>
                         <table>
                             <tbody>

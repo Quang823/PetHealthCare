@@ -25,7 +25,12 @@
         h1{
             font-size: var(--h1FontSize);
             color: var(--blackColor);
-            font-weight: 700;
+    
+            font-size: 27px;
+            font-weight: bolder;
+            text-transform: uppercase;
+            font-family: 'Arial, sans-serif';
+            color: #008145;
         }
         p{
             font-size: var(--normalFontSize);
@@ -34,27 +39,71 @@
         }
     }
 
-    .searchBar{
-        padding: 1rem 2rem;
-        background: var(--whiteColor);
-        border-radius: 5px;
-        gap:1rem;
-        box-shadow: 0 2px 4px var(--inputColor);
-        height: 40px;
-        margin-top: 20px;
+    // .searchBar{
+    //     padding: 1rem 2rem;
+    //     background: var(--whiteColor);
+    //     border-radius: 5px;
+    //     gap:1rem;
+    //     box-shadow: 0 2px 4px var(--inputColor);
+    //     height: 40px;
+    //     margin-top: 20px;
         
-        input{
-            border: none;
-            outline: none;
-            background: none;
-        }
-        .icon{
-            color: var(--textColor);
-            &:hover{
-                color: var(--PrimaryColor);
-            }
-        }
-    }
+    //     input{
+    //         border: none;
+    //         outline: none;
+    //         background: none;
+    //     }
+    //     .icon{
+    //         color: var(--textColor);
+    //         &:hover{
+    //             color: var(--PrimaryColor);
+    //         }
+    //     }
+    // }
+    /* AnimatedBanner.css */
+.animatedBanner {
+    display: flex;
+    overflow: hidden;
+    width: 30%;
+    height: 80px;
+    background: url('../../../../Assets/hinh-anh-thu-cung-cute-dang-yeu_014117794.jpg')no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    border: 1px solid #121e23;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .message {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    animation: slide 9s infinite;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .message:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  .message:nth-child(2) {
+    animation-delay: 3s;
+  }
+  
+  .message:nth-child(3) {
+    animation-delay: 6s;
+  }
+  
+  @keyframes slide {
+    0%, 100% { opacity: 0; }
+    10%, 40% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+}
      .adminDiv{
         gap: 1rem;
         .icon{
@@ -67,8 +116,8 @@
         }
         .adminImage{
             border: 3px solid var(--whiteColor);
-            width: 2.8rem;
-            height: 2.8rem;
+            width: 4.5rem;
+            height: 4.5rem;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 2px 4px var(--inputColor);
@@ -172,7 +221,9 @@ gap:1rem;
                 font-size: var(--h1FontSize);
                 padding-bottom: 1rem;
                 color: #121e23;
-                font-weight: 600;
+                font-family: 'Arial, sans-serif';
+                font-weight: bolder;
+                
             }
             .flex{
                 gap:1.5rem;
@@ -187,7 +238,8 @@ gap:1rem;
                 }
                 .serviceName{
                     font-size: 18px;
-                    font-weight: bold;
+                    font-family: 'Arial, sans-serif';
+                    font-weight: bolder;
                      color: #599776;  // Change this to the desired color
   
                 }
@@ -195,8 +247,12 @@ gap:1rem;
             .link{
                 margin-top: 2rem;
                 cursor: pointer;
+                font-family: 'Arial, sans-serif';
+                font-size: 18px;
                 &:hover{
                     color: var(--PrimaryColor);
+                    font-family: 'Arial, sans-serif';
+                    
                     .icon{
                         transform: translateX(10px);
                         transition: .3s ease;
@@ -208,9 +264,11 @@ gap:1rem;
             transform: translateY(-20px);
 
             img{
+                margin-left: 10px;
                 width: 150px;
+                height: 130px;
                 border-radius: 10px;
-                margin-top: 30px;
+                margin-top: 70px;
 
             }
         }
@@ -218,4 +276,4 @@ gap:1rem;
    }
 
 }
-}
+

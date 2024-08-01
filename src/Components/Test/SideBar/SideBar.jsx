@@ -24,14 +24,14 @@ const SideBar = () => {
         navigate("/");
         toast.success("Sucess")
     }
-    const contact = () =>{
+    const contact = () => {
         navigate("/contact")
     }
 
     return (
         <div className="sideBar grid">
             <div className="logoDiv flex">
-                <img src={v186_574} alt="Image Name" />
+                {/* <img src={v186_574} alt="Image Name" /> */}
                 <h2>Pet Health Care</h2>
             </div>
             <div className="menuDiv">
@@ -57,7 +57,7 @@ const SideBar = () => {
                     </li>
                     <li className="listItem">
                         <NavLink to="/testadmin/addUser" className="menuLink flex">
-                            <GiBirdCage  className="icon" />
+                            <GiBirdCage className="icon" />
                             <span className="smallText">Add User</span>
                         </NavLink>
                     </li>
@@ -67,11 +67,11 @@ const SideBar = () => {
                             <span className="smallText">Logout</span>
                         </NavLink>
                     </li>
-                    
+
                 </ul>
             </div>
             <div className="sideBarCard">
-                <MdOutlinePets  className="icon" />
+                <MdOutlinePets className="icon" />
                 <div className="cardContent">
                     <div className="circle1"></div>
                     <div className="circle2"></div>

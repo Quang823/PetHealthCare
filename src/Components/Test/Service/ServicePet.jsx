@@ -1,9 +1,12 @@
 import axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { Modal, Button } from 'react-bootstrap';
 import './ServicePet.scss';
 import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
+import { confirmAlert } from 'react-confirm-alert'; // Import the library
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import the CSS
 
 const ServicePet = () => {
     const [showForm, setShowForm] = useState(false);
@@ -21,23 +24,15 @@ const ServicePet = () => {
     const [postPerPage, setPostPerPage] = useState(5);
     const [file, setFile] = useState(null);
     const [validationMessages, setValidationMessages] = useState({});
-    const [isDeleting, setIsDeleting] = useState(false); // New state for deletion
-    const [serviceToDelete, setServiceToDelete] = useState(null); // New state for service to delete
-    const formRef = useRef(null);
+    const [serviceToDelete, setServiceToDelete] = useState(null);
 
     useEffect(() => {
         fetchServices();
     }, [showEditForm, showForm]);
 
-    useEffect(() => {
-        if (showForm || showEditForm) {
-            formRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [showForm, showEditForm]);
-
     const fetchServices = async () => {
         try {
-            const res = await axios.get("http://localhost:8080/Service/getAll");
+            const res = await axios.get("http://localhost:8080/Service/getAllActive");
             setServices(res.data);
         } catch (error) {
             console.error(error);
@@ -46,11 +41,19 @@ const ServicePet = () => {
 
     const validateField = (name, value) => {
         let message = '';
-        if (name === 'name' && (!value || value.length < 2)) {
-            message = 'Service name must be at least 2 characters long.';
+        if (name === 'name') {
+            const nameRegex = /^[a-zA-Z\s]+$/;
+            if (!value || value.length < 2) {
+                message = 'Service name must be at least 2 characters long.';
+            } else if (!nameRegex.test(value)) {
+                message = 'Service name must contain only letters and spaces.';
+            }
         }
-        if (name === 'price' && (isNaN(value) || value <= 0)) {
-            message = 'Price must be a positive number.';
+        if (name === 'price') {
+            const priceValue = parseFloat(value);
+            if (isNaN(priceValue) || priceValue < 50000 || priceValue > 10000000) {
+                message = 'Price must be between 50,000 and 10,000,000.';
+            }
         }
         return message;
     };
@@ -68,7 +71,12 @@ const ServicePet = () => {
     };
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
+        const selectedFile = e.target.files[0];
+        if (selectedFile && selectedFile.type.startsWith('image/')) {
+            setFile(selectedFile);
+        } else {
+            toast.error("Please select a valid image file (jpg, jpeg, png, gif, bmp, tiff, tif, webp, svg)");
+        }
     };
 
     const handleAddNew = async () => {
@@ -99,8 +107,9 @@ const ServicePet = () => {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setServices([...services, res.data.data]);
-            resetForm();
+            resetForm(); // Reset the form after successful addition
             toast.success("Add success");
+            setShowForm(false); // Close the form after adding a new service
         } catch (error) {
             toast.error("Failed to add service");
         }
@@ -112,7 +121,7 @@ const ServicePet = () => {
             imageUrl: service.imageUrl || ''
         });
         setShowEditForm(true);
-        setShowForm(false);
+        setShowForm(true);
     };
 
     const handleEdit = async () => {
@@ -145,27 +154,43 @@ const ServicePet = () => {
             setServices(services.map(s => s.serviceId === serviceId ? res.data.data : s));
             resetForm();
             toast.success("Update success");
+            setShowEditForm(false);
+            setShowForm(false);
         } catch (error) {
-            toast.error("Failed to update");
+            if (error.response && error.response.status === 404) {
+                toast.error("This service has a booking. Cannot be edited");
+            } else {
+                toast.error("This service has a booking. Cannot be edited");
+            }
         }
     };
 
     const handleDelete = async (service) => {
-        if (service.isBooked) {
-            toast.info("This service is currently booked and cannot be deleted.");
-            return;
-        }
-
-        const confirmDelete = window.confirm("Are you sure you want to delete this service?");
-        if (!confirmDelete) return;
-
-        try {
-            await axios.delete(`http://localhost:8080/Service/delete/${service.serviceId}`);
-            setServices(services.filter(s => s.serviceId !== service.serviceId));
-            toast.success("Delete success");
-        } catch (error) {
-            toast.error("Failed to delete");
-        }
+        confirmAlert({
+            title: 'Confirm to delete',
+            message: 'Are you sure you want to delete this service?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: async () => {
+                        try {
+                            const res = await axios.delete(`http://localhost:8080/Service/delete/${service.serviceId}`);
+                            if (res.data.status === 'failed' || res.data.message === 'Service is being used') {
+                                toast.error("This service has a booking. Cannot be deleted");
+                            } else {
+                                setServices(services.filter(s => s.serviceId !== service.serviceId));
+                                toast.success("Delete success");
+                            }
+                        } catch (error) {
+                            toast.error("");
+                        }
+                    }
+                },
+                {
+                    label: 'No'
+                }
+            ]
+        });
     };
 
     const indexOfLastPost = currentPage * postPerPage;
@@ -185,16 +210,16 @@ const ServicePet = () => {
     };
 
     return (
-        <div className="container">
-            <div className='hehe'>
-                <h2 className="my-4">Service List</h2>
-                <button className='bttnn-add' onClick={() => {
+        <div className="servicepet-container">
+            <div className='servicepet-header'>
+                <h2 className="servicepet-title">Service List</h2>
+                <button className='servicepet-add-button' onClick={() => {
                     setShowForm(true);
                     setShowEditForm(false);
                 }}>Add new Service</button>
             </div>
 
-            <table className="table table-striped">
+            <table className="servicepet-table table table-striped">
                 <thead>
                     <tr>
                         <th>Service ID</th>
@@ -214,12 +239,12 @@ const ServicePet = () => {
                             <td>{service.description}</td>
                             <td>
                                 {service.imageUrl && (
-                                    <img src={service.imageUrl} alt={service.name} style={{ width: '150px', height: '100px' }} />
+                                    <img src={service.imageUrl} alt={service.name} className="servicepet-image" />
                                 )}
                             </td>
                             <td>
-                                <button className="edit-button" onClick={() => handleEditService(service)}>Edit</button>
-                                <button className="delete-button" onClick={() => handleDelete(service)}>Delete</button>
+                                <button className="servicepet-edit-button" onClick={() => handleEditService(service)}>Edit</button>
+                                <button className="servicepet-delete-button" onClick={() => handleDelete(service)}>Delete</button>
                             </td>
                         </tr>
                     ))}
@@ -231,29 +256,38 @@ const ServicePet = () => {
                 nextLabel={'Next'}
                 pageCount={Math.ceil(services.length / postPerPage)}
                 onPageChange={({ selected }) => setCurrentPage(selected + 1)}
-                containerClassName={'pagination'}
-                activeClassName={'active'}
+                containerClassName={'servicepet-pagination'}
+                activeClassName={'servicepet-active'}
             />
 
-            {(showForm || showEditForm) && (
-                <div className="form-container" ref={formRef}>
-                    <h3>{showEditForm ? 'Edit Service' : 'Add a new Service'}</h3>
+            <Modal show={showForm} onHide={() => setShowForm(false)}>
+                <Modal.Header closeButton onClick={() => { resetForm(); }}>
+                    <Modal.Title style={{
+                        textAlign: 'center', color: '#333',
+                        fontFamily: 'Arial, sans-serif',
+                        fontWeight: 'bolder',
+                        fontSize: '1.5rem'
+                    }}>{showEditForm ? 'Edit Service' : 'Add a new Service'}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
                     <input type="text" name="name" placeholder="Name" value={serviceData.name} onChange={handleChange} />
-                    {validationMessages.name && <span className="error-message">{validationMessages.name}</span>}
+                    {validationMessages.name && <span className="servicepet-error-message">{validationMessages.name}</span>}
                     <input type="number" name="price" placeholder="Price" value={serviceData.price} onChange={handleChange} />
-                    {validationMessages.price && <span className="error-message">{validationMessages.price}</span>}
+                    {validationMessages.price && <span className="servicepet-error-message">{validationMessages.price}</span>}
                     <input type="text" name="description" placeholder="Description" value={serviceData.description} onChange={handleChange} />
-                    {validationMessages.description && <span className="error-message">{validationMessages.description}</span>}
-                    <input type="file" onChange={handleFileChange} />
-                    {serviceData.imageUrl && !file && <img src={serviceData.imageUrl} alt="Service" style={{ width: '150px', height: '150px' }} />}
-                    <button className='btn btn-success' onClick={showEditForm ? handleEdit : handleAddNew}>{showEditForm ? 'Update' : 'Add'}</button>
-                    <button className='btn btn-secondary' onClick={() => {
+                    {validationMessages.description && <span className="servicepet-error-message">{validationMessages.description}</span>}
+                    <input type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff,.tif,.webp,.svg" onChange={handleFileChange} />
+                    {serviceData.imageUrl && !file && <img src={serviceData.imageUrl} alt="Service" className="servicepet-preview-image" />}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => {
                         setShowForm(false);
                         setShowEditForm(false);
                         resetForm();
-                    }}>Cancel</button>
-                </div>
-            )}
+                    }}>Cancel</Button>
+                    <Button variant="primary" onClick={showEditForm ? handleEdit : handleAddNew}>{showEditForm ? 'Update' : 'Add'}</Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
