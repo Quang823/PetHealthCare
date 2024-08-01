@@ -79,7 +79,7 @@ const RefundPage = () => {
             {isModalOpen && (
                 <div className="modal">
                     <div className="modal-content">
-                        <span className="close-button" onClick={closeModal}>&times;</span>
+<span className="close-button" onClick={closeModal}>&times;</span>
                         <h3>Booking Detail</h3>
                         <table className="booking-detail-table">
                             <thead>

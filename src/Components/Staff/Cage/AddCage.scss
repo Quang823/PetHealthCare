@@ -1,0 +1,63 @@
+.add-cage-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7f9fc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-cage-title {
+    margin-bottom: 20px;
+      font-size: 2rem !important;
+      color: #039433;
+      text-align: center;
+      font-weight: bold;
+      font-family: 'Arial, sans-serif';
+      text-transform: uppercase;
+  }
+  
+  .add-cage-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .add-cage-label {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #555;
+  }
+  .add-cage-select {
+    width: 100%;
+    height: 50px;
+  }
+  
+  .add-cage-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .add-cage-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-cage-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-cage-button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }

@@ -60,7 +60,7 @@ const LoginForm = () => {
         }
 
         let res = await loginApi(email, password);
-
+        console.log(res);
         if (res && res.data && res.status === "ok") {
             const token = res.data; // token returned in res.data
             const decodedToken = jwtDecode(token); // decode token
@@ -87,11 +87,10 @@ const LoginForm = () => {
                 toast.error("Unable to retrieve user role");
             }
         } else {
-            if (res && res.status === 401) {
-                toast.error(res.data.error);
+            if (res && res.status === "400") {
                 toast.error("Wrong email or password");
             } else {
-                toast.error("Login fail. Please try again!!!");
+                toast.error("This account has been locked. Please contact the administrator to unlock it.");
             }
         }
         setIsLoading(false);

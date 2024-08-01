@@ -1,4 +1,4 @@
-import './Cage.scss';
+import './AddCage.scss';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';

@@ -31,16 +31,16 @@ const Addslotcancel = () => {
   const [showInputFields, setShowInputFields] = useState(false); // Initialize as false
 
   useEffect(() => {
+   
     fetchCancelledBookings();
     setShowAvailableVets(false);
     setAvailableVets([]);
     setNoAvailableVets(false);
   }, [selectedDate, selectedSlot]);
-
-  const handlehideInput = () => {
+  const handlehideInput =() =>{
     setShowInputFields(false);
-  };
-
+  }
+  
   const cancelBooking = async (bookingDetailId) => {
     const cancelledBookings = JSON.parse(localStorage.getItem('cancelledBookings'));
     const booking = cancelledBookings.find(booking => booking.bookingDetailId === bookingDetailId);
@@ -65,7 +65,7 @@ const Addslotcancel = () => {
 
       // Check for the specific error message and display a relevant toast notification
       if (error.response && error.response.data && error.response.data.message) {
-        if (error.response.data.message === 'booking/bookingDetail is already cancelled or completed or pending') {
+if (error.response.data.message === 'booking/bookingDetail is already cancelled or completed or pending') {
           toast.error('The booking is already cancelled, completed, or pending.');
         } else {
           toast.error('An error occurred while cancelling the booking.');
@@ -73,6 +73,7 @@ const Addslotcancel = () => {
       }
     }
   };
+  
 
   const updateVetSlot = async (bookingDetailId, serviceSlotId, date) => {
     try {
@@ -92,15 +93,16 @@ const Addslotcancel = () => {
       if (response.status === 200) {
         const updatedBooking = response.data.data;
         toast.success('Booking detail updated successfully');
+        console.log("Updated Booking", updatedBooking);
 
         setCancelledBookings(prevBookings =>
           prevBookings.map(booking =>
             booking.bookingDetailId === bookingDetailId
               ? {
-                ...booking,
-                ...updatedBooking,
-                vetCancelled: false
-              }
+                  ...booking,
+                  ...updatedBooking,
+                  vetCancelled: false
+                }
               : booking
           )
         );
@@ -122,10 +124,10 @@ const Addslotcancel = () => {
       const filteredBookings = response.data.filter(
         (booking) => new Date(booking.date).toDateString() === selectedDate.toDateString()
       );
-
+  
       // Store the fetched bookings in localStorage
       localStorage.setItem('cancelledBookings', JSON.stringify(filteredBookings));
-
+  
       setCancelledBookings(filteredBookings);
     } catch (error) {
       console.error('Error fetching cancelled bookings:', error);
@@ -133,6 +135,7 @@ const Addslotcancel = () => {
   };
 
   const handleAddSlot = async (booking) => {
+    console.log('handleAddSlot called with booking:', booking);
     setSelectedBooking(booking);
     setSelectedSlot(booking.slot ? booking.slot.slotId.toString() : '');
     setInputDate(booking.date);
@@ -146,7 +149,8 @@ const Addslotcancel = () => {
         date: booking.date,
       });
 
-      if (response.data.length === 0) {
+      console.log('API response:', response.data);
+if (response.data.length === 0) {
         setNoAvailableVets(true);
         setShowAvailableVets(false);
       } else {
@@ -179,6 +183,8 @@ const Addslotcancel = () => {
         date: inputDate,
       });
 
+      console.log('API response:', response.data);
+
       if (response.data.length === 0) {
         setNoAvailableVets(true);
         setShowAvailableVets(false);
@@ -204,16 +210,16 @@ const Addslotcancel = () => {
   };
 
   return (
-    <div className="addslotcancel-container">
-      <h2 className="addslotcancel-heading">Cancelled Bookings Slot</h2>
-      <div className="addslotcancel-date-picker">
+    <div className="container">
+      <h2 className="heading">Cancelled Bookings Slot</h2>
+      <div className="date-picker-container">
         <DatePicker
           selected={selectedDate}
           onChange={(date) => setSelectedDate(date)}
           dateFormat="yyyy-MM-dd"
         />
       </div>
-      <table className="addslotcancel-styled-table">
+      <table className="styled-table">
         <thead>
           <tr>
             <th>Date</th>
@@ -232,93 +238,94 @@ const Addslotcancel = () => {
           {cancelledBookings.map((booking, index) => (
             <tr key={index}>
               <td>{booking.date}</td>
-              <td>{`${booking.slot.startTime} - ${booking.slot.endTime}`}</td>
+              <td>{booking.slot ? booking.slot.slotId : 'N/A'}</td>
               <td>{booking.status}</td>
               <td>{booking.booking.totalPrice}</td>
               <td>{booking.pet.petName}</td>
-              <td>{booking.pet.user.firstName}</td>
+              <td>{booking.pet.user.name}</td>
               <td>{booking.pet.user.email}</td>
-              <td>{booking.pet.user.phoneNumber}</td>
-              <td>{booking.vetCancelled ? 'Cancelled' : booking.vetName}</td>
+              <td>{booking.pet.user.phone}</td>
+              <td>{booking.user.name}</td>
               <td>
-                {booking.vetCancelled ? (
-                  <button className="addslotcancel-button" onClick={() => handleAddSlot(booking)}>View</button>
-                ) : (
-                  <button className="addslotcancel-button" onClick={() => cancelBooking(booking.bookingDetailId)}>Cancel</button>
-                )}
+<button onClick={() => handleAddSlot(booking)}>Update</button>
+                <button onClick={() => cancelBooking(booking.bookingDetailId)}>Cancel</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {showInputFields && ( // Render input fields conditionally
-        <div className="addslotcancel-input-fields">
-          <label>Date:</label>
-          <input
-            type="date"
-            value={inputDate}
-            onChange={(e) => setInputDate(e.target.value)}
-          />
-          <label>Slot:</label>
-          <select
-            value={selectedSlot}
-            onChange={(e) => setSelectedSlot(e.target.value)}
-          >
-            {slots.map((slot) => (
-              <option key={slot.id} value={slot.id}>
-                {slot.startTime} - {slot.endTime}
-              </option>
-            ))}
-          </select>
-          <button
-            className="addslotcancel-button"
-            onClick={handleCheckAvailability}
-            disabled={isLoading}
-          >
-            Check Availability
-          </button>
-          <button
-            className="addslotcancel-button"
-            onClick={handlehideInput}
-            disabled={isLoading}
-          >
-            Hide
-          </button>
-        </div>
-      )}
+
+      {isLoading && <p>Loading...</p>}
+
       {showAvailableVets && availableVets.length > 0 && (
-        <div className="addslotcancel-available-vets">
-          <h3>Available Vets</h3>
-          <ul>
-            {availableVets.map((vet, index) => (
-              <li key={index}>
-                {vet.user.firstName} - {vet.slot.startTime} to {vet.slot.endTime}
-                <button
-                  className="addslotcancel-button"
-                  onClick={() =>
-                    updateVetSlot(
+        <div className="available-vets">
+          <div className="available-vets-header">
+            <h3>Available Veterinarians</h3>
+            <button onClick={handleCloseAvailableVets} className="close-button">Close</button>
+          </div>
+          <table className="styled-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Slot</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {availableVets.map((vet, index) => (
+                <tr key={index}>
+                  <td>{vet.user.name}</td>
+                  <td>{vet.user.email}</td>
+                  <td>{vet.slot ? vet.slot.slotId : 'N/A'}</td>
+                  <td>
+                    <button onClick={() => updateVetSlot(
                       selectedBooking.bookingDetailId,
                       vet.serviceSlotId,
-                      inputDate
-                    )
-                  }
-                >
-                  Assign Vet
-                </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            className="addslotcancel-button"
-            onClick={handleCloseAvailableVets}
-          >
-            Close
-          </button>
+                      inputDate || selectedBooking.date
+                    )}>
+                      Add Slot
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
+
       {noAvailableVets && (
-        <div className="addslotcancel-no-vets">
-          <p>No available vets for the selected slot and date.</p>
+        <div className="no-vets-message">
+          <p>No veterinarians are available for the selected slot and date.</p>
+        </div>
+      )}
+
+      {showInputFields && (
+         // Conditionally render input fields
+        <div className="input-container">
+          <h3>Enter Date and Select Slot to Display Available Veterinarians</h3>
+          <button onClick={handlehideInput} className="close-button">Close</button>
+          <label>
+            Date:
+            <input
+              type="date"
+              value={inputDate}
+              onChange={(e) => setInputDate(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+            />
+          </label>
+          <label>
+            Slot:
+            <select value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
+              <option value="">Select a slot</option>
+              {slots.map((slot) => (
+                <option key={slot.id} value={slot.id}>
+                  {slot.startTime} - {slot.endTime}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button onClick={handleCheckAvailability}>Check Availability</button>
         </div>
       )}
     </div>

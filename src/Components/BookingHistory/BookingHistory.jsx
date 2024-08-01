@@ -138,7 +138,7 @@ const BookingHistory = () => {
                                 toast.success("Cancel success");
                             }
                             if (response.data.status === "failed") {
-                                toast.error("This booking detail has bean cancelled");
+                                toast.error("This booking is already cancelled or completed or examining");
                             }
                         } catch (error) {
                             console.error('Error canceling booking detail:', error);

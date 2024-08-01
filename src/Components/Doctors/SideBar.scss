@@ -1,3 +1,18 @@
+.welcome-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */         /* Full viewport height to center vertically */
+    text-align: center;      /* Center text inside the span */
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    color: #00a558;
+    font-family: Arial, sans-serif;
+    font-weight: bolder;
+}
+
+
 .sidebar {
     width: 250px;
     height: 100vh;

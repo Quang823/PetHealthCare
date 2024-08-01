@@ -15,7 +15,7 @@ const Activity = () => {
 
     const fetchRevenueData = async (year) => {
         try {
-            const response = await axios.get(`http://localhost:8080/booking/api/revenue?year=${year}`)
+            const response = await axios.get(`http://localhost:8080/payment/getRevenueByMonth/${year}`)
             setRevenueData(response.data);
         } catch (error) {
             console.error("Error fetching revenue data:", error);

@@ -20,11 +20,17 @@ const Slotdoctor = () => {
     const fetchSlots = async () => {
       setLoading(true);
       setError(null);
-      const formattedDate = selectedDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+      // Lấy ngày theo múi giờ local mà không dùng toISOString()
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      
       const token = localStorage.getItem('token');
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.User.map.userID;
-      
+
       try {
         // Changed to GET request with params
         const response = await axios.get('http://localhost:8080/sev-slot/getByVet', {
@@ -51,7 +57,13 @@ const Slotdoctor = () => {
   const handleCancelSlots = async () => {
     setCancellationLoading(true);
     setCancellationError(null);
-    const formattedDate = selectedDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+    // Lấy ngày theo múi giờ local mà không dùng toISOString()
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+    const day = String(selectedDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+
     const token = localStorage.getItem('token');
     const decodedToken = jwtDecode(token);
     const userId = decodedToken.User.map.userID;
@@ -72,6 +84,7 @@ const Slotdoctor = () => {
       toast.success('Cancel success');
       console.log('Cancelled slots:', response.data);
       // Optionally refresh the slots or show a success message
+      window.location.reload();
     } catch (error) {
       console.error('Error cancelling slots:', error.response ? error.response.data : error.message);
       setCancellationError(error);
@@ -93,6 +106,7 @@ const Slotdoctor = () => {
           dateFormat="yyyy-MM-dd"
           placeholderText="Select a date"
           className="form-control"
+          minDate={new Date()} // Chỉ cho phép chọn từ hôm nay trở đi
         />
       </div>
       <button

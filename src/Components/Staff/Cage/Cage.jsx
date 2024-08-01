@@ -84,7 +84,7 @@ const Cage = ({ Toggle }) => {
 
   return (
     <div className="cage-layout">
-      <div className="content">
+<div className="content">
         <div className="search-filter-container">
           <input
             type="text"
@@ -96,12 +96,6 @@ const Cage = ({ Toggle }) => {
           <div className="filter-buttons">
             <button onClick={() => setFilterStatus('all')} className="filter-button">
               All
-            </button>
-            <button onClick={() => setFilterStatus('available')} className="filter-button">
-              Available
-            </button>
-            <button onClick={() => setFilterStatus('booked')} className="filter-button">
-              Booked
             </button>
             <button className="back-button" onClick={handleBack}>Back</button>
           </div>
