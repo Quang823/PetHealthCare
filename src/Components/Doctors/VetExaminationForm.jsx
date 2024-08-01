@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import Swal from 'sweetalert2';  // Import SweetAlert2
+import Swal from 'sweetalert2';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';  // Ensure correct import
+import { jwtDecode } from 'jwt-decode'; // Ensure correct import
 import { useNavigate, useLocation } from 'react-router-dom';
 import './VetExaminationForm.scss';
 
@@ -36,6 +36,22 @@ function VetExaminationForm() {
     useEffect(() => {
         console.log("Received bookingDetail:", bookingDetail);
     }, [bookingDetail]);
+
+    const handleNeedCageChange = () => {
+        setNeedCage(!needCage);
+        axios.put(`http://localhost:8080/bookingDetail/needCage/${bookingDetail.bookingDetailId}`)
+            .then(response => {
+                console.log('Need Cage status updated:', response.data);
+            })
+            .catch(error => {
+                console.error('There was an error updating the Need Cage status!', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error updating the Need Cage status.',
+                });
+            });
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -82,25 +98,69 @@ function VetExaminationForm() {
             return; // Prevent form submission
         }
 
-        const data = {
+        const medicalHistoryData = {
+            petId: bookingDetail.pet.petId,
+            bookingDetailId: bookingDetail.bookingDetailId,
             veterinaryName,
-            dateMedicalHistory: dateMedical, // Format date to MM/DD/YYYY
+            dateMedicalHistory: dateMedical,
             diseaseName,
             treatmentMethod,
             note,
             reminders,
-            vaccine
         };
 
-        axios.post(`http://localhost:8080/medical-history/create/${bookingDetail.bookingDetailId}`, data)
+        axios.post('http://localhost:8080/medical-history/create', medicalHistoryData)
             .then(response => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Medical history created successfully.',
-                }).then(() => {
-                    navigate('/doctor'); // Redirect to another page after success
-                });
+                // Successfully created medical history, now update the vaccination if needed
+                if (vaccine) {
+                    const vaccinationData = {
+                        petId: bookingDetail.pet.petId,
+                        vaccination: vaccine,
+                    };
+
+                    axios.put('http://localhost:8080/pet/update-Vaccination', vaccinationData)
+                        .then(() => {
+                            // Now update the bookingDetail status to COMPLETED
+                            return axios.put(`http://localhost:8080/bookingDetail/update/status/${bookingDetail.bookingDetailId}`, { status: 'COMPLETED' });
+                        })
+                        .then(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Medical history, vaccination updated, and booking status updated to COMPLETED.',
+                            }).then(() => {
+                                navigate('/doctor'); // Redirect to another page after success
+                            });
+                        })
+                        .catch(error => {
+                            console.error('There was an error updating the vaccination or booking status!', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Medical history was created but there was an error updating the vaccination or booking status.',
+                            });
+                        });
+                } else {
+                    // Update the bookingDetail status to COMPLETED directly
+                    axios.put(`http://localhost:8080/bookingDetail/update/status/${bookingDetail.bookingDetailId}`, { status: 'COMPLETED' })
+                        .then(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Medical history created and booking status updated to COMPLETED.',
+                            }).then(() => {
+                                navigate('/doctor'); // Redirect to another page after success
+                            });
+                        })
+                        .catch(error => {
+                            console.error('There was an error updating the booking status!', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Medical history was created but there was an error updating the booking status.',
+                            });
+                        });
+                }
             })
             .catch(error => {
                 console.error('There was an error creating the medical history!', error);
@@ -121,30 +181,30 @@ function VetExaminationForm() {
 
     const handleInputChange = (setter) => (e) => {
         const value = e.target.value || '';
-    
+
         // Split value into words
         const words = value.split(' ');
-    
+
         // Create formatted lines
         const formattedLines = [];
         let currentLine = [];
-    
+
         for (let i = 0; i < words.length; i++) {
             // Add word to current line
             currentLine.push(words[i]);
-    
+
             // If line length reaches 200 words, end current line and start a new one
             if (currentLine.length === 200) {
                 formattedLines.push(currentLine.join(' '));
                 currentLine = [];
             }
         }
-    
+
         // Add remaining words to final line
         if (currentLine.length > 0) {
             formattedLines.push(currentLine.join(' '));
         }
-    
+
         // Join lines into a single string
         const formattedValue = formattedLines.join('\n');
         setter(formattedValue);
@@ -191,7 +251,8 @@ function VetExaminationForm() {
                     />
                 </div>
 
-                <div className="vet-exam-form-group"><label className="vet-exam-label">Note</label>
+                <div className="vet-exam-form-group">
+                    <label className="vet-exam-label">Note</label>
                     <textarea
                         name="note"
                         className="vet-exam-input"
@@ -228,6 +289,16 @@ function VetExaminationForm() {
                 </div>
 
                 <div className="vet-exam-form-group">
+                    <label className="vet-exam-label">Need Cage</label>
+                    <input
+                        type="checkbox"
+                        className="vet-exam-checkbox"
+                        checked={needCage}
+                        onChange={handleNeedCageChange}
+                    />
+                </div>
+
+                <div className="vet-exam-form-group">
                     <label className="vet-exam-label">Date Medical</label>
                     <DatePicker
                         selected={dateMedical}
@@ -237,7 +308,7 @@ function VetExaminationForm() {
                         disabled
                     />
                 </div>
-                
+
                 <button type="submit" className="vet-exam-button">
                     Submit
                 </button>

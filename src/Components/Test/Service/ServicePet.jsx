@@ -175,14 +175,14 @@ const ServicePet = () => {
                     onClick: async () => {
                         try {
                             const res = await axios.delete(`http://localhost:8080/Service/delete/${service.serviceId}`);
-                            if (res.data.status === 'failed') {
+                            if (res.data.status === 'failed' || res.data.message === 'Service is being used') {
                                 toast.error("This service has a booking. Cannot be deleted");
                             } else {
                                 setServices(services.filter(s => s.serviceId !== service.serviceId));
                                 toast.success("Delete success");
                             }
                         } catch (error) {
-                            toast.error("This service has a booking. Cannot be deleted");
+                            toast.error("");
                         }
                     }
                 },

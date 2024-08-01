@@ -92,8 +92,12 @@ function UserATest() {
                             <td>{user.address}</td>
                             <td>{user.role}</td>
                             <td>
-                                <button className="useratest-edit-button" onClick={() => handleEdit(user)}>Edit</button>
-                                <button className="useratest-delete-button" onClick={() => handleDelete(user.userId)}>Delete</button>
+                                {user.role !== 'Admin' && (
+                                    <>
+                                        <button className="useratest-edit-button" onClick={() => handleEdit(user)}>Edit</button>
+                                        <button className="useratest-delete-button" onClick={() => handleDelete(user.userId)}>Delete</button>
+                                    </>
+                                )}
                             </td>
                         </tr>
                     ))}
