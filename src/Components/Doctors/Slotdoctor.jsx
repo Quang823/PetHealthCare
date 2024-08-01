@@ -24,10 +24,14 @@ const Slotdoctor = () => {
       const token = localStorage.getItem('token');
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.User.map.userID;
+      
       try {
-        const response = await axios.post('http://localhost:8080/sev-slot/slot-available', {
-          userId: userId,
-          date: formattedDate
+        // Changed to GET request with params
+        const response = await axios.get('http://localhost:8080/sev-slot/getByVet', {
+          params: {
+            vetId: userId,
+            date: formattedDate
+          }
         });
         setSlots(response.data);
       } catch (error) {
@@ -65,7 +69,7 @@ const Slotdoctor = () => {
           vetId: userId
         }
       });
-      toast.success('Cancel success')
+      toast.success('Cancel success');
       console.log('Cancelled slots:', response.data);
       // Optionally refresh the slots or show a success message
     } catch (error) {

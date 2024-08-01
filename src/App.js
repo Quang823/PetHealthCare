@@ -88,9 +88,10 @@ function App() {
             <Route path='examineDoctor' element={<VetExaminationForm />} />
             {/* <Route path='scheduleDoctor' element={<Schedule />} />
           <Route path='home' element={<Home />} />
-         
+          
           <Route path='slotdoctor' element={<Slotdoctor />} /> */}
-          </Route>
+          <Route path='examineDoctor' element={<VetExaminationForm />} />
+        </Route>
 
 
           {/* Protected routes for Staff */}

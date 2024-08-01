@@ -124,7 +124,7 @@ function Home({ Toggle }) {
     });
 
     return (
-        <>
+
             <div className='bs-form'>
                 <div className='headers'>
                     <h1>Doctor's Schedule</h1>
@@ -226,7 +226,7 @@ function Home({ Toggle }) {
                 )}
                 <button className="back-button" onClick={handleBack}>Back</button>
             </div>
-        </>
+
     );
 }
 

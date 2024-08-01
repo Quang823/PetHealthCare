@@ -5,6 +5,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Home from './Home';
 import Sidebar from './SideBar';
 import Slotdoctor from './Slotdoctor';
+import VetExaminationForm from './VetExaminationForm';
 
 const Doctor = () => {
   const [toggle, setToggle] = useState(true);

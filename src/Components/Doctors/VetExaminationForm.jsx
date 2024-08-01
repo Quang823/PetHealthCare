@@ -303,7 +303,7 @@ function VetExaminationForm() {
                     <DatePicker
                         selected={dateMedical}
                         onChange={(date) => setDateMedical(date)}
-                        dateFormat="dd MMMM yyyy"
+                        dateFormat="yyyy-MM-dd"
                         className="vet-exam-datepicker"
                         disabled
                     />

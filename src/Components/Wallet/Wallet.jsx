@@ -8,10 +8,12 @@ import Modal from 'react-modal';
 const Wallet = () => {
     const [wallet, setWallet] = useState(null);
     const [depositAmount, setDepositAmount] = useState('');
-    const [withdrawAmount, setWithdrawAmount] = useState('');
     const [transactions, setTransactions] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [validationError, setValidationError] = useState('');
+    const [isVNPayHandled, setIsVNPayHandled] = useState(false);
+    const [isProcessingVNPay, setIsProcessingVNPay] = useState(false);
+
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -38,11 +40,11 @@ const Wallet = () => {
         axios.get(`http://localhost:8080/payment/get-all?walletId=${walletId}`)
             .then(res => {
                 if (res.data.status === "ok" && Array.isArray(res.data.data)) {
+
                     console.log('Transactions data:', res.data.data); // Debug log
 
                     // Sort transactions by transactionDate in descending order
                     const sortedTransactions = res.data.data.sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate));
-
                     setTransactions(sortedTransactions);
                 } else {
                     console.error('Unexpected transactions data structure:', res.data);
@@ -61,19 +63,18 @@ const Wallet = () => {
         const searchParams = new URLSearchParams(location.search);
         const vnpResponseCode = searchParams.get('vnp_ResponseCode');
 
-        if (vnpResponseCode) {
-            handleVNPayReturn();
+        if (vnpResponseCode && !isVNPayHandled) {
+            console.log("Calling handleVNPayReturn from useEffect");
+            handleVNPayReturn(); // Không cần setIsVNPayHandled ở đây vì sẽ được quản lý bên trong handleVNPayReturn
         }
-    }, [location.search]);
+    }, [location.search, isVNPayHandled]);
 
     const validateDepositAmount = (amount) => {
-        // Check if amount is a valid number
         if (!amount || isNaN(amount) || amount <= 0) {
             setValidationError('Please enter a valid amount (positive number only).');
             return false;
         }
 
-        // Check if amount is an integer and has a maximum of 8 digits
         const amountInt = parseInt(amount, 10);
         if (amountInt !== parseFloat(amount) || amount.length > 8) {
             setValidationError('Please enter a valid amount (up to 8 digits).');
@@ -109,7 +110,6 @@ const Wallet = () => {
     };
 
     const handleWithdraw = () => {
-        // Implement withdraw logic here
         alert('Withdraw functionality not implemented yet');
     };
 
@@ -119,6 +119,15 @@ const Wallet = () => {
     };
 
     const handleVNPayReturn = async () => {
+        console.log("handleVNPayReturn called");
+
+        if (isProcessingVNPay) {
+            console.log("handleVNPayReturn aborted due to isProcessingVNPay being true");
+            return;
+        }
+
+        setIsProcessingVNPay(true);
+
         const searchParams = new URLSearchParams(location.search);
         const vnpResponseCode = searchParams.get('vnp_ResponseCode');
         const vnpAmount = searchParams.get('vnp_Amount');
@@ -136,18 +145,19 @@ const Wallet = () => {
                 });
 
                 if (depositResponse.data.status === "ok") {
-                    toast.success("Deposit successful")
+                    toast.success("Deposit successful");
                     fetchWalletData();
                 } else {
-                    toast.error("Deposit error")
+                    toast.error("Deposit error");
                 }
             } catch (error) {
                 console.error('Error finalizing deposit:', error);
-                toast.error("Deposit error")
+                toast.error("Deposit error");
             }
         } else {
             alert('Payment was not successful. Please try again.');
         }
+        setIsProcessingVNPay(false);
         navigate('/wallet', { replace: true });
     };
 
@@ -170,6 +180,7 @@ const Wallet = () => {
             <div className="wallet-card">
                 <h2 style={{ fontFamily: "Georgia", fontWeight: "bold" }}>YOUR WALLET</h2>
                 <div className="wallet-info" style={{ marginLeft: "200px" }}>
+
                     <div className="d-flex" >
                         {/* <div style={{ fontStyle: "italic" }}>
                             Name:
@@ -179,7 +190,9 @@ const Wallet = () => {
                         </div>
                     </div>
 
+
                     {/* <div className="d-flex" >
+
                         <div style={{ fontStyle: "italic" }}>
                             Phone:
                         </div>
@@ -187,7 +200,7 @@ const Wallet = () => {
                             {wallet.user.phone}
                         </div>
                     </div>
-                    <div className="d-flex" >
+                    <div className="d-flex">
                         <div style={{ fontStyle: "italic" }}>
                             Address:
                         </div>
@@ -204,7 +217,7 @@ const Wallet = () => {
                 <div className="wallet-actions">
                     <div className="action-group">
                         <input
-                            type="text" // Changed from number to text for better control
+                            type="text"
                             value={depositAmount}
                             onChange={(e) => {
                                 const value = e.target.value;

@@ -7,9 +7,20 @@ const BookingStaff = () => {
   const [bookingDetails, setBookingDetails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [searchDate, setSearchDate] = useState('');
   const [searchName, setSearchName] = useState('');
+  const [searchPhone, setSearchPhone] = useState('');
   const [filteredBookingDetails, setFilteredBookingDetails] = useState([]);
+  const [updateTrigger, setUpdateTrigger] = useState(0);
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const currentDate = getCurrentDate();
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
@@ -19,8 +30,9 @@ const BookingStaff = () => {
       try {
         const response = await axios.get("http://localhost:8080/bookingDetail/getBookingDetailByPaidBooking");
         console.log('API Response:', response.data);
-        setBookingDetails(response.data);
-        setFilteredBookingDetails(response.data); // Initialize filtered details
+        const todayBookings = response.data.filter(detail => detail.date === currentDate);
+        setBookingDetails(todayBookings);
+        setFilteredBookingDetails(todayBookings); // Initialize filtered details
       } catch (error) {
         console.error('Error fetching booking details:', error);
         setError(error);
@@ -30,7 +42,7 @@ const BookingStaff = () => {
     };
 
     fetchBookingDetails();
-  }, []);
+  }, [currentDate,updateTrigger]);
 
   const handleUpdateStatus = async (bookingDetailId) => {
     try {
@@ -50,6 +62,12 @@ const BookingStaff = () => {
           )
 
         );
+        setFilteredBookingDetails((prevDetails) =>
+          prevDetails.map((detail) =>
+            detail.bookingDetailId === bookingDetailId ? { ...detail, status: 'CONFIRMED' } : detail
+          )
+        );
+        setUpdateTrigger(prev => prev + 1);
       } else {
         console.error('Failed to update status:', res.statusText);
       }
@@ -58,19 +76,14 @@ const BookingStaff = () => {
     }
   };
 
-  const formatDate = (dateString) => {
-    const [year, month, day] = dateString.split('-');
-    return `${month}-${day}-${year}`;
-  };
-
   const handleSearch = () => {
     const results = bookingDetails.filter(detail => {
-      const matchesDate = searchDate ? detail.date.includes(searchDate) : true;
       const matchesName = searchName ? detail.pet?.petName.toLowerCase().includes(searchName.toLowerCase()) : true;
-      return matchesDate && matchesName;
+      const matchesPhone = searchPhone ? detail.user.phone.includes(searchPhone) : true;
+      return matchesName && matchesPhone;
     });
     setFilteredBookingDetails(results);
-  };
+};
 
   if (loading) return (
     <div className="loading-indicator">
@@ -94,9 +107,10 @@ const BookingStaff = () => {
           onChange={(e) => setSearchName(e.target.value)}
         />
         <input
-          type="date"
-          value={searchDate}
-          onChange={(e) => setSearchDate(e.target.value)}
+          type="text"
+          placeholder="Search by Phone"
+          value={searchPhone}
+          onChange={(e) => setSearchPhone(e.target.value)}
         />
         <button className="search-button" onClick={handleSearch}>Search</button>
       </div>
@@ -122,12 +136,12 @@ const BookingStaff = () => {
                 <td>{detail.pet?.petName || 'N/A'}</td>
                 <td>{detail.services?.name || 'N/A'}</td>
                 <td>{detail.needCage ? 'Yes' : 'No'}</td>
-                <td>{formatDate(detail.date)}</td>
+                <td>{detail.date}</td>
                 <td>{detail.slot?.slotId || 'N/A'}</td>
                 <td>{detail.status}</td>
                 <td>{detail.user.phone}</td>
                 <td>
-                  {detail.status === 'WAITING' && (
+                  {detail.status === 'WAITING' && detail.date === currentDate && (
                     <button onClick={() => handleUpdateStatus(detail.bookingDetailId)}>Confirm</button>
                   )}
                 </td>
