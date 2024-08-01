@@ -50,22 +50,27 @@ function UserATest() {
             });
     };
 
-    const handleDelete = (userId) => {
-        const userToDelete = users.find(user => user.userId === userId);
-        if (userToDelete.role === 'Admin') {
-            toast.error('Cannot delete admin user');
-            return;
-        }
-        axios.delete(`http://localhost:8080/account/delete/${userId}`)
+    const handleDelete = (user) => {
+        const apiUrl = user.isLocked
+            ? `http://localhost:8080/account/cancelDeleteUser/${user.userId}`
+            : `http://localhost:8080/account/delete/${user.userId}`;
+
+        const method = user.isLocked ? 'GET' : 'DELETE';
+
+        axios({
+            method: method,
+            url: apiUrl
+        })
             .then(() => {
-                setUsers(users.filter(user => user.userId !== userId));
-                toast.success("User deleted successfully");
+                setUsers(users.map(u => u.userId === user.userId ? { ...u, isLocked: !u.isLocked } : u));
+                toast.success(user.isLocked ? "User unlocked successfully" : "User locked successfully");
             })
             .catch(err => {
-                console.log(err);
-                toast.error("Failed to delete user");
+                console.error(err);
+                toast.error(user.isLocked ? "Failed to unlock user" : "Failed to lock user");
             });
     };
+
 
     return (
         <div className="useratest-container">
@@ -80,6 +85,7 @@ function UserATest() {
                         <th>Phone</th>
                         <th>Address</th>
                         <th>Role</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -91,11 +97,16 @@ function UserATest() {
                             <td>{user.phone}</td>
                             <td>{user.address}</td>
                             <td>{user.role}</td>
+                            <td>{user.isLocked ? 'Locked' : 'Active'}</td>
                             <td>
                                 {user.role !== 'Admin' && (
                                     <>
                                         <button className="useratest-edit-button" onClick={() => handleEdit(user)}>Edit</button>
-                                        <button className="useratest-delete-button" onClick={() => handleDelete(user.userId)}>Delete</button>
+                                        <button
+                                            className="useratest-delete-button"
+                                            onClick={() => handleDelete(user)}>
+                                            {user.isLocked ? 'Unlock' : 'Lock'}
+                                        </button>
                                     </>
                                 )}
                             </td>

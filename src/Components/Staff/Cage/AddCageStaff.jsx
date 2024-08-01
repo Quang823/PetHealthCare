@@ -1,40 +1,48 @@
-
-import './Cage.scss'
+import './Cage.scss';
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { values } from 'lodash';
-const AddCageStaff = () =>{
-  
-  const [cageType,setCageType] = useState('');
-  const handleInputChange = (event) =>{
+
+const AddCageStaff = () => {
+  const [cageType, setCageType] = useState('');
+
+  const handleSelectChange = (event) => {
     setCageType(event.target.value);
-  }
-  const handleSubmit = async  (event) =>{
-    event.preventDefault(); 
-    try{
-      const res = await axios.post("http://localhost:8080/cage/create",
-        {
-          type :cageType
-        }
-      );
-      toast.success("Add cage success")
-    }catch(err){
-      toast.error('Failed to add cage')
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post("http://localhost:8080/cage/create", { type: cageType });
+      toast.success("Cage added successfully");
+    } catch (err) {
+      toast.error("Failed to add cage");
     }
-  }
-  return(
-    <>
-    <h1>Add Cage</h1>
-      <form onSubmit={handleSubmit} className='formContainer'>
-       <lable>
-        Cage Type:
-        <input type='text' value={cageType} onChange={handleInputChange} />
-       </lable>
-       <button type="submit">Add Cage</button>
+  };
+
+  return (
+    <div className="add-cage-container">
+      <h1 className="add-cage-title">Add Cage</h1>
+      <form onSubmit={handleSubmit} className="add-cage-form">
+        <label className="add-cage-label">
+          Cage Type:
+          <select
+            value={cageType}
+            onChange={handleSelectChange}
+            className="add-cage-select"
+          >
+            <option value="">Select Type</option>
+            <option value="DOG">DOG</option>
+            <option value="CAT">CAT</option>
+            <option value="BIRD">BIRD</option>
+            <option value="HAMSTER">HAMSTER</option>
+            <option value="CHICKEN">CHICKEN</option>
+          </select>
+        </label>
+        <button type="submit" className="add-cage-button">Add Cage</button>
       </form>
-    </>
-  )
-}
-export default AddCageStaff
+    </div>
+  );
+};
+
+export default AddCageStaff;

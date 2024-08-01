@@ -83,6 +83,9 @@ const AddSlot = () => {
         });
     };
 
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 1);
+
     return (
         <div className='slot-scheduler'>
             <h2 className="my-4">Schedule Veterinarian Slot</h2>
@@ -94,6 +97,7 @@ const AddSlot = () => {
                     onChange={(date) => setSelectedDate(date)}
                     dateFormat="yyyy-MM-dd"
                     minDate={new Date()}
+                    maxDate={maxDate}
                     className="form-control"
                 />
             </div>

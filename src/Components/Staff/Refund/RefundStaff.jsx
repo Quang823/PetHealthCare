@@ -35,14 +35,14 @@ const RefundStaff = () => {
     };
 
     return (
-        <div className="container">
-            <h1>Refunds</h1>
+        <div className={styles.refundContainer}>
+            <h1 className={styles.refundTitle}>Refunds</h1>
             {loading ? (
-                <div className="loading-indicator">
+                <div className={styles.refundLoadingIndicator}>
                     <Spinner animation="border" variant="primary" />
                 </div>
             ) : (
-                <Table striped bordered hover>
+                <Table striped bordered hover className={styles.refundTable}>
                     <thead>
                         <tr>
                             <th>Transaction No</th>
@@ -60,7 +60,7 @@ const RefundStaff = () => {
                                 <td>{refund.refundPercent}%</td>
                                 <td>{new Date(refund.refundDate).toLocaleDateString()}</td>
                                 <td>
-                                    <Button variant="info" onClick={() => handleShowDetails(refund.bookingDetail)}>
+                                    <Button variant="info" onClick={() => handleShowDetails(refund.bookingDetail)} className={styles.refundButtonInfo}>
                                         Show Booking Detail
                                     </Button>
                                 </td>
@@ -72,20 +72,19 @@ const RefundStaff = () => {
 
             {selectedBookingDetail && (
                 <Modal show={showModal} onHide={handleClose} size="lg">
-                    <Modal.Header closeButton className={styles.modalHeader}>
-                        <Modal.Title className={styles.modalTitle}>Booking Detail</Modal.Title>
+                    <Modal.Header closeButton className={styles.refundModalHeader}>
+                        <Modal.Title className={styles.refundModalTitle}>Booking Detail</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body className={styles.modalBody}>
-                     
+                    <Modal.Body className={styles.refundModalBody}>
                         <p><strong>Need Cage:</strong> {selectedBookingDetail.needCage ? 'Yes' : 'No'}</p>
                         <p><strong>Date:</strong> {new Date(selectedBookingDetail.date).toLocaleDateString()}</p>
                         <p><strong>Status:</strong> {selectedBookingDetail.status}</p>
-                        <h5 className={styles.sectionTitle}>Booking Info</h5>
+                        <h5 className={styles.refundSectionTitle}>Booking Info</h5>
                         <p><strong>Booking ID:</strong> {selectedBookingDetail.booking.bookingId}</p>
                         <p><strong>Date:</strong> {new Date(selectedBookingDetail.booking.date).toLocaleDateString()}</p>
                         <p><strong>Status:</strong> {selectedBookingDetail.booking.status}</p>
                         <p><strong>Total Price:</strong> {selectedBookingDetail.booking.totalPrice}</p>
-                        <h5 className={styles.sectionTitle}>Pet Info</h5>
+                        <h5 className={styles.refundSectionTitle}>Pet Info</h5>
                         <p><strong>Pet ID:</strong> {selectedBookingDetail.pet.petId}</p>
                         <p><strong>Pet Name:</strong> {selectedBookingDetail.pet.petName}</p>
                         <p><strong>Pet Age:</strong> {selectedBookingDetail.pet.petAge}</p>
@@ -93,22 +92,18 @@ const RefundStaff = () => {
                         <p><strong>Pet Type:</strong> {selectedBookingDetail.pet.petType}</p>
                         <p><strong>Vaccination:</strong> {selectedBookingDetail.pet.vaccination}</p>
                         <p><strong>Stay Cage:</strong> {selectedBookingDetail.pet.stayCage ? 'Yes' : 'No'}</p>
-                        <h5 className={styles.sectionTitle}>User Info</h5>
-                       
+                        <h5 className={styles.refundSectionTitle}>User Info</h5>
                         <p><strong>Name:</strong> {selectedBookingDetail.pet.user.name}</p>
                         <p><strong>Email:</strong> {selectedBookingDetail.pet.user.email}</p>
                         <p><strong>Phone:</strong> {selectedBookingDetail.pet.user.phone}</p>
                         <p><strong>Address:</strong> {selectedBookingDetail.pet.user.address}</p>
-                        
-                        <h5 className={styles.sectionTitle}>Service Info</h5>
+                        <h5 className={styles.refundSectionTitle}>Service Info</h5>
                         <p><strong>Service ID:</strong> {selectedBookingDetail.services.serviceId}</p>
                         <p><strong>Name:</strong> {selectedBookingDetail.services.name}</p>
-                       
-                        <h5 className={styles.sectionTitle}>Slot Info</h5>
+                        <h5 className={styles.refundSectionTitle}>Slot Info</h5>
                         <p><strong>Slot ID:</strong> {selectedBookingDetail.slot.slotId}</p>
-                        
                     </Modal.Body>
-                    <Modal.Footer className={styles.modalFooter}>
+                    <Modal.Footer className={styles.refundModalFooter}>
                         <Button variant="secondary" onClick={handleClose}>
                             Close
                         </Button>

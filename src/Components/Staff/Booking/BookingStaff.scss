@@ -5,7 +5,17 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-
+  background-color: #ffffffe8;
+  border-radius: 10px;
+  .header {
+    h2 {
+      font-size: 2rem;
+      color: #00a558;
+      text-transform: uppercase;
+      font-family: 'Arial, sans-serif';
+      font-weight: bolder;
+    }
+  }
   .search {
     margin-bottom: 1rem;
     display: flex;
@@ -14,7 +24,7 @@
     input[type="text"], input[type="date"] {
       padding: 0.5rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
+      border: 1px solid #616161;
       border-radius: 4px;
     }
 
@@ -50,7 +60,7 @@
   padding: 10px;
   font-size: 16px;
   width: 300px;
-  border: 1px solid #ccc;
+  border: 1px solid #5f5f5f;
   border-radius: 4px;
 }
 
@@ -101,7 +111,7 @@
 .header-item {
   padding: 10px;
   flex: 1;
-  border: 1px solid #dee2e6;
+  border: 1px solid #666666;
   font-weight: bold;
   text-align: center;
 }
@@ -115,7 +125,7 @@
 .table-item {
   padding: 10px;
   flex: 1;
-  border: 1px solid #dee2e6;
+  border: 1px solid #6d6d6d;
   text-align: center;
   display: flex;
   align-items: center;
