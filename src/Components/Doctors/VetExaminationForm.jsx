@@ -92,7 +92,7 @@ function VetExaminationForm() {
             vaccine
         };
 
-        axios.post(`http://localhost:8080/medical-history/create/${bookingDetail.bookingDetailId}`, data)
+        axios.post(`http://localhost:8080/medical-history/create/${bookingDetail.pet.petId}`, data)
             .then(response => {
                 Swal.fire({
                     icon: 'success',
@@ -232,7 +232,7 @@ function VetExaminationForm() {
                     <DatePicker
                         selected={dateMedical}
                         onChange={(date) => setDateMedical(date)}
-                        dateFormat="dd MMMM yyyy"
+                        dateFormat="yyyy-MM-dd"
                         className="vet-exam-datepicker"
                         disabled
                     />

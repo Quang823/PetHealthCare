@@ -55,7 +55,7 @@ const Addslotcancel = () => {
           userId: userId,
         }
       });
-  
+      
       if (response.data.status === "ok") {
         toast.success('Booking cancelled successfully');
         setCancelledBookings(prevBookings => prevBookings.filter(booking => booking.bookingDetailId !== bookingDetailId));
@@ -72,9 +72,7 @@ const Addslotcancel = () => {
         } else {
           toast.error('An error occurred while cancelling the booking.');
         }
-      } else {
-        toast.error('An error occurred while cancelling the booking.');
-      }
+      } 
     }
   };
   

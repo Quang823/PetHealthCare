@@ -37,7 +37,7 @@ const ServicePet = () => {
 
     const fetchServices = async () => {
         try {
-            const res = await axios.get("http://localhost:8080/Service/getAll");
+            const res = await axios.get("http://localhost:8080/Service/getAllActive");
             setServices(res.data);
         } catch (error) {
             console.error(error);

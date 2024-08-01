@@ -87,8 +87,9 @@ function App() {
           <Route path='/doctor/*' element={<Doctor />} />
           {/* <Route path='scheduleDoctor' element={<Schedule />} />
           <Route path='home' element={<Home />} />
-          <Route path='examineDoctor' element={<VetExaminationForm />} />
+          
           <Route path='slotdoctor' element={<Slotdoctor />} /> */}
+          <Route path='examineDoctor' element={<VetExaminationForm />} />
         </Route>
 
 

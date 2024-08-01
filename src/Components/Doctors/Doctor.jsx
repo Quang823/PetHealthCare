@@ -5,6 +5,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Home from './Home';
 import Sidebar from './SideBar';
 import Slotdoctor from './Slotdoctor';
+import VetExaminationForm from './VetExaminationForm';
 
 const Doctor = () => {
     const [toggle, setToggle] = useState(true);
@@ -27,6 +28,7 @@ const Doctor = () => {
                 <Route path="/" element={<Home Toggle={Toggle} />} />
                 <Route path="slotdoctor" element={<Slotdoctor />} />
                 {/* Add other routes for doctor components here */}
+                <Route path='examineDoctor' element={<VetExaminationForm />} />
               </Routes>
             </div>
           </div>
